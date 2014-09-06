@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Container>
+  <Name>Dropbox</Name>
+  <Description>
+    Dropbox is a free service that lets you bring your photos, docs, and videos anywhere and share them easily. Never email yourself a file again![br][br]
+    [b][span style='color: #E80000;']Directions:[/span][/b][br]
+    [b]/config[/b] : in this path, Dropbox will store it's configuration files.[br]
+    [b]/dropbox[/b] : in this path, Dropbox wil store the user files. [br][br]
+    [b][span style='color: #E80000;']Tip:[/span][/b] If it's the first time you install this container, an authorization link will be available in the logs. Please take a look.
+  </Description>
+  <Registry>https://registry.hub.docker.com/u/gfjardim/dropbox/</Registry>
+  <GitHub>https://github.com/gfjardim/docker-dropbox</GitHub>
+  <Repository>gfjardim/dropbox</Repository>
+  <BindTime>true</BindTime>
+  <Privileged>true</Privileged>
+  <Environment/>
+  <Networking>
+    <Mode>host</Mode>
+    <Publish/>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/dropbox/</HostDir>
+      <ContainerDir>/home/.dropbox</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir></HostDir>
+      <ContainerDir>/home/Dropbox</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <WebUI>
+    <Port></Port>
+    <Protocol></Protocol>
+    <Path></Path>
+    <Url>https://www.dropbox.com</Url>
+  </WebUI>
+  <Banner>http://i.imgur.com/m9g2DiM.png</Banner>
+  <Icon>http://i.imgur.com/eom5LCT.png</Icon>
+</Container>

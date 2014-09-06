@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Container>
+  <Name>HTPC-Manager</Name>
+  <Description>
+    HTPC-Manager allows you to manage your hHTPC from anywhere[br][br]
+    [b][span style='color: #E80000;']Directions:[/span][/b][br]
+    [b]/config[/b] : this path is used to store the configuration and the database files of HTPC-Manager.
+  </Description>
+  <Registry>https://registry.hub.docker.com/u/smdion/docker-htpcmanager/</Registry>
+  <Repository>smdion/docker-htpcmanager</Repository>
+  <BindTime>true</BindTime>
+  <Privileged>false</Privileged>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>8085</HostPort>
+        <ContainerPort>8085</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Environment>
+    <Variable>
+      <Name></Name>
+      <Value></Value>
+    </Variable>
+  </Environment>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/htpc-manager</HostDir>
+      <ContainerDir>/config</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <WebUI>http://[IP]:[PORT:8085]/</WebUI>
+  <Banner>http://i.imgur.com/Z1JYrWP.png</Banner>
+  <Icon>http://i.imgur.com/Rt1zg4D.png</Icon>
+</Container>

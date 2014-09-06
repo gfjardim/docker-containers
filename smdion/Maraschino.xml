@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Container>
+  <Name>Maraschino</Name>
+  <Description>
+    Maraschino a simple web interface to act as a nice overview/front page for my XBMC HTPC[br][br]
+    [b][span style='color: #E80000;']Directions:[/span][/b][br]
+    [b]/config[/b] : this path is used to store the configuration and the database files of Maraschino.
+  </Description>
+  <Registry>https://registry.hub.docker.com/u/smdion/docker-maraschino/</Registry>
+  <Repository>smdion/docker-maraschino</Repository>
+  <BindTime>true</BindTime>
+  <Privileged>false</Privileged>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>7000</HostPort>
+        <ContainerPort>7000</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Environment>
+    <Variable>
+      <Name></Name>
+      <Value></Value>
+    </Variable>
+  </Environment>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/maraschino</HostDir>
+      <ContainerDir>/config</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <WebUI>http://[IP]:[PORT:7000]/</WebUI>
+  <Banner></Banner>
+  <Icon>http://i.imgur.com/2l9EiCA.png</Icon>
+</Container>

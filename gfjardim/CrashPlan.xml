@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Container>
+  <Name>CrashPlan</Name>
+  <Description>
+    With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywhere, anytime access to ALL your files, CrashPlan is the simplest, surest way to protect your digital life.[br][br]
+    [b][span style='color: #E80000;']Directions:[/span][/b][br]
+    [b]/config[/b] : this path is where the configuration of CrashPlan is stored to.[br]
+    [b]/data[/b] : normally this should point to '/mnt/user', but you can set this to any directory you wish to backup. You may add another paths too.
+  </Description>
+  <Registry>https://registry.hub.docker.com/u/gfjardim/crashplan/</Registry>
+  <GitHub>https://github.com/gfjardim/docker-crashplan</GitHub>
+  <Repository>gfjardim/crashplan</Repository>
+  <BindTime>true</BindTime>
+  <Privileged>true</Privileged>
+  <Networking>
+    <Mode>host</Mode>
+    <Publish/>
+  </Networking>
+  <Environment/>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/crashplan</HostDir>
+      <ContainerDir>/config</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir></HostDir>
+      <ContainerDir>/data</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <WebUI>http://www.code42.com/crashplan/</WebUI>
+  <Banner>http://i.imgur.com/mAdH6Zu.png</Banner>
+  <Icon>http://i.imgur.com/F5ckGpm.png</Icon>
+</Container>

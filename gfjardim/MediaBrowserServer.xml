@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Container>
+  <Name>MediaBrowserServer</Name>
+  <Description>
+    Media Browser Server is a home media server built on top of other popular open source technologies such as Service Stack, jQuery, jQuery mobile, and Mono.It features a REST-based api with built-in documention to facilitate client development. We also have client libraries for our api to enable rapid development.[br][br]
+    [b][span style=\'color: #E80000;\']Directions:[/span][/b][br]
+    [b]/config[/b] : this path is used to store the configuration and the database files of Media Browser.[br]
+    [b]/movies[/b] : set this path to where you store your movie files.[br]
+    [b]/tv[/b] : set this path to where you store your tv shows files.
+  </Description>
+  <Registry>https://registry.hub.docker.com/u/gfjardim/mediabrowser/</Registry>
+  <Repository>gfjardim/mediabrowser</Repository>
+  <BindTime>true</BindTime>
+  <Privileged>false</Privileged>
+  <Environment/>
+  <Networking>
+    <Mode>host</Mode>
+    <Publish/>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/MediaBrowserServer</HostDir>
+      <ContainerDir>/config</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir></HostDir>
+      <ContainerDir>/movies</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir></HostDir>
+      <ContainerDir>/tv</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Version></Version>
+  <WebUI>http://[IP]:[PORT:8096]/mediabrowser</WebUI>
+  <Banner>http://i.imgur.com/NGb7TN5.png</Banner>
+  <Icon>http://i.imgur.com/PaCUMqS.png</Icon>
+</Container>

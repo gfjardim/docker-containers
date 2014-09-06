@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Container>
+  <Name>ownCloud</Name>
+  <Description>
+    ownCloud gives you universal access to your files through a web interface or WebDAV. It also provides a platform to easily view and sync your contacts, calendars and bookmarks across all your devices and enables basic editing right on the web.[br][br]
+    [b][span style='color: #E80000;']Directions:[/span][/b][br]
+    [b]/var/www/owncloud/data[/b] : this path is where ownCloud data is stored to.[br][br]
+    [b]Tip:[/b] Set EDGE variable to '1' if you want to always run the last version.
+  </Description>
+  <Registry>https://registry.hub.docker.com/u/gfjardim/owncloud/</Registry>
+  <GitHub>https://github.com/gfjardim/docker-owncloud</GitHub>
+  <Repository>gfjardim/owncloud</Repository>
+  <BindTime>true</BindTime>
+  <Privileged>false</Privileged>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>8000</HostPort>
+        <ContainerPort>8000</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Environment>
+    <Variable>
+      <Name>SUBJECT</Name>
+      <Value>/C=US/ST=CA/L=City/O=Organization/OU=Organization Unit/CN=yourhome.com</Value>
+    </Variable>
+    <Variable>
+      <Name>EDGE</Name>
+      <Value>0</Value>
+    </Variable>
+  </Environment>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/owncloud</HostDir>
+      <ContainerDir>/var/www/owncloud/data</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <WebUI>http://[IP]:[PORT:8000]/</WebUI>
+  <Banner>http://i.imgur.com/eUAGaPA.png</Banner>
+  <Icon>http://i.imgur.com/EX4qL2V.png</Icon>
+</Container>
