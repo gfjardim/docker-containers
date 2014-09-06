@@ -1,7 +1,7 @@
 #!/bin/bash
 NZBUP_BRANCH=${NZBUP_BRANCH:-STABLE}
 
-URL="https://raw.githubusercontent.com/${GIT_USER}/docker-nzbget/repository"
+URL="https://raw.githubusercontent.com/${GIT_USER}/nzbget-updates/master"
 
 echo "Installing ${NZBUP_BRANCH}"
 
