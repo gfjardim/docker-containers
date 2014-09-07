@@ -34,7 +34,7 @@ VOLUME /config
 VOLUME /music
 
 #PORTS
-EXPOSE 3483 9000 9090
+EXPOSE 3483 3483/udp 9000 9090
 
 # Add logitechmediaserver to runit
 RUN mkdir /etc/service/logitechmediaserver
