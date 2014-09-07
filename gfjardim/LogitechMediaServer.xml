@@ -21,6 +21,11 @@
         <Protocol>tcp</Protocol>
       </Port>
       <Port>
+        <HostPort>3483</HostPort>
+        <ContainerPort>3483</ContainerPort>
+        <Protocol>udp</Protocol>
+      </Port>
+      <Port>
         <HostPort>9000</HostPort>
         <ContainerPort>9000</ContainerPort>
         <Protocol>tcp</Protocol>
