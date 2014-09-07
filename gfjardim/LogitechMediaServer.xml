@@ -51,6 +51,6 @@
   </Data>
   <Version></Version>
   <WebUI>http://[IP]:[PORT:9000]/</WebUI>
-  <Banner></Banner>
+  <Banner>http://i.imgur.com/vA7y2Io.png</Banner>
   <Icon>http://i.imgur.com/PoUuA3k.png</Icon>
 </Container>
