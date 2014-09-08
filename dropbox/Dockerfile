@@ -16,10 +16,6 @@ RUN apt-get update -qq && \
     apt-get autoremove && \
     apt-get autoclean
 
-
-VOLUME /config
-VOLUME /dropbox
-
 RUN mkdir -p /opt/dropbox && wget -nv -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar -xzf - --strip-components=1 -C /opt/dropbox
 
 EXPOSE 17500
