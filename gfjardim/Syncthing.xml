@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Container>
+  <Name>Syncthing</Name>
+  <Description>
+    [h3]Syncthing[/h3]Syncthing replaces proprietary sync and cloud services with something open, trustworthy and decentralized. Your data is your data alone and you deserve to choose where it is stored, if it is shared with some third party and how it's transmitted over the Internet.[br][br]
+    [b][span style='color: #E80000;']Directions:[/span][/b][br]
+    [b]/config[/b] : set this path to where you wish Syncthing to store it's configuration.[br]
+  </Description>
+  <Registry>https://registry.hub.docker.com/u/gfjardim/syncthing/</Registry>
+  <Repository>gfjardim/syncthing</Repository>
+  <BindTime>true</BindTime>
+  <Privileged>false</Privileged>
+  <Environment/>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>8002</HostPort>
+        <ContainerPort>8080</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>22000</HostPort>
+        <ContainerPort>22000</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>21025</HostPort>
+        <ContainerPort>21025</ContainerPort>
+        <Protocol>udp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/Documentos/</HostDir>
+      <ContainerDir>/documents</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/boot/custom/appdata/syncthing</HostDir>
+      <ContainerDir>/config</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Version></Version>
+  <WebUI>https://[IP]:[PORT:8080]/</WebUI>
+  <Banner>http://i.imgur.com/THkgyoC.png</Banner>
+  <Icon>http://i.imgur.com/xTw0Ci8.png</Icon>
+</Container>
