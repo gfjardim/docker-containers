@@ -1,16 +1,15 @@
-# docker-logitechmediaserver
+# Syncthing
 
-Docker image for Logitech Media Server (SqueezeCenter, SqueezeboxServer, SlimServer)
+Docker image for Syncthing (http://syncthing.net)
 
 Run with:
 
 ```
-docker run -t -i --rm=true --net="bridge" \
-      -p 3483:3483/tcp \
-      -p 9000:9000/tcp \
-      -p 9090:9090/tcp \
-      -v "/mnt/user/appdata/LogitechMediaServer":"/config":rw \
-      -v "/etc/localtime":"/etc/localtime":ro \
-      gfjardim/logitechmediaserver
+docker run -d --name="Syncthing" \
+      --net="bridge" \
+      -p 8080:8080/tcp \
+      -p 22000:22000/tcp \
+      -p 21025:21025/udp \
+      -v "/mnt/user/appdata/syncthing":"/config":rw gfjardim/syncthing
 ```
 
