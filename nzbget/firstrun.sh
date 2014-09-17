@@ -40,10 +40,8 @@ fi
 
 if [[ ! -f /config/ssl/nzbget.key ]]; then
   mkdir -p /config/ssl
-  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /config/ssl/nzbget.key -out /config/ssl/nzbget.crt -subj "/O=SOHO/OU=HOME/CN=yourhome.com"
+  openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /config/ssl/nzbget.key -out /config/ssl/nzbget.crt -subj "/O=SOHO/OU=HOME/CN=yourhome.com"
 fi
-
-
 
 # Embed the update package-info
 if [[ ! -f /usr/share/nzbget/webui/package-info.json ]]; then
