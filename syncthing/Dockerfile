@@ -16,6 +16,7 @@ ENV LC_ALL     en_US.UTF-8
 # Fix a Debianism of the nobody's uid being 65534
 RUN usermod -u 99 nobody
 RUN usermod -g 100 nobody
+RUN usermod -d /home nobody
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
