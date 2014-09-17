@@ -15,7 +15,7 @@
     <Mode>bridge</Mode>
     <Publish>
       <Port>
-        <HostPort>8002</HostPort>
+        <HostPort>8080</HostPort>
         <ContainerPort>8080</ContainerPort>
         <Protocol>tcp</Protocol>
       </Port>
@@ -33,12 +33,7 @@
   </Networking>
   <Data>
     <Volume>
-      <HostDir>/mnt/user/Documentos/</HostDir>
-      <ContainerDir>/documents</ContainerDir>
-      <Mode>rw</Mode>
-    </Volume>
-    <Volume>
-      <HostDir>/boot/custom/appdata/syncthing</HostDir>
+      <HostDir>/mnt/user/appdata/syncthing</HostDir>
       <ContainerDir>/config</ContainerDir>
       <Mode>rw</Mode>
     </Volume>
