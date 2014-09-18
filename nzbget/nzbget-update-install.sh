@@ -43,10 +43,9 @@ regex=".*?:.?(.*?)"
 if [[ \$(nzbget -v) =~ \$regex ]]; then
         VERSION=\${BASH_REMATCH[1]}
 fi
-tmpbkp="/tmp/nzbget-\$VERSION-$(date +'%m%d%Y').tar.gz"
-tar -czf \$tmpbkp /config
+bkp="/config/backup/nzbget-\$VERSION-$(date +'%m-%d-%Y').conf"
 mkdir -p /config/backup
-mv \$tmpbkp /config/backup/
+cp /config/nzbget.conf \$bkp 
 
 # Installing the update
 dpkg -P nzbget

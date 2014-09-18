@@ -2,7 +2,6 @@
 umask 000
 
 # install last used version
-# install last used version
 if [[ ! -f /tmp/last_version_installed ]]; then
   if [[ -d /config/last_version ]]; then
     for file in /config/last_version/* ; do
@@ -62,29 +61,33 @@ if [[ ! -e /config/ppscripts ]]; then
   mkdir -p /config/ppscripts
 fi
 
-# Add some post-processing scripts
-# nzbToMedia
-if [[ ! -e /config/ppscripts/nzbToMedia ]]; then
+# install last version of ppscripts
+if [[ ! -f /tmp/ppscripts_installed ]]; then
+
+  # Add some post-processing scripts
+  # nzbToMedia
   echo "Downloading nzbToMedia."
+  rm -rf /config/ppscripts/nzbToMedia
   mkdir -p /config/ppscripts/nzbToMedia
   wget -nv https://github.com/clinton-hall/nzbToMedia/archive/master.tar.gz -O - | tar --strip-components 1 -C /config/ppscripts/nzbToMedia -zxf -
-fi
 
-# Videosort
-if [[ ! -e /config/ppscripts/videosort ]]; then
+  # Videosort
   echo "Downloading videosort."
+  rm -rf /config/ppscripts/videosort
   mkdir -p /config/ppscripts/videosort
-  wget -nv http://sourceforge.net/projects/nzbget/files/ppscripts/videosort/videosort-ppscript-4.0.zip/download -O /config/ppscripts/videosort-ppscript-4.0.zip
-  unzip -qq /config/ppscripts/videosort-ppscript-4.0.zip
-  rm /config/ppscripts/videosort-ppscript-4.0.zip
-fi
+  wget -nv http://sourceforge.net/projects/nzbget/files/ppscripts/videosort/videosort-ppscript-5.0.zip/download -O /config/ppscripts/videosort-ppscript-5.0.zip
+  unzip -qq /config/ppscripts/videosort-ppscript-5.0.zip
+  rm /config/ppscripts/videosort-ppscript-5.0.zip
 
-# NotifyXBMC.py
-if [[ ! -e /config/ppscripts/NotifyXBMC.py ]]; then
+  # NotifyXBMC.py
   echo "Downloading NotifyXBMC."
   wget -nv http://nzbget.net/forum/download/file.php?id=193 -O /config/ppscripts/NotifyXBMC.py
+
+  touch /tmp/ppscripts_installed
 fi
 
-# Fix permissions
+# Ensure permissions
 chown -R nobody:users /config
 chmod 777 /tmp
+
+
