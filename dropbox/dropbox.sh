@@ -2,4 +2,4 @@
 umask 000
 chown -R nobody:users /home
 
-exec /sbin/setuser nobody /opt/dropbox/dropboxd
+exec /sbin/setuser nobody /home/.dropbox-dist/dropboxd

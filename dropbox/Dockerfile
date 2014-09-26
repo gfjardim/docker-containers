@@ -16,7 +16,7 @@ RUN apt-get update -qq && \
     apt-get autoremove && \
     apt-get autoclean
 
-RUN mkdir -p /opt/dropbox && wget -nv -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar -xzf - --strip-components=1 -C /opt/dropbox
+RUN wget -nv -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar -xzf - -C /home
 
 EXPOSE 17500
 
