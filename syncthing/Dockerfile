@@ -2,9 +2,6 @@ FROM phusion/baseimage:0.9.11
 MAINTAINER gfjardim <gfjardim@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 
-# Set install version
-ENV VERSION testing
-
 # Set correct environment variables
 ENV HOME /root
 
@@ -16,7 +13,7 @@ ENV LC_ALL     en_US.UTF-8
 # Fix a Debianism of the nobody's uid being 65534
 RUN usermod -u 99 nobody
 RUN usermod -g 100 nobody
-RUN usermod -d /home nobody
+RUN usermod -d /config nobody
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
@@ -26,7 +23,7 @@ RUN apt-get update -q
 RUN apt-get install -qy --force-yes wget
 
 # Install Syncthing
-RUN mkdir -p /opt/syncthing && wget -nv -O - "https://github.com/syncthing/syncthing/releases/download/v0.9.15/syncthing-linux-amd64-v0.9.15.tar.gz" | tar -xzf - --strip-components=1 -C /opt/syncthing
+RUN mkdir -p /opt/syncthing && wget -nv -O - "https://github.com/syncthing/syncthing/releases/download/v0.9.18/syncthing-linux-amd64-v0.9.18.tar.gz" | tar -xzf - --strip-components=1 -C /opt/syncthing
 
 # VOLUMES
 VOLUME /config
