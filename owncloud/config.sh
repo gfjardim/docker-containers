@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# FIx the timezone
+if [[ $(cat /etc/timezone) != $TZ ]] ; then
+  echo "$TZ" > /etc/timezone
+  dpkg-reconfigure -f noninteractive tzdata
+fi
+
+
 if [[ -f /var/www/owncloud/data/server.key && -f /var/www/owncloud/data/server.pem ]]; then
   echo "Found pre-existing certificate, using it."
   cp -f /var/www/owncloud/data/server.* /opt/
@@ -25,7 +32,3 @@ if [[ -d /var/www/owncloud/config ]]; then
 fi
 
 chown -R nobody:users /var/www/owncloud
-
-if [[ $EDGE == 1 ]]; then
-  apt-get update -qq && apt-get upgrade -y --force-yes -qq > /dev/null
-fi

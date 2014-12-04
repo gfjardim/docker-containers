@@ -1,31 +1,69 @@
 FROM phusion/baseimage:0.9.11
 MAINTAINER gfjardim <gfjardim@gmail.com>
-ENV DEBIAN_FRONTEND noninteractive
-ENV VERSION 2014.07.28
+
+#########################################
+##        ENVIRONMENTAL CONFIG         ##
+#########################################
 
 # Set correct environment variables
-ENV HOME /root
+ENV DEBIAN_FRONTEND noninteractive
+ENV HOME            /root
+ENV RUNTIME_USER    nobody
 
-# Fix a Debianism of the nobody's uid being 65534
-RUN usermod -u 99 nobody
-RUN usermod -g 100 nobody
+# Ensure UTF-8
+RUN locale-gen en_US.UTF-8
+ENV LANG       en_US.UTF-8
+ENV LC_ALL     en_US.UTF-8
 
-RUN add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse"
-RUN add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
-RUN apt-get update -q
+# Configure user nobody to match unRAID's settings
+RUN usermod -u 99 nobody && \
+    usermod -g 100 nobody && \
+    usermod -d /home nobody && \
+    chown -R nobody:users /home
 
-# Install Dependencies
-RUN apt-get install -qy  wget nginx php5-common php5-cli php5-fpm openssl
+# Disable SSH
+RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
-# Add the ownCloud repository
-RUN echo "deb http://download.opensuse.org/repositories/isv:/ownCloud:/community/xUbuntu_14.04/ /" >> /etc/apt/sources.list.d/owncloud.list
-RUN wget -qO - http://download.opensuse.org/repositories/isv:ownCloud:community/xUbuntu_14.04/Release.key | apt-key add -
+
+#########################################
+##    REPOSITORIES AND DEPENDENCIES    ##
+#########################################
+
+# Use mirrors
+#RUN sed -i -e "s#http://[^\s]*archive.ubuntu[^\s]* #http://sft.if.usp.br/ubuntu/ #g" /etc/apt/sources.list
+
+# Install Dependencies
+RUN apt-get update -q
+RUN  apt-get install -qy php5-cli php5-gd php5-pgsql php5-sqlite php5-mysqlnd php5-curl php5-intl php5-mcrypt php5-ldap php5-gmp php5-apcu \
+     php5-imagick php5-fpm smbclient nginx openssl
+
+
+#########################################
+##       FILES AND CONFIGURATION       ##
+#########################################
 
 # Install ownCloud
-RUN apt-get update -qq && apt-get install -qy owncloud
+ADD http://download.owncloud.org/community/owncloud-latest.tar.bz2 /tmp/owncloud-latest.tar.bz2
+RUN mkdir -p /var/www && tar -C /var/www -xjf /tmp/owncloud-latest.tar.bz2 && rm /tmp/owncloud-latest.tar.bz2
+
+# Add the site configuration
+ADD owncloud.site /etc/nginx/sites-enabled/owncloud
+
+# Remove default site
+RUN rm -f /etc/nginx/sites-enabled/default
+
+# Add custom PHP-FPM / Ningx configuration
+ADD www.conf /etc/php5/fpm/pool.d/
+ADD php.ini /etc/php5/fpm/
+ADD nginx.conf /etc/nginx/
+
+
+#########################################
+##         EXPORTS AND VOLUMES         ##
+#########################################
 
 # Expose ownCloud's data dir
 VOLUME ["/var/www/owncloud/data"]
@@ -33,20 +71,10 @@ VOLUME ["/var/www/owncloud/data"]
 # Expose port. Cannot be modified!
 EXPOSE 8000
 
-# Add the site configuration
-ADD owncloud.site /etc/nginx/sites-enabled/owncloud
 
-# Add custom PHP-FPM / Ningx configuration
-ADD www.conf /etc/php5/fpm/pool.d/
-ADD php.ini /etc/php5/fpm/
-ADD nginx.conf /etc/nginx/
-
-RUN rm -f /etc/nginx/sites-enabled/default
-
-# Fix SabreDAV error running with self signed certificate
-#RUN sed -i "/.*CURLOPT_MAXREDIRS.*/a\            CURLOPT_SSL_VERIFYPEER => 0,\n \
-#           CURLOPT_SSL_VERIFYHOST => 0,\n"  /var/www/owncloud/3rdparty/Sabre/DAV/Client.php
-
+#########################################
+##          RUNTIME SERVICES           ##
+#########################################
 
 # Add config.sh to execute during container startup
 RUN mkdir -p /etc/my_init.d
@@ -62,3 +90,4 @@ RUN chmod +x /etc/service/nginx/run
 RUN mkdir /etc/service/php-fpm
 ADD php-fpm.sh /etc/service/php-fpm/run
 RUN chmod +x /etc/service/php-fpm/run
+
