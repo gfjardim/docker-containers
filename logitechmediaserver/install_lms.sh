@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OUT=$(wget -qO - http://downloads.slimdevices.com/nightly/index.php?ver=7.8)
+OUT=$(wget -qO - http://downloads.slimdevices.com/nightly/index.php?ver=7.9)
 
 # Try to catch the link or die
 REGEX=".*href=\".(.*).deb\""
