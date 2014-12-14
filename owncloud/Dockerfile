@@ -8,54 +8,19 @@ MAINTAINER gfjardim <gfjardim@gmail.com>
 # Set correct environment variables
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME            /root
-ENV RUNTIME_USER    nobody
-
-# Ensure UTF-8
-RUN locale-gen en_US.UTF-8
-ENV LANG       en_US.UTF-8
-ENV LC_ALL     en_US.UTF-8
-
-# Configure user nobody to match unRAID's settings
-RUN usermod -u 99 nobody && \
-    usermod -g 100 nobody && \
-    usermod -d /home nobody && \
-    chown -R nobody:users /home
-
-# Disable SSH
-RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
+ENV LC_ALL          C.UTF-8
+ENV LANG            en_US.UTF-8
+ENV LANGUAGE        en_US.UTF-8
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
-
 #########################################
-##    REPOSITORIES AND DEPENDENCIES    ##
+##         RUN INSTALL SCRIPT          ##
 #########################################
 
-# Use mirrors
-#RUN sed -i -e "s#http://[^\s]*archive.ubuntu[^\s]* #http://sft.if.usp.br/ubuntu/ #g" /etc/apt/sources.list
-
-# Install Dependencies
-RUN apt-get update -q && \
-    apt-get install -qy \
-    php5-cli
-    php5-gd \
-    php5-pgsql \
-    php5-sqlite \
-    php5-mysqlnd \
-    php5-curl \
-    php5-intl \
-    php5-mcrypt \
-    php5-ldap \
-    php5-gmp \
-    php5-apcu \
-    php5-imagick \
-    php5-fpm \
-    smbclient \
-    nginx \
-    openssl \
-    && rm -rf /var/lib/apt/lists/*
-
+ADD install.sh /tmp/
+RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh
 
 #########################################
 ##       FILES AND CONFIGURATION       ##

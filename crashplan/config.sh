@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Fix the timezone
+if [[ $(cat /etc/timezone) != $TZ ]] ; then
+  echo "$TZ" > /etc/timezone
+  dpkg-reconfigure -f noninteractive tzdata
+fi
+
 # move identity out of container, this prevents having to adopt account every time you rebuild the Docker
 if [[ ! -d /config/id ]]; then
   mkdir -p /config/id
