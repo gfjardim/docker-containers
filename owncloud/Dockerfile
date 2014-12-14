@@ -36,9 +36,25 @@ CMD ["/sbin/my_init"]
 #RUN sed -i -e "s#http://[^\s]*archive.ubuntu[^\s]* #http://sft.if.usp.br/ubuntu/ #g" /etc/apt/sources.list
 
 # Install Dependencies
-RUN apt-get update -q
-RUN  apt-get install -qy php5-cli php5-gd php5-pgsql php5-sqlite php5-mysqlnd php5-curl php5-intl php5-mcrypt php5-ldap php5-gmp php5-apcu \
-     php5-imagick php5-fpm smbclient nginx openssl
+RUN apt-get update -q && \
+    apt-get install -qy \
+    php5-cli
+    php5-gd \
+    php5-pgsql \
+    php5-sqlite \
+    php5-mysqlnd \
+    php5-curl \
+    php5-intl \
+    php5-mcrypt \
+    php5-ldap \
+    php5-gmp \
+    php5-apcu \
+    php5-imagick \
+    php5-fpm \
+    smbclient \
+    nginx \
+    openssl \
+    && rm -rf /var/lib/apt/lists/*
 
 
 #########################################
@@ -46,8 +62,8 @@ RUN  apt-get install -qy php5-cli php5-gd php5-pgsql php5-sqlite php5-mysqlnd ph
 #########################################
 
 # Install ownCloud
-ADD http://download.owncloud.org/community/owncloud-latest.tar.bz2 /tmp/owncloud-latest.tar.bz2
-RUN mkdir -p /var/www && tar -C /var/www -xjf /tmp/owncloud-latest.tar.bz2 && rm /tmp/owncloud-latest.tar.bz2
+RUN mkdir /var/www
+ADD http://download.owncloud.org/community/owncloud-latest.tar.bz2 /var/www/
 
 # Add the site configuration
 ADD owncloud.site /etc/nginx/sites-enabled/owncloud
