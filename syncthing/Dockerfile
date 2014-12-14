@@ -1,35 +1,37 @@
 FROM phusion/baseimage:0.9.11
 MAINTAINER gfjardim <gfjardim@gmail.com>
-ENV DEBIAN_FRONTEND noninteractive
+
+#########################################
+##        ENVIRONMENTAL CONFIG         ##
+#########################################
 
 # Set correct environment variables
-ENV HOME /root
-
-# Ensure UTF-8
-RUN locale-gen en_US.UTF-8
-ENV LANG       en_US.UTF-8
-ENV LC_ALL     en_US.UTF-8
-
-# Fix a Debianism of the nobody's uid being 65534
-RUN usermod -u 99 nobody
-RUN usermod -g 100 nobody
-RUN usermod -d /config nobody
+ENV DEBIAN_FRONTEND noninteractive
+ENV HOME            /root
+ENV LC_ALL          C.UTF-8
+ENV LANG            en_US.UTF-8
+ENV LANGUAGE        en_US.UTF-8
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
-# Install Dependencies
-RUN apt-get update -q
-RUN apt-get install -qy --force-yes wget
+#########################################
+##         RUN INSTALL SCRIPT          ##
+#########################################
 
-# Install Syncthing
-RUN mkdir -p /opt/syncthing && wget -nv -O - "https://github.com/syncthing/syncthing/releases/download/v0.9.18/syncthing-linux-amd64-v0.9.18.tar.gz" | tar -xzf - --strip-components=1 -C /opt/syncthing
+ADD install.sh /tmp/
+RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh
 
-# VOLUMES
+#########################################
+##         EXPORTS AND VOLUMES         ##
+#########################################
+
 VOLUME /config
-
-# PORTS
 EXPOSE 8080 22000 21025/udp
+
+#########################################
+##          RUNTIME SERVICES           ##
+#########################################
 
 # Add syncthing to runit
 RUN mkdir /etc/service/syncthing
