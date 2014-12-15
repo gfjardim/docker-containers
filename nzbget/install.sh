@@ -26,10 +26,10 @@ fi
 # Repositories
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse"
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
-add-apt-repository ppa:jon-severinsson/ffmpeg
+add-apt-repository ppa:mc3man/trusty-media
 
 # Use mirrors
-sed -i -e "s#http://[^\s]*archive.ubuntu[^\s]* #mirror://mirrors.ubuntu.com/mirrors.txt #g" /etc/apt/sources.list
+#sed -i -e "s#http://[^\s]*archive.ubuntu[^\s]* #mirror://mirrors.ubuntu.com/mirrors.txt #g" /etc/apt/sources.list
 
 # Install Dependencies
 apt-get update -qq

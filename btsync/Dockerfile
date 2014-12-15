@@ -1,43 +1,44 @@
 FROM phusion/baseimage:0.9.11
 MAINTAINER gfjardim <gfjardim@gmail.com>
-ENV DEBIAN_FRONTEND noninteractive
 
-# Set install version
-ENV VERSION testing
+#########################################
+##        ENVIRONMENTAL CONFIG         ##
+#########################################
 
 # Set correct environment variables
-ENV HOME /root
-
-# Ensure UTF-8
-RUN locale-gen en_US.UTF-8
-ENV LANG       en_US.UTF-8
-ENV LC_ALL     en_US.UTF-8
-
-# Fix a Debianism of the nobody's uid being 65534
-RUN usermod -u 99 nobody
-RUN usermod -g 100 nobody
-
-# Disabling SSH
-RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
+ENV DEBIAN_FRONTEND noninteractive
+ENV HOME            /root
+ENV LC_ALL          C.UTF-8
+ENV LANG            en_US.UTF-8
+ENV LANGUAGE        en_US.UTF-8
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
-# Install Dependencies
-RUN apt-get update -q
-RUN apt-get install -qy --force-yes wget
+#########################################
+##         RUN INSTALL SCRIPT          ##
+#########################################
 
-# Install Syncthing
-RUN mkdir -p /opt/btsync && wget -nv -O - "http://download.getsyncapp.com/endpoint/btsync/os/linux-x64/track/stable" |  tar -xzf - -C /opt/btsync
+ADD install.sh /tmp/
+RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh
 
-# VOLUMES
-VOLUME /config
-
-# PORTS
-EXPOSE 5555 8888
+#########################################
+##       FILES AND CONFIGURATION       ##
+#########################################
 
 # Files
 ADD btsync.conf /tmp/
+
+#########################################
+##         EXPORTS AND VOLUMES         ##
+#########################################
+
+VOLUME /config
+EXPOSE 5555 8888
+
+#########################################
+##          RUNTIME SERVICES           ##
+#########################################
 
 # Add btsync to runit
 RUN mkdir /etc/service/btsync
