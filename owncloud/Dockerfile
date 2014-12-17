@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.11
+FROM phusion/baseimage:0.9.15
 MAINTAINER gfjardim <gfjardim@gmail.com>
 
 #########################################
@@ -16,24 +16,12 @@ ENV LANGUAGE        en_US.UTF-8
 CMD ["/sbin/my_init"]
 
 #########################################
-##         RUN INSTALL SCRIPT          ##
+##  FILES, SERVICES AND CONFIGURATION  ##
 #########################################
 
-ADD install.sh /tmp/
-RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh
-
-#########################################
-##       FILES AND CONFIGURATION       ##
-#########################################
-
-# Install ownCloud
-RUN mkdir /var/www
+# Files
 ADD http://download.owncloud.org/community/owncloud-latest.tar.bz2 /var/www/
-
-# Add the site configuration
 ADD owncloud.site /etc/nginx/sites-enabled/owncloud
-
-# Remove default site
 RUN rm -f /etc/nginx/sites-enabled/default
 
 # Add custom PHP-FPM / Ningx configuration
@@ -41,34 +29,23 @@ ADD www.conf /etc/php5/fpm/pool.d/
 ADD php.ini /etc/php5/fpm/
 ADD nginx.conf /etc/nginx/
 
+# Add services to runit
+ADD config.sh /etc/my_init.d/config.sh
+ADD nginx.sh /etc/service/nginx/run
+ADD php-fpm.sh /etc/service/php-fpm/run
+
+RUN chmod +x /etc/service/*/run /etc/my_init.d/*
 
 #########################################
 ##         EXPORTS AND VOLUMES         ##
 #########################################
 
-# Expose ownCloud's data dir
 VOLUME ["/var/www/owncloud/data"]
-
-# Expose port. Cannot be modified!
 EXPOSE 8000
 
-
 #########################################
-##          RUNTIME SERVICES           ##
+##         RUN INSTALL SCRIPT          ##
 #########################################
 
-# Add config.sh to execute during container startup
-RUN mkdir -p /etc/my_init.d
-ADD config.sh /etc/my_init.d/config.sh
-RUN chmod +x /etc/my_init.d/config.sh
-
-# Add Nginx to runit
-RUN mkdir /etc/service/nginx
-ADD nginx.sh /etc/service/nginx/run
-RUN chmod +x /etc/service/nginx/run
-
-# Add PHP-FPM to runit
-RUN mkdir /etc/service/php-fpm
-ADD php-fpm.sh /etc/service/php-fpm/run
-RUN chmod +x /etc/service/php-fpm/run
-
+ADD install.sh /tmp/
+RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh

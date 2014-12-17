@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.11
+FROM phusion/baseimage:0.9.15
 MAINTAINER gfjardim <gfjardim@gmail.com>
 
 #########################################
@@ -7,7 +7,10 @@ MAINTAINER gfjardim <gfjardim@gmail.com>
 
 # Set correct environment variables
 ENV DEBIAN_FRONTEND noninteractive
-ENV HOME /root
+ENV HOME            /root
+ENV LC_ALL          C.UTF-8
+ENV LANG            en_US.UTF-8
+ENV LANGUAGE        en_US.UTF-8
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
@@ -16,44 +19,32 @@ CMD ["/sbin/my_init"]
 ENV GIT_USER gfjardim
 
 #########################################
-##         RUN INSTALL SCRIPT          ##
+##  FILES, SERVICES AND CONFIGURATION  ##
 #########################################
 
-ADD install.sh /tmp/
-RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh
-
-#########################################
-##       FILES AND CONFIGURATION       ##
-#########################################
-
-# Add nzbget in-app update scripts
+# Files
 ADD nzbget-update-install.sh /opt/
 RUN chmod +x /opt/nzbget-update-install.sh
 ADD package-info.json /opt/
+
+# Add services to runit
+ADD config.sh /etc/my_init.d/config.sh
+ADD nzbget.sh /etc/service/nzbget/run
+ADD update_service.sh /etc/service/update_service/run
+
+RUN chmod +x /etc/service/*/run /etc/my_init.d/*
 
 #########################################
 ##         EXPORTS AND VOLUMES         ##
 #########################################
 
-VOLUME /config
-VOLUME /downloads
+VOLUME /config /downloads
 EXPOSE 6789
 
 #########################################
-##          RUNTIME SERVICES           ##
+##         RUN INSTALL SCRIPT          ##
 #########################################
 
-# Add config.sh to execute during container startup
-RUN mkdir -p /etc/my_init.d
-ADD config.sh /etc/my_init.d/config.sh
-
-# Add nzbget to runit
-RUN mkdir /etc/service/nzbget
-ADD nzbget.sh /etc/service/nzbget/run
-
-# Add update_service to runit
-RUN mkdir /etc/service/update_service
-ADD update_service.sh /etc/service/update_service/run
-
-RUN chmod +x /etc/service/*/run /etc/my_init.d/*
+ADD install.sh /tmp/
+RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh
 

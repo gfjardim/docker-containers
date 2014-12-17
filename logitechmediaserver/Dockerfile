@@ -1,42 +1,39 @@
-FROM phusion/baseimage:0.9.11
+FROM phusion/baseimage:0.9.15
 MAINTAINER gfjardim <gfjardim@gmail.com>
-ENV DEBIAN_FRONTEND noninteractive
 
-# Set install version
-ENV VERSION testing
+#########################################
+##        ENVIRONMENTAL CONFIG         ##
+#########################################
 
 # Set correct environment variables
-ENV HOME /root
-
-# Ensure UTF-8
-RUN locale-gen en_US.UTF-8
-ENV LANG       en_US.UTF-8
-ENV LC_ALL     en_US.UTF-8
-
-# Fix a Debianism of the nobody's uid being 65534
-RUN usermod -u 99 nobody
-RUN usermod -g 100 nobody
+ENV DEBIAN_FRONTEND noninteractive
+ENV HOME            /root
+ENV LC_ALL          C.UTF-8
+ENV LANG            en_US.UTF-8
+ENV LANGUAGE        en_US.UTF-8
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
-# Install Dependencies
-RUN apt-get update -q
-RUN apt-get install -qy --force-yes wget
+#########################################
+##  FILES, SERVICES AND CONFIGURATION  ##
+#########################################
 
-ADD install_lms.sh /tmp/
-RUN bash /tmp/install_lms.sh
-RUN dpkg -i /tmp/lms.deb
-RUN rm /tmp/install_lms.sh /tmp/lms.deb
+# Add services to runit
+ADD logitechmediaserver.sh /etc/service/logitechmediaserver/run
 
-#VOLUMES
-VOLUME /config
-VOLUME /music
+RUN chmod +x /etc/service/*/run /etc/my_init.d/*
 
-#PORTS
+#########################################
+##         EXPORTS AND VOLUMES         ##
+#########################################
+
+VOLUME /config /music
 EXPOSE 3483 3483/udp 9000 9090
 
-# Add logitechmediaserver to runit
-RUN mkdir /etc/service/logitechmediaserver
-ADD logitechmediaserver.sh /etc/service/logitechmediaserver/run
-RUN chmod +x /etc/service/logitechmediaserver/run
+#########################################
+##         RUN INSTALL SCRIPT          ##
+#########################################
+
+ADD install.sh /tmp/
+RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh

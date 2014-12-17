@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.11
+FROM phusion/baseimage:0.9.15
 MAINTAINER gfjardim <gfjardim@gmail.com>
 
 #########################################
@@ -16,18 +16,16 @@ ENV LANGUAGE        en_US.UTF-8
 CMD ["/sbin/my_init"]
 
 #########################################
-##         RUN INSTALL SCRIPT          ##
-#########################################
-
-ADD install.sh /tmp/
-RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh
-
-#########################################
-##       FILES AND CONFIGURATION       ##
+##  FILES, SERVICES AND CONFIGURATION  ##
 #########################################
 
 # Files
 ADD btsync.conf /tmp/
+
+# Add services to runit
+ADD btsync.sh /etc/service/btsync/run
+
+RUN chmod +x /etc/service/*/run /etc/my_init.d/*
 
 #########################################
 ##         EXPORTS AND VOLUMES         ##
@@ -37,10 +35,8 @@ VOLUME /config
 EXPOSE 5555 8888
 
 #########################################
-##          RUNTIME SERVICES           ##
+##         RUN INSTALL SCRIPT          ##
 #########################################
 
-# Add btsync to runit
-RUN mkdir /etc/service/btsync
-ADD btsync.sh /etc/service/btsync/run
-RUN chmod +x /etc/service/btsync/run
+ADD install.sh /tmp/
+RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh

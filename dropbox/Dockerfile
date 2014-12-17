@@ -1,29 +1,39 @@
-FROM phusion/baseimage:0.9.11
+FROM phusion/baseimage:0.9.15
 MAINTAINER gfjardim <gfjardim@gmail.com>
-ENV DEBIAN_FRONTEND noninteractive
 
-RUN usermod -u 99 nobody && \
-    usermod -g 100 nobody && \
-    usermod -d /home nobody
+#########################################
+##        ENVIRONMENTAL CONFIG         ##
+#########################################
+
+# Set correct environment variables
+ENV DEBIAN_FRONTEND noninteractive
+ENV HOME            /root
+ENV LC_ALL          C.UTF-8
+ENV LANG            en_US.UTF-8
+ENV LANGUAGE        en_US.UTF-8
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
-ADD sources.list /etc/apt/
+#########################################
+##  FILES, SERVICES AND CONFIGURATION  ##
+#########################################
 
-RUN apt-get update -qq && \
-    apt-get install -qq --force-yes python wget && \
-    apt-get autoremove && \
-    apt-get autoclean
+# Add services to runit
+ADD dropbox.sh /etc/service/dropbox/run
 
-RUN wget -nv -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar -xzf - -C /home
+RUN chmod +x /etc/service/*/run /etc/my_init.d/*
+
+#########################################
+##         EXPORTS AND VOLUMES         ##
+#########################################
 
 EXPOSE 17500
+VOLUME /home/.dropbox /home/Dropbox
 
-VOLUME /home/.dropbox
-VOLUME /home/Dropbox
+#########################################
+##         RUN INSTALL SCRIPT          ##
+#########################################
 
-# Add Dropbox to runit
-RUN mkdir /etc/service/dropbox
-ADD dropbox.sh /etc/service/dropbox/run
-RUN chmod +x /etc/service/dropbox/run
+ADD install.sh /tmp/
+RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh

@@ -36,7 +36,6 @@ apt-get update -qq
 apt-get install -qy libxml2 \
                     sgml-base \
                     libsigc++-2.0-0c2a \
-                    python2.7-minimal \
                     xml-core \
                     javascript-common \
                     libjs-jquery \
@@ -44,8 +43,6 @@ apt-get install -qy libxml2 \
                     libjs-jquery-tablesorter \
                     libjs-twitter-bootstrap \
                     libpython-stdlib \
-                    python2.7 \
-                    python-minimal \
                     python \
                     ffmpeg \
                     wget \
@@ -54,7 +51,10 @@ apt-get install -qy libxml2 \
                     p7zip \
                     nzbget
 
+#########################################
+##                 CLEANUP             ##
+#########################################
+
 # Clean APT install files
-rm -rf /var/lib/apt/lists/*
-apt-get autoremove -y
-apt-get autoclean -y
+apt-get clean -y
+rm -rf /var/lib/apt/lists/* /var/cache/* /var/tmp/*

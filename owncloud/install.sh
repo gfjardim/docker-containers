@@ -21,9 +21,6 @@ rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse"
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
 
-# Use mirrors
-sed -i -e "s#http://[^\s]*archive.ubuntu[^\s]* #mirror://mirrors.ubuntu.com/mirrors.txt #g" /etc/apt/sources.list
-
 # Install Dependencies
 apt-get update -qq
 apt-get install -qy php5-cli \
@@ -43,6 +40,10 @@ apt-get install -qy php5-cli \
                     nginx \
                     openssl
 
+#########################################
+##                 CLEANUP             ##
+#########################################
+
 # Clean APT install files
 apt-get clean -y
-rm -rf /var/lib/apt/lists/*
+rm -rf /var/lib/apt/lists/* /var/cache/* /var/tmp/*

@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.11
+FROM phusion/baseimage:0.9.15
 MAINTAINER gfjardim <gfjardim@gmail.com>
 
 #########################################
@@ -16,11 +16,13 @@ ENV LANGUAGE        en_US.UTF-8
 CMD ["/sbin/my_init"]
 
 #########################################
-##         RUN INSTALL SCRIPT          ##
+##  FILES, SERVICES AND CONFIGURATION  ##
 #########################################
 
-ADD install.sh /tmp/
-RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh
+# Add services to runit
+ADD syncthing.sh /etc/service/syncthing/run
+
+RUN chmod +x /etc/service/*/run /etc/my_init.d/*
 
 #########################################
 ##         EXPORTS AND VOLUMES         ##
@@ -30,10 +32,8 @@ VOLUME /config
 EXPOSE 8080 22000 21025/udp
 
 #########################################
-##          RUNTIME SERVICES           ##
+##         RUN INSTALL SCRIPT          ##
 #########################################
 
-# Add syncthing to runit
-RUN mkdir /etc/service/syncthing
-ADD syncthing.sh /etc/service/syncthing/run
-RUN chmod +x /etc/service/syncthing/run
+ADD install.sh /tmp/
+RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh
