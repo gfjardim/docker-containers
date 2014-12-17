@@ -6,17 +6,27 @@ MAINTAINER gfjardim <gfjardim@gmail.com>
 #########################################
 
 # Set correct environment variables
-ENV DEBIAN_FRONTEND="noninteractive" HOME="/root" LC_ALL="C.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US.UTF-8"
+ENV DEBIAN_FRONTEND noninteractive
+ENV HOME            /root
+ENV LC_ALL          C.UTF-8
+ENV LANG            en_US.UTF-8
+ENV LANGUAGE        en_US.UTF-8
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
+
+#########################################
+##         RUN INSTALL SCRIPT          ##
+#########################################
+
+ADD install.sh /tmp/
+RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh
 
 #########################################
 ##  FILES, SERVICES AND CONFIGURATION  ##
 #########################################
 
 # Files
-ADD http://download.owncloud.org/community/owncloud-latest.tar.bz2 /var/www/
 ADD owncloud.site /etc/nginx/sites-enabled/owncloud
 RUN rm -f /etc/nginx/sites-enabled/default
 
@@ -39,9 +49,3 @@ RUN chmod +x /etc/service/*/run /etc/my_init.d/*
 VOLUME ["/var/www/owncloud/data"]
 EXPOSE 8000
 
-#########################################
-##         RUN INSTALL SCRIPT          ##
-#########################################
-
-ADD install.sh /tmp/
-RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh

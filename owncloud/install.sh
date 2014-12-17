@@ -38,13 +38,11 @@ apt-get install -qy php5-cli \
                     php5-fpm \
                     smbclient \
                     nginx \
-                    openssl
+                    openssl \
+                    wget
 
-#########################################
-##             INSTALLATION            ##
-#########################################
-
-cp /etc/php5/fpm/php-fpm.conf.dpkg-new /etc/php5/fpm/php-fpm.conf
+mkdir -p /var/www/
+wget -qO - http://download.owncloud.org/community/owncloud-latest.tar.bz2 | tar -jx -C /var/www
 
 #########################################
 ##                 CLEANUP             ##
