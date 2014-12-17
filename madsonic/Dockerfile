@@ -16,7 +16,8 @@ CMD ["/sbin/my_init"]
 #########################################
 
 # Add services to runit
-ADD syncthing.sh /etc/service/syncthing/run
+ADD config.sh /etc/my_init.d/config.sh
+ADD madsonic.sh /etc/service/madsonic/run
 
 RUN chmod +x /etc/service/*/run /etc/my_init.d/*
 
@@ -24,8 +25,8 @@ RUN chmod +x /etc/service/*/run /etc/my_init.d/*
 ##         EXPORTS AND VOLUMES         ##
 #########################################
 
-VOLUME /config
-EXPOSE 8080 22000 21025/udp
+VOLUME /config /music
+EXPOSE 4040 4050
 
 #########################################
 ##         RUN INSTALL SCRIPT          ##
@@ -33,3 +34,4 @@ EXPOSE 8080 22000 21025/udp
 
 ADD install.sh /tmp/
 RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh
+
