@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Container>
+  <Name>Madsonic</Name>
+  <Description>[b][u][span style=\'color: #E80000;\']Description[/span][/u][/b][br]&#13;
+Madsonic is a fork of the Subsonic 4.x Server, Madsonic is a full replacement for your current Subsonic server!, Madsonic is designed for people who want more from the vanilla Subsonic features.[br][br]&#13;
+[b][u][span style=\'color: #E80000;\']Configuration[/span][/u][/b][br]&#13;
+[b]/config[/b] This is where madsonic will store it\'s configuration file, database and logs.[br]&#13;
+[b]/media[/b] This is where madsonic will scan for media files.&#13;
+</Description>
+  <Registry>https://registry.hub.docker.com/u/gfjardim/madsonic/</Registry>
+  <Repository>gfjardim/madsonic</Repository>
+  <BindTime>true</BindTime>
+  <Privileged>false</Privileged>
+  <Environment>
+    <Variable>
+      <Name>SSL</Name>
+      <Value>0</Value>
+    </Variable>
+  </Environment>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>4040</HostPort>
+        <ContainerPort>4040</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>4050</HostPort>
+        <ContainerPort>4050</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/madsonic</HostDir>
+      <ContainerDir>/config</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir></HostDir>
+      <ContainerDir>/music</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <WebUI>http://[IP]:[PORT:4040]/</WebUI>
+  <Banner>http://forum.madsonic.org/styles/prosilver_se/imageset/logo.default.png</Banner>
+  <Icon>https://raw.githubusercontent.com/binhex/docker-templates/master/binhex/images/madsonic-icon.png</Icon>
+</Container>
