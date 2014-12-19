@@ -42,11 +42,11 @@ TRANSCODE_LINK="http://madsonic.org/download/transcode/20141017_madsonic-transco
 # Install Madsonic
 mkdir -p /opt/madsonic /opt/transcode
 wget -qO - "${MADSONIC_LINK}" | tar -zx -C /opt/madsonic
-sed -e "s#\${LOG} 2>\&1 \&#\${LOG} 2>\&1#g" /opt/madsonic/madsonic.sh
+sed -i -e "s#\${LOG} 2>\&1 \&#\${LOG} 2>\&1#g" /opt/madsonic/madsonic.sh
 
 # Install transcode package
 wget -qO /tmp/transcode.zip "${TRANSCODE_LINK}"
-unzip /tmp/transcode.zip -d /opt/transcode
+unzip -qq /tmp/transcode.zip -d /opt/transcode
 rm -rf /tmp/transcode.zip /opt/transcode/windows /opt/transcode/mac /opt/transcode/licenses
 
 # Clean APT install files
