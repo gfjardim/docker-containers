@@ -11,7 +11,7 @@ if [[ -d /opt/transcode ]]; then
 fi
 
 # Set https port if SSL = 1
-[[ ${SSL} == 1 ]]; && HTTPS_PORT=4050 || HTTPS_PORT=0
+[[ ${SSL} == 1 ]] && HTTPS_PORT=4050 || HTTPS_PORT=0
 
 # Create Madsonic home directory.
 mkdir -p ${HOME_FOLDER}/incoming \
@@ -20,7 +20,7 @@ mkdir -p ${HOME_FOLDER}/incoming \
          ${HOME_FOLDER}/playlists/export \
          ${HOME_FOLDER}/playlists/backup 
 
-exec /sbin/setuser nobody /var/madsonic/madsonic.sh --home=${HOME_FOLDER} \
+exec /sbin/setuser nobody /opt/madsonic/madsonic.sh --home=${HOME_FOLDER} \
                                                     --host=0.0.0.0 \
                                                     --port=4040 \
                                                     --https-port=${HTTPS_PORT} \
