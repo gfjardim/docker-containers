@@ -25,9 +25,6 @@ add-apt-repository ppa:webupd8team/java
 # Accept JAVA license
 echo "oracle-java7-installer shared/accepted-oracle-license-v1-1 select true" | /usr/bin/debconf-set-selections
 
-# Use mirrors
-sed -i -e "s#http://[^\s]*archive.ubuntu[^\s]* #mirror://mirrors.ubuntu.com/mirrors.txt #g" /etc/apt/sources.list
-
 # Install Dependencies
 apt-get update -qq
 apt-get install -qy unzip gzip oracle-java7-installer wget
