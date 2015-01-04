@@ -24,6 +24,11 @@
         <ContainerPort>5555</ContainerPort>
         <Protocol>tcp</Protocol>
       </Port>
+      <Port>
+        <HostPort>3838</HostPort>
+        <ContainerPort>3838</ContainerPort>
+        <Protocol>udp</Protocol>
+      </Port>
     </Publish>
   </Networking>
   <Data>
