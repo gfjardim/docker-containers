@@ -32,7 +32,7 @@ RUN chmod +x /etc/service/*/run /etc/my_init.d/*
 #########################################
 
 VOLUME /config
-EXPOSE 5555 8888
+EXPOSE 3838/udp 5555 8888
 
 #########################################
 ##         RUN INSTALL SCRIPT          ##
