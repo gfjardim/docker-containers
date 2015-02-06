@@ -71,6 +71,9 @@ if [[ ! -f /tmp/ppscripts_installed ]]; then
   mkdir -p /config/ppscripts/nzbToMedia
   wget -nv https://github.com/clinton-hall/nzbToMedia/archive/master.tar.gz -O - | tar --strip-components 1 -C /config/ppscripts/nzbToMedia -zxf -
 
+  # Misc Clinton Hall scripts
+  wget -nv https://github.com/clinton-hall/GetScripts/archive/master.tar.gz -O - | tar -zxf - --strip-components 1 -C /config/ppscripts/ --wildcards --no-anchored '*.py'
+
   # Videosort
   echo "Downloading videosort."
   rm -rf /config/ppscripts/videosort

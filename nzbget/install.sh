@@ -26,6 +26,7 @@ fi
 # Repositories
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse"
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
+apt-add-repository ppa:modriscoll/nzbget
 add-apt-repository ppa:mc3man/trusty-media
 
 # Use mirrors
@@ -50,6 +51,9 @@ apt-get install -qy libxml2 \
                     unzip \
                     p7zip \
                     nzbget
+
+# Update unrar to the last version
+wget http://www.rarlab.com/rar/rarlinux-x64-5.2.1b2.tar.gz -O - |tar zx --strip-components=1 -C /usr/bin/ rar/unrar
 
 #########################################
 ##                 CLEANUP             ##
