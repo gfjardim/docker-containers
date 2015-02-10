@@ -13,6 +13,9 @@ fi
 # Set https port if SSL = 1
 [[ ${SSL} == 1 ]] && HTTPS_PORT=4050 || HTTPS_PORT=0
 
+# Set TZ if empty
+[[ ${TZ} ]] || TZ=$(cat /etc/timezone)
+
 # Create Madsonic home directory.
 mkdir -p ${HOME_FOLDER}/incoming \
          ${HOME_FOLDER}/podcast \
