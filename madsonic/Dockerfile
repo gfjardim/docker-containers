@@ -29,7 +29,7 @@ RUN chmod +x /etc/service/*/run /etc/my_init.d/*
 ##         EXPORTS AND VOLUMES         ##
 #########################################
 
-VOLUME /config /music
+VOLUME /config /media
 EXPOSE 4040 4050
 
 #########################################
