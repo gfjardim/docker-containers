@@ -42,6 +42,7 @@ apt-get install -qy php5-cli \
                     wget
 
 mkdir -p /var/www/
+
 url="https://owncloud.org/install/"
 regex="<a href=\"([^\"]*)\">Unix</a>"
 if [[ $(wget -qO - ${url}) =~ $regex ]]; then
