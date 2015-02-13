@@ -43,15 +43,7 @@ apt-get install -qy php5-cli \
 
 mkdir -p /var/www/
 
-url="https://owncloud.org/install/"
-regex="<a href=\"([^\"]*)\">Unix</a>"
-if [[ $(wget -qO - ${url}) =~ $regex ]]; then
-  download=${BASH_REMATCH[1]}
-else
-  exit 1
-fi
-
-wget -qO - $download | tar -jx -C /var/www
+wget -qO - "https://download.owncloud.org/community/owncloud-8.0.0.tar.bz2" | tar -jx -C /var/www
 
 rm -f /var/www/owncloud/.user.ini
 
