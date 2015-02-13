@@ -53,6 +53,8 @@ fi
 
 wget -qO - $download | tar -jx -C /var/www
 
+rm -f /var/www/owncloud/.user.ini
+
 #########################################
 ##                 CLEANUP             ##
 #########################################
