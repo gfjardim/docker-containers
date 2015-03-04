@@ -30,7 +30,7 @@ apt-get install -qy wget
 #########################################
 
 # Install BTSync
-mkdir -p /opt/btsync && wget -nv -O - "http://download.getsyncapp.com/endpoint/btsync/os/linux-x64/track/stable" |  tar -xzf - -C /opt/btsync
+mkdir -p /opt/btsync && wget -nv -O - "https://download-cdn.getsyncapp.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz" |  tar -xzf - -C /opt/btsync
 
 #########################################
 ##                 CLEANUP             ##
