@@ -43,9 +43,9 @@ apt-get install -qy php5-cli \
 
 mkdir -p /var/www/
 
-wget -qO - "https://download.owncloud.org/community/owncloud-8.0.0.tar.bz2" | tar -jx -C /var/www
+wget -qO - "https://download.owncloud.org/community/owncloud-8.0.2.tar.bz2" | tar -jx -C /var/www
 
-rm -f /var/www/owncloud/.user.ini
+#rm -f /var/www/owncloud/.user.ini
 
 #########################################
 ##                 CLEANUP             ##
