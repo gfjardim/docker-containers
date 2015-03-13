@@ -33,13 +33,14 @@ apt-get install -qy php5-cli \
                     php5-mcrypt \
                     php5-ldap \
                     php5-gmp \
-                    php5-apcu \
                     php5-imagick \
                     php5-fpm \
+                    php5-gd \
                     smbclient \
                     nginx \
                     openssl \
-                    wget
+                    wget \
+                    bzip2
 
 mkdir -p /var/www/
 

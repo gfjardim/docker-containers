@@ -27,12 +27,11 @@ RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh
 #########################################
 
 # Files
-ADD owncloud.site /etc/nginx/sites-enabled/owncloud
+ADD owncloud.site owncloud_ssl.site /etc/nginx/sites-enabled/
 RUN rm -f /etc/nginx/sites-enabled/default
 
 # Add custom PHP-FPM / Ningx configuration
 ADD www.conf /etc/php5/fpm/pool.d/
-ADD php.ini /etc/php5/fpm/
 ADD nginx.conf /etc/nginx/
 
 # Add services to runit

@@ -1,6 +1,14 @@
+upstream php-handler {
+  server unix:/var/run/php5-fpm.sock;
+}
+
 server {
-  listen 8001;
+  listen 8000 ssl;
   server_name "";
+
+  ssl_certificate /opt/server.pem;
+  ssl_certificate_key /opt/server.key;
+  error_page 497 https://$host:$server_port$request_uri;
   
   # Path to the root of your installation
   root /var/www/owncloud;
@@ -52,6 +60,4 @@ server {
   }
 
 }
-
-
 
