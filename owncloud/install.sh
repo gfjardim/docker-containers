@@ -1,10 +1,12 @@
 #!/bin/bash
+OWNCLOUD_VERSION="8.0.2"
 
 #########################################
 ##        ENVIRONMENTAL CONFIG         ##
 #########################################
 
 # Configure user nobody to match unRAID's settings
+export DEBIAN_FRONTEND="noninteractive"
 usermod -u 99 nobody
 usermod -g 100 nobody
 usermod -d /home nobody
@@ -42,11 +44,238 @@ apt-get install -qy php5-cli \
                     wget \
                     bzip2
 
+#########################################
+##  FILES, SERVICES AND CONFIGURATION  ##
+#########################################
+# NGINX
+mkdir -p /etc/service/nginx
+cat <<'EOT' > /etc/service/nginx/run
+#!/bin/bash
+umask 000
+exec /usr/sbin/nginx -c /etc/nginx/nginx.conf
+EOT
+
+# PHP-FPM
+mkdir -p /etc/service/php-fpm
+cat <<'EOT' > /etc/service/php-fpm/run
+#!/bin/bash
+umask 000
+exec /usr/sbin/php5-fpm --nodaemonize --fpm-config /etc/php5/fpm/php-fpm.conf
+EOT
+
+# CONFIG
+cat <<'EOT' > /etc/my_init.d/config.sh
+#!/bin/bash
+
+# Fix the timezone
+if [[ $(cat /etc/timezone) != $TZ ]] ; then
+  echo "$TZ" > /etc/timezone
+  dpkg-reconfigure -f noninteractive tzdata
+  sed -i -e "s#;date.timezone.*#date.timezone = ${TZ}#g" /etc/php5/fpm/php.ini
+fi
+
+if [[ -f /var/www/owncloud/data/server.key && -f /var/www/owncloud/data/server.pem ]]; then
+  echo "Found pre-existing certificate, using it."
+  cp -f /var/www/owncloud/data/server.* /opt/
+else
+  if [[ -z $SUBJECT ]]; then 
+    SUBJECT="/C=US/ST=CA/L=Carlsbad/O=Lime Technology/OU=unRAID Server/CN=yourhome.com"
+  fi
+  echo "No pre-existing certificate found, generating a new one with subject:"
+  echo $SUBJECT
+  openssl req -new -x509 -days 3650 -nodes -out /opt/server.pem -keyout /opt/server.key \
+          -subj "$SUBJECT"
+  ls /opt/
+  cp -f /opt/server.* /var/www/owncloud/data/
+fi
+
+if [[ ! -d /var/www/owncloud/data/config ]]; then
+  mkdir /var/www/owncloud/data/config
+fi
+
+if [[ -d /var/www/owncloud/config ]]; then
+  rm -rf /var/www/owncloud/config
+  ln -sf /var/www/owncloud/data/config/ /var/www/owncloud/config
+fi
+
+chown -R nobody:users /var/www/owncloud
+EOT
+
+#PHP-FPM config
+cat <<'EOT' > /etc/php5/fpm/pool.d/www.conf
+[global]
+daemonize = no
+
+[www]
+user = nobody
+group = users
+listen = /var/run/php5-fpm.sock
+listen.mode = 0666
+pm = dynamic
+pm.max_children = 50
+pm.start_servers = 3
+pm.min_spare_servers = 2
+pm.max_spare_servers = 4
+pm.max_requests = 500
+php_admin_value[upload_max_filesize] = 100G
+php_admin_value[post_max_size] = 100G
+php_admin_value[default_charset] = UTF-8
+EOT
+
+# NGINX config
+cat <<'EOT' > /etc/nginx/nginx.conf
+user nobody users;
+daemon off;
+worker_processes 4;
+pid /run/nginx.pid;
+
+events {
+  worker_connections 768;
+}
+
+http {
+  sendfile on;
+  tcp_nopush on;
+  tcp_nodelay on;
+  keepalive_timeout 65;
+  types_hash_max_size 2048;
+  include /etc/nginx/mime.types;
+  default_type application/octet-stream;
+  access_log /var/log/nginx/access.log;
+  error_log /var/log/nginx/error.log;
+  gzip on;
+  gzip_disable "msie6";
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+  include /etc/nginx/conf.d/*.conf;
+  include /etc/nginx/sites-enabled/*;
+}
+EOT
+
+# NGINX site
+rm -f /etc/nginx/sites-enabled/default
+cat <<'EOT' > /etc/nginx/sites-enabled/owncloud.site
+upstream php-handler {
+  server unix:/var/run/php5-fpm.sock;
+}
+
+server {
+  listen 8000 ssl;
+  server_name "";
+
+  ssl_certificate /opt/server.pem;
+  ssl_certificate_key /opt/server.key;
+  error_page 497 https://$host:$server_port$request_uri;
+  
+  # Path to the root of your installation
+  root /var/www/owncloud;
+  
+  client_max_body_size 100G;
+  fastcgi_buffers 64 4K;
+  
+  rewrite ^/caldav(.*)$ /remote.php/caldav$1 redirect;
+  rewrite ^/carddav(.*)$ /remote.php/carddav$1 redirect;
+  rewrite ^/webdav(.*)$ /remote.php/webdav$1 redirect;
+  
+  index index.php;
+  error_page 403 /core/templates/403.php;
+  error_page 404 /core/templates/404.php;
+  
+  location = /robots.txt {
+    allow all;
+    log_not_found off;
+    access_log off;
+  }
+  location ~ ^/(?:\.htaccess|data|config|db_structure\.xml|README) {
+    deny all;
+  }
+  location / {
+    # The following 2 rules are only needed with webfinger
+    rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
+    rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
+    rewrite ^/.well-known/carddav /remote.php/carddav/ redirect;
+    rewrite ^/.well-known/caldav /remote.php/caldav/ redirect;
+    rewrite ^(/core/doc/[^\/]+/)$ $1/index.html;
+    try_files $uri $uri/ index.php;
+  }
+  location ~ \.php(?:$|/) {
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+    fastcgi_pass php-handler;
+  }
+  # Optional: set long EXPIRES header on static assets
+  location ~* \.(?:jpg|jpeg|gif|bmp|ico|png|css|js|swf)$ {
+    expires 30d;
+    # Optional: Don't log access to assets
+    access_log off;
+  }
+}
+
+server {
+  listen 8001;
+  server_name "";
+  
+  # Path to the root of your installation
+  root /var/www/owncloud;
+  
+  client_max_body_size 100G;
+  fastcgi_buffers 64 4K;
+  
+  rewrite ^/caldav(.*)$ /remote.php/caldav$1 redirect;
+  rewrite ^/carddav(.*)$ /remote.php/carddav$1 redirect;
+  rewrite ^/webdav(.*)$ /remote.php/webdav$1 redirect;
+  
+  index index.php;
+  error_page 403 /core/templates/403.php;
+  error_page 404 /core/templates/404.php;
+  
+  location = /robots.txt {
+    allow all;
+    log_not_found off;
+    access_log off;
+  }
+
+  location ~ ^/(?:\.htaccess|data|config|db_structure\.xml|README) {
+    deny all;
+  }
+
+  location / {
+    # The following 2 rules are only needed with webfinger
+    rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
+    rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
+    rewrite ^/.well-known/carddav /remote.php/carddav/ redirect;
+    rewrite ^/.well-known/caldav /remote.php/caldav/ redirect;
+    rewrite ^(/core/doc/[^\/]+/)$ $1/index.html;
+    try_files $uri $uri/ index.php;
+  }
+  
+  location ~ \.php(?:$|/) {
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+    fastcgi_pass php-handler;
+  }
+  
+  # Optional: set long EXPIRES header on static assets
+  location ~* \.(?:jpg|jpeg|gif|bmp|ico|png|css|js|swf)$ {
+    expires 30d;
+    # Optional: Don't log access to assets
+    access_log off;
+  }
+}
+EOT
+
+chmod -R +x /etc/service/ /etc/my_init.d/
+
+#########################################
+##             INSTALLATION            ##
+#########################################
+
+# Install ownCloud
 mkdir -p /var/www/
-
-wget -qO - "https://download.owncloud.org/community/owncloud-8.0.2.tar.bz2" | tar -jx -C /var/www
-
-#rm -f /var/www/owncloud/.user.ini
+wget -qO - "https://download.owncloud.org/community/owncloud-${OWNCLOUD_VERSION}.tar.bz2" | tar -jx -C /var/www
 
 #########################################
 ##                 CLEANUP             ##
