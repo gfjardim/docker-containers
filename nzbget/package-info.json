@@ -1,4 +1,0 @@
-NZBGet.PackageInfo = {
-	"update-info-link": "https://raw.githubusercontent.com/GIT_USER/nzbget-updates/master/nzbget-update-info.json",
-	"install-script": "/opt/nzbget-update-install.sh"
-}
