@@ -19,6 +19,8 @@ rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
 #########################################
 #config
 cat <<'EOT' > /etc/my_init.d/config.sh
+#!/bin/bash
+export DEBIAN_FRONTEND="noninteractive"
 if [[ $(cat /etc/timezone) != $TZ ]] ; then
   echo "$TZ" > /etc/timezone
   dpkg-reconfigure -f noninteractive tzdata
