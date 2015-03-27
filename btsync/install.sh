@@ -20,10 +20,9 @@ rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
 #config
 cat <<'EOT' > /etc/my_init.d/config.sh
 #!/bin/bash
-export DEBIAN_FRONTEND="noninteractive"
 if [[ $(cat /etc/timezone) != $TZ ]] ; then
   echo "$TZ" > /etc/timezone
-  dpkg-reconfigure -f noninteractive tzdata
+  DEBIAN_FRONTEND="noninteractive" dpkg-reconfigure -f noninteractive tzdata
 fi
 EOT
 
@@ -65,8 +64,8 @@ add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe mul
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
 
 # Install Dependencies
-apt-get update -qq
-apt-get install -qy wget
+# apt-get update -qq
+# apt-get install -qy wget
 
 #########################################
 ##             INSTALLATION            ##
@@ -74,7 +73,8 @@ apt-get install -qy wget
 
 # Install BTSync
 mkdir -p /opt/btsync
-wget -nv -O - "https://download-cdn.getsyncapp.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz" |  tar -xzf - -C /opt/btsync
+curl -s -k -L "https://download-cdn.getsyncapp.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz" |  tar -xzf - -C /opt/btsync
+
 
 #########################################
 ##                 CLEANUP             ##
