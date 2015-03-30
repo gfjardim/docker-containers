@@ -31,6 +31,10 @@
       <Name>EDGE</Name>
       <Value>0</Value>
     </Variable>
+    <Variable>
+      <Name>DEFAULT_PORT</Name>
+      <Value>8000</Value>
+    </Variable>
   </Environment>
   <Data>
     <Volume>
