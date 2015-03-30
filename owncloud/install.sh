@@ -52,6 +52,7 @@ mkdir -p /etc/service/nginx
 cat <<'EOT' > /etc/service/nginx/run
 #!/bin/bash
 umask 000
+sed -i -e 's%listen\s8000\sssl%listen\ '"$DEFAULT_PORT"'\ ssl%1' /etc/nginx/sites-enabled/owncloud.site
 exec /usr/sbin/nginx -c /etc/nginx/nginx.conf
 EOT
 
