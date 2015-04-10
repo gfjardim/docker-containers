@@ -2,7 +2,7 @@
 <Container>
   <Name>Syncthing</Name>
   <Description>
-    [h3]Syncthing[/h3]Syncthing replaces proprietary sync and cloud services with something open, trustworthy and decentralized. Your data is your data alone and you deserve to choose where it is stored, if it is shared with some third party and how it's transmitted over the Internet.[br][br]
+    Syncthing replaces proprietary sync and cloud services with something open, trustworthy and decentralized. Your data is your data alone and you deserve to choose where it is stored, if it is shared with some third party and how it's transmitted over the Internet.[br][br]
     [b][span style='color: #E80000;']Directions:[/span][/b][br]
     [b]/config[/b] : set this path to where you wish Syncthing to store it's configuration.[br]
   </Description>

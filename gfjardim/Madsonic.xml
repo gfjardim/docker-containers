@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
   <Name>Madsonic</Name>
-  <Description>[b][u][span style=\'color: #E80000;\']Description[/span][/u][/b][br]&#13;
-Madsonic is a fork of the Subsonic 4.x Server, Madsonic is a full replacement for your current Subsonic server!, Madsonic is designed for people who want more from the vanilla Subsonic features.[br][br]&#13;
-[b][u][span style=\'color: #E80000;\']Configuration[/span][/u][/b][br]&#13;
-[b]/config[/b] This is where madsonic will store it\'s configuration file, database and logs.[br]&#13;
-[b]/media[/b] This is where madsonic will scan for media files.&#13;
+  <Description>
+Madsonic is a fork of the Subsonic 4.x Server, Madsonic is a full replacement for your current Subsonic server!, Madsonic is designed for people who want more from the vanilla Subsonic features.[br][br]
+[span style=\'color: #E80000;\'][b]Configuration[/b][/span]
+[b]/config[/b] This is where madsonic will store it\'s configuration file, database and logs.[br]
+[b]/media[/b] This is where madsonic will scan for media files.
 </Description>
   <Registry>https://registry.hub.docker.com/u/gfjardim/madsonic/</Registry>
   <Repository>gfjardim/madsonic</Repository>
