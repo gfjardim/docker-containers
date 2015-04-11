@@ -52,7 +52,6 @@ mkdir -p /etc/service/nginx
 cat <<'EOT' > /etc/service/nginx/run
 #!/bin/bash
 umask 000
-sed -i -e 's%listen\s8000\sssl%listen\ '"$DEFAULT_PORT"'\ ssl%1' /etc/nginx/sites-enabled/owncloud.site
 exec /usr/sbin/nginx -c /etc/nginx/nginx.conf
 EOT
 
@@ -74,6 +73,11 @@ if [[ $(cat /etc/timezone) != $TZ ]] ; then
   dpkg-reconfigure -f noninteractive tzdata
   sed -i -e "s#;date.timezone.*#date.timezone = ${TZ}#g" /etc/php5/fpm/php.ini
 fi
+
+if [[ -z $DEFAULT_PORT ]]; then
+  DEFAULT_PORT=8000
+fi
+sed -i -e "s#DEFAULT_PORT#${DEFAULT_PORT}#" /etc/nginx/sites-enabled/owncloud.site
 
 if [[ -f /var/www/owncloud/data/server.key && -f /var/www/owncloud/data/server.pem ]]; then
   echo "Found pre-existing certificate, using it."
@@ -160,17 +164,19 @@ upstream php-handler {
 }
 
 server {
-  listen 8000 ssl;
+  listen DEFAULT_PORT ssl;
   server_name "";
 
   ssl_certificate /opt/server.pem;
   ssl_certificate_key /opt/server.key;
-  error_page 497 https://$host:$server_port$request_uri;
+
+  # Force SSL
+  error_page 497 https://$host:DEFAULT_PORT$request_uri;
   
   # Path to the root of your installation
   root /var/www/owncloud;
   
-  client_max_body_size 100G;
+  client_max_body_size 0m;
   fastcgi_buffers 64 4K;
   
   rewrite ^/caldav(.*)$ /remote.php/caldav$1 redirect;
@@ -197,6 +203,7 @@ server {
     rewrite ^/.well-known/caldav /remote.php/caldav/ redirect;
     rewrite ^(/core/doc/[^\/]+/)$ $1/index.html;
     try_files $uri $uri/ index.php;
+    client_max_body_size 0m;
   }
   location ~ \.php(?:$|/) {
     fastcgi_split_path_info ^(.+\.php)(/.+)$;
@@ -220,7 +227,7 @@ server {
   # Path to the root of your installation
   root /var/www/owncloud;
   
-  client_max_body_size 100G;
+  client_max_body_size 0m;
   fastcgi_buffers 64 4K;
   
   rewrite ^/caldav(.*)$ /remote.php/caldav$1 redirect;
@@ -249,6 +256,7 @@ server {
     rewrite ^/.well-known/caldav /remote.php/caldav/ redirect;
     rewrite ^(/core/doc/[^\/]+/)$ $1/index.html;
     try_files $uri $uri/ index.php;
+    client_max_body_size 0m;
   }
   
   location ~ \.php(?:$|/) {
@@ -276,7 +284,14 @@ chmod -R +x /etc/service/ /etc/my_init.d/
 
 # Install ownCloud
 mkdir -p /var/www/
-wget -qO - "https://download.owncloud.org/community/owncloud-${OWNCLOUD_VERSION}.tar.bz2" | tar -jx -C /var/www
+HTML=$(wget -qO - https://owncloud.org/changelog/)
+REGEX="(https://download.owncloud.org/community/owncloud-[0-9.]*tar.bz2)"
+if [[ $HTML =~ $REGEX ]]; then
+ wget -qO - "${BASH_REMATCH[1]}" | tar -jx -C /var/www
+else
+  exit 1
+fi
+rm /var/www/owncloud/.user.ini
 
 #########################################
 ##                 CLEANUP             ##
