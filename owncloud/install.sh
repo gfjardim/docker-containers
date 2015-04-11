@@ -287,7 +287,7 @@ mkdir -p /var/www/
 HTML=$(wget -qO - https://owncloud.org/changelog/)
 REGEX="(https://download.owncloud.org/community/owncloud-[0-9.]*tar.bz2)"
 if [[ $HTML =~ $REGEX ]]; then
- wget -qO - "${BASH_REMATCH[1]}" | tar -jx -C /var/www
+ curl -s -k -L "${BASH_REMATCH[1]}" | tar -jx -C /var/www
 else
   exit 1
 fi
