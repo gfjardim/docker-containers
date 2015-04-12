@@ -12,6 +12,7 @@
   <Registry>https://registry.hub.docker.com/u/needo/couchpotato/</Registry>
   <GitHub>https://github.com/needo37/couchpotato</GitHub>
   <Repository>needo/couchpotato</Repository>
+  <Support>http://lime-technology.com/forum/index.php?topic=33822.0</Support>
   <BindTime>true</BindTime>
   <Privileged>false</Privileged>
   <Networking>

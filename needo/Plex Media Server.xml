@@ -10,6 +10,7 @@
   <Registry>https://registry.hub.docker.com/u/needo/plex/</Registry>
   <GitHub>https://github.com/needo37/plex</GitHub>
   <Repository>needo/plex</Repository>
+  <Support>http://lime-technology.com/forum/index.php?topic=33822.0</Support>
   <BindTime>true</BindTime>
   <Privileged>true</Privileged>
   <Networking>

@@ -11,6 +11,7 @@
   <Registry>https://registry.hub.docker.com/u/needo/nzbget/</Registry>
   <GitHub>https://github.com/needo37/nzbget</GitHub>
   <Repository>needo/nzbget</Repository>
+  <Support>http://lime-technology.com/forum/index.php?topic=33822.0</Support>
   <BindTime>true</BindTime>
   <Privileged>false</Privileged>
   <Networking>
