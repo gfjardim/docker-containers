@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
   <Name>AirVideoServer</Name>
+  <Overview>
+    Air Video can stream videos in almost any format to your iPhone, iPad and iPod touch. You don't need to copy your videos to the device just to watch them.
+  </Overview>
   <Description>
     Air Video can stream videos in almost any format to your iPhone, iPad and iPod touch. You don't need to copy your videos to the device just to watch them.[br][br]
     If the videos in your collection are not in format supported by iPhone or iPad, Air Video will convert them on fly. You don't need to wait until the entire video is converted. You can start watching it almost immediately![br][br]
@@ -12,6 +15,7 @@
   <Registry>https://registry.hub.docker.com/u/eroz/airvideo/</Registry>
   <GitHub>https://github.com/rsanch1/airvideo</GitHub>
   <Repository>eroz/airvideo</Repository>
+  <Support>http://lime-technology.com/forum/index.php?topic=34053.0</Support>
   <BindTime>true</BindTime>
   <Privileged>true</Privileged>
   <Environment>

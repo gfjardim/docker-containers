@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
   <Name>SABnzbd</Name>
+  <Overview>
+    SABnzbd is an Open Source Binary Newsreader written in Python. SABnzbd makes Usenet as simple and streamlined as possible by automating everything we can. All you have to do is add an .nzb. SABnzbd takes over from there, where it will be automatically downloaded, verified, repaired, extracted and filed away with zero human interaction.
+  </Overview>
   <Description>
     SABnzbd is an Open Source Binary Newsreader written in Python. SABnzbd makes Usenet as simple and streamlined as possible by automating everything we can. All you have to do is add an .nzb. SABnzbd takes over from there, where it will be automatically downloaded, verified, repaired, extracted and filed away with zero human interaction.[br][br]
     [b][span style='color: #E80000;']Directions:[/span][/b][br]

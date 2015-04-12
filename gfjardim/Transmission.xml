@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
   <Name>Transmission</Name>
+  <Overview>
+    Transmission is a BitTorrent client which features a simple interface on top of a cross-platform back-end. Transmission is free software licensed under the terms of the GNU General Public License (GPL), with parts under the MIT License.
+  </Overview>
   <Description>
-  	Transmission is a BitTorrent client which features a simple interface on top of a cross-platform back-end. Transmission is free software licensed under the terms of the GNU General Public License (GPL), with parts under the MIT License.[br][br]
-  	[b][span style='color: #E80000;']Directions:[/span][/b][br]
+    Transmission is a BitTorrent client which features a simple interface on top of a cross-platform back-end. Transmission is free software licensed under the terms of the GNU General Public License (GPL), with parts under the MIT License.[br][br]
+    [b][span style='color: #E80000;']Directions:[/span][/b][br]
     [b]/config[/b] : in this path, Transmission will store it's configuration files.[br]
     [b]/downloads[/b] : in this path Transmission will store the downloaded files.
   </Description>
   <Registry>https://registry.hub.docker.com/u/gfjardim/transmission/</Registry>
   <GitHub>https://github.com/gfjardim/docker-transmission</GitHub>
   <Repository>gfjardim/transmission</Repository>
+  <Support>http://lime-technology.com/forum/index.php?topic=39227.0</Support>
   <BindTime>true</BindTime>
   <Privileged>false</Privileged>
   <Environment>

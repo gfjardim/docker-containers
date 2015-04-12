@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
   <Name>CrashPlan</Name>
+  <Overview>
+    With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywhere, anytime access to ALL your files, CrashPlan is the simplest, surest way to protect your digital life.
+  </Overview>
   <Description>
     With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywhere, anytime access to ALL your files, CrashPlan is the simplest, surest way to protect your digital life.[br][br]
     [b][span style='color: #E80000;']Directions:[/span][/b][br]
@@ -9,6 +12,7 @@
   </Description>
   <Registry>https://registry.hub.docker.com/u/gfjardim/crashplan/</Registry>
   <GitHub>https://github.com/gfjardim/docker-crashplan</GitHub>
+  <Support>http://lime-technology.com/forum/index.php?topic=33864.0</Support>
   <Repository>gfjardim/crashplan</Repository>
   <BindTime>true</BindTime>
   <Privileged>true</Privileged>

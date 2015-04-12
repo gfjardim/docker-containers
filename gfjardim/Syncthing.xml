@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
   <Name>Syncthing</Name>
+  <Overview>
+    Syncthing replaces proprietary sync and cloud services with something open, trustworthy and decentralized. Your data is your data alone and you deserve to choose where it is stored, if it is shared with some third party and how it's transmitted over the Internet.
+  </Overview>
   <Description>
     Syncthing replaces proprietary sync and cloud services with something open, trustworthy and decentralized. Your data is your data alone and you deserve to choose where it is stored, if it is shared with some third party and how it's transmitted over the Internet.[br][br]
     [b][span style='color: #E80000;']Directions:[/span][/b][br]
@@ -8,6 +11,7 @@
   </Description>
   <Registry>https://registry.hub.docker.com/u/gfjardim/syncthing/</Registry>
   <Repository>gfjardim/syncthing</Repository>
+  <Support>http://lime-technology.com/forum/index.php?topic=39227.0</Support>
   <BindTime>true</BindTime>
   <Privileged>false</Privileged>
   <Environment/>

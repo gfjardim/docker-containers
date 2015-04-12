@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
   <Name>Madsonic</Name>
+  <Overview>
+    Madsonic is a fork of the Subsonic 4.x Server, Madsonic is a full replacement for your current Subsonic server!, Madsonic is designed for people who want more from the vanilla Subsonic features. [b] This container is a fork of binhex, converted to use Phusion Base Image.[/b]
+  </Overview>
   <Description>
-Madsonic is a fork of the Subsonic 4.x Server, Madsonic is a full replacement for your current Subsonic server!, Madsonic is designed for people who want more from the vanilla Subsonic features.[br][br]
-[span style=\'color: #E80000;\'][b]Configuration[/b][/span]
-[b]/config[/b] This is where madsonic will store it\'s configuration file, database and logs.[br]
-[b]/media[/b] This is where madsonic will scan for media files.
-</Description>
+    Madsonic is a fork of the Subsonic 4.x Server, Madsonic is a full replacement for your current Subsonic server!, Madsonic is designed for people who want more from the vanilla Subsonic features.[br][br]
+    [span style=\'color: #E80000;\'][b]Configuration[/b][/span]
+    [b]/config[/b] This is where madsonic will store it\'s configuration file, database and logs.[br]
+    [b]/media[/b] This is where madsonic will scan for media files.
+  </Description>
   <Registry>https://registry.hub.docker.com/u/gfjardim/madsonic/</Registry>
   <Repository>gfjardim/madsonic</Repository>
+  <Support>http://lime-technology.com/forum/index.php?topic=39227.0</Support>
   <BindTime>true</BindTime>
   <Privileged>false</Privileged>
   <Environment>

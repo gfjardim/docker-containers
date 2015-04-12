@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
   <Name>MariaDB</Name>
+  <Overview>
+    MariaDB is a drop-in replacement for MySQL. MariaDB strives to be the logical choice for database professionals looking for a robust, scalable, and reliable SQL server. To accomplish this, the MariaDB Foundation work closely and cooperatively with the larger community of users and developers in the true spirit of Free and open source software, and release software in a manner that balances predictability with reliability.
+  </Overview>
   <Description>
     MariaDB is a drop-in replacement for MySQL. MariaDB strives to be the logical choice for database professionals looking for a robust, scalable, and reliable SQL server. To accomplish this, the MariaDB Foundation work closely and cooperatively with the larger community of users and developers in the true spirit of Free and open source software, and release software in a manner that balances predictability with reliability.[br][br]
     [b][span style='color: #E80000;']Directions:[/span][/b][br]

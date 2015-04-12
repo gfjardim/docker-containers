@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
   <Name>NZBGet</Name>
+  <Overview>
+    NZBGet is a cross-platform binary newsgrabber for nzb files, written in C++. It supports client/server mode, automatic par-check/-repair, web-interface, command-line interface, etc. NZBGet requires low system resources and runs great on routers, NAS-devices and media players. [br]
+    [b] This container is a fork of needo's NZBGet, and offer always updated versions of NZBget[/b]
+  </Overview>
   <Description>
     NZBGet is a cross-platform binary newsgrabber for nzb files, written in C++. It supports client/server mode, automatic par-check/-repair, web-interface, command-line interface, etc. NZBGet requires low system resources and runs great on routers, NAS-devices and media players.[br][br]
     [b][span style='color: #E80000;']Directions:[/span][/b][br]
@@ -11,6 +15,7 @@
   <Registry>https://registry.hub.docker.com/u/gfjardim/nzbget/</Registry>
   <GitHub>https://github.com/gfjardim/nzbget</GitHub>
   <Repository>gfjardim/nzbget</Repository>
+  <Support>http://lime-technology.com/forum/index.php?topic=39227.0</Support>
   <BindTime>true</BindTime>
   <Privileged>false</Privileged>
   <Networking>

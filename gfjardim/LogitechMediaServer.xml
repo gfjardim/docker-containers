@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
   <Name>LogitechMediaServer</Name>
+  <Overview>
+    Logitech Media Server (formerly SlimServer, SqueezeCenter and Squeezebox Server) is a streaming audio server supported by Logitech (formerly Slim Devices), developed in particular to support their Squeezebox range of digital audio receivers.
+  </Overview>
   <Description>
     Logitech Media Server (formerly SlimServer, SqueezeCenter and Squeezebox Server) is a streaming audio server supported by Logitech (formerly Slim Devices), developed in particular to support their Squeezebox range of digital audio receivers.[br][br]
     [b][span style='color: #E80000;']Directions:[/span][/b][br]
@@ -9,6 +12,7 @@
   </Description>
   <Registry>https://registry.hub.docker.com/u/gfjardim/logitechmediaserver/</Registry>
   <Repository>gfjardim/logitechmediaserver</Repository>
+  <Support>http://lime-technology.com/forum/index.php?topic=39227.0</Support>
   <BindTime>true</BindTime>
   <Privileged>false</Privileged>
   <Environment/>
