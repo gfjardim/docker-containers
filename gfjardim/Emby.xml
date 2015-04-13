@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
-  <Name>MediaBrowserServer</Name>
+  <Name>Emby</Name>
   <Overview>
-    EMBY (former Media Browser Server) is a home media server built on top of other popular open source technologies such as Service Stack, jQuery, jQuery mobile, and Mono.It features a REST-based api with built-in documention to facilitate client development. We also have client libraries for our api to enable rapid development.
+    Emby (former Media Browser Server) is a home media server built on top of other popular open source technologies such as Service Stack, jQuery, jQuery mobile, and Mono.It features a REST-based api with built-in documention to facilitate client development. We also have client libraries for our api to enable rapid development.
   </Overview>
   <Description>
-    Media Browser Server is a home media server built on top of other popular open source technologies such as Service Stack, jQuery, jQuery mobile, and Mono.It features a REST-based api with built-in documention to facilitate client development. We also have client libraries for our api to enable rapid development.[br][br]
+    Emby (former Media Browser Server) is a home media server built on top of other popular open source technologies such as Service Stack, jQuery, jQuery mobile, and Mono.It features a REST-based api with built-in documention to facilitate client development. We also have client libraries for our api to enable rapid development.[br][br]
     [b][span style=\'color: #E80000;\']Directions:[/span][/b][br]
     [b]/config[/b] : this path is used to store the configuration and the database files of Media Browser.[br]
     [b]/movies[/b] : set this path to where you store your movie files.[br]
