@@ -39,7 +39,7 @@
   </Networking>
   <Data>
     <Volume>
-      <HostDir>/mnt/user/appdata/MediaBrowserServer</HostDir>
+      <HostDir>/mnt/user/appdata/emby</HostDir>
       <ContainerDir>/config</ContainerDir>
       <Mode>rw</Mode>
     </Volume>
