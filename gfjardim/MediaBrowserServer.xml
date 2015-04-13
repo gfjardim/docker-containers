@@ -2,7 +2,7 @@
 <Container>
   <Name>MediaBrowserServer</Name>
   <Overview>
-    Media Browser Server is a home media server built on top of other popular open source technologies such as Service Stack, jQuery, jQuery mobile, and Mono.It features a REST-based api with built-in documention to facilitate client development. We also have client libraries for our api to enable rapid development.
+    EMBY (former Media Browser Server) is a home media server built on top of other popular open source technologies such as Service Stack, jQuery, jQuery mobile, and Mono.It features a REST-based api with built-in documention to facilitate client development. We also have client libraries for our api to enable rapid development.
   </Overview>
   <Description>
     Media Browser Server is a home media server built on top of other popular open source technologies such as Service Stack, jQuery, jQuery mobile, and Mono.It features a REST-based api with built-in documention to facilitate client development. We also have client libraries for our api to enable rapid development.[br][br]
@@ -19,7 +19,23 @@
   <Environment/>
   <Networking>
     <Mode>host</Mode>
-    <Publish/>
+    <Publish>
+      <Port>
+        <HostPort>8096</HostPort>
+        <ContainerPort>8096</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>7359</HostPort>
+        <ContainerPort>7359</ContainerPort>
+        <Protocol>udp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>1900</HostPort>
+        <ContainerPort>1900</ContainerPort>
+        <Protocol>udp</Protocol>
+      </Port>
+    </Publish>
   </Networking>
   <Data>
     <Volume>
