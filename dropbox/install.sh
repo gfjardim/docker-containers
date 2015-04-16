@@ -5,6 +5,7 @@
 #########################################
 
 # Configure user nobody to match unRAID's settings
+export DEBIAN_FRONTEND="noninteractive"
 usermod -u 99 nobody
 usermod -g 100 nobody
 usermod -d /home nobody
