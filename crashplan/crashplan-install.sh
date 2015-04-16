@@ -58,5 +58,33 @@ chmod 777 $LOGDIR
 # Install the control script for the service
 cp scripts/run.conf ${TARGETDIR}/bin
 
+# Add desktop shortcut
+cp scripts/CrashPlanDesktop  ${TARGETDIR}/bin/
+cat <<'EOT' > /usr/share/applications/CrashPlan.desktop
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=CrashPlan
+Categories=Utilities;
+Comment=CrashPlan Desktop
+Comment[en_CA]=CrashPlan Desktop
+Exec=/usr/local/crashplan/bin/CrashPlanDesktop
+Icon=/usr/local/crashplan/skin/icon_app_128x128.png
+Hidden=false
+Terminal=false
+Type=Application
+GenericName[en_CA]=
+EOT
+
+# Tweak the ui.properties to docker environment
+sed -i -e "s|.*serviceHost.*|serviceHost=172.17.42.1|" ${TARGETDIR}/conf/ui.properties
+chmod -R 777 /usr/local/crashplan
+
+# Disable auto update
+chmod  /usr/local/crashplan/upgrade/
+
+# Fix permissions
+chmod -R u-x,go-rwx,go+u,ugo+X /usr/local/crashplan
+
 # Remove install data
 rm -rf ${INSTALL_DIR}

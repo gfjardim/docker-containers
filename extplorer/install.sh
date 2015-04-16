@@ -1,12 +1,11 @@
 #!/bin/bash
-OWNCLOUD_VERSION="8.0.2"
+EXTPLORER_VERSION="2.1.7"
 
 #########################################
 ##        ENVIRONMENTAL CONFIG         ##
 #########################################
 
 # Configure user nobody to match unRAID's settings
-export DEBIAN_FRONTEND="noninteractive"
 usermod -u 99 nobody
 usermod -g 100 nobody
 usermod -d /home nobody
@@ -22,28 +21,17 @@ rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
 # Repositories
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse"
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
-add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ trusty-proposed restricted main multiverse universe"
+
 # Install Dependencies
+export DEBIAN_FRONTEND="noninteractive"
 apt-get update -qq
-apt-get install -qy -f php5-cli \
-                    php5-common \
-                    php5-gd \
-                    php5-pgsql \
-                    php5-sqlite \
+apt-get install -qy mariadb-server \
+                    php5-cli \
                     php5-mysqlnd \
-                    php5-curl \
-                    php5-intl \
-                    php5-mcrypt \
-                    php5-ldap \
-                    php5-gmp \
-                    php5-imagick \
                     php5-fpm \
-                    php5-gd \
-                    smbclient \
                     nginx \
-                    openssl \
                     wget \
-                    bzip2
+                    unzip
 
 #########################################
 ##  FILES, SERVICES AND CONFIGURATION  ##
@@ -62,49 +50,6 @@ cat <<'EOT' > /etc/service/php-fpm/run
 #!/bin/bash
 umask 000
 exec /usr/sbin/php5-fpm --nodaemonize --fpm-config /etc/php5/fpm/php-fpm.conf
-EOT
-
-# CONFIG
-cat <<'EOT' > /etc/my_init.d/config.sh
-#!/bin/bash
-
-# Fix the timezone
-if [[ $(cat /etc/timezone) != $TZ ]] ; then
-  echo "$TZ" > /etc/timezone
-  dpkg-reconfigure -f noninteractive tzdata
-  sed -i -e "s#;date.timezone.*#date.timezone = ${TZ}#g" /etc/php5/fpm/php.ini
-fi
-
-if [[ -z $DEFAULT_PORT ]]; then
-  DEFAULT_PORT=8000
-fi
-sed -i -e "s#DEFAULT_PORT#${DEFAULT_PORT}#" /etc/nginx/sites-enabled/owncloud.site
-
-if [[ -f /var/www/owncloud/data/server.key && -f /var/www/owncloud/data/server.pem ]]; then
-  echo "Found pre-existing certificate, using it."
-  cp -f /var/www/owncloud/data/server.* /opt/
-else
-  if [[ -z $SUBJECT ]]; then 
-    SUBJECT="/C=US/ST=CA/L=Carlsbad/O=Lime Technology/OU=unRAID Server/CN=yourhome.com"
-  fi
-  echo "No pre-existing certificate found, generating a new one with subject:"
-  echo $SUBJECT
-  openssl req -new -x509 -days 3650 -nodes -out /opt/server.pem -keyout /opt/server.key \
-          -subj "$SUBJECT"
-  ls /opt/
-  cp -f /opt/server.* /var/www/owncloud/data/
-fi
-
-if [[ ! -d /var/www/owncloud/data/config ]]; then
-  mkdir /var/www/owncloud/data/config
-fi
-
-if [[ -d /var/www/owncloud/config ]]; then
-  rm -rf /var/www/owncloud/config
-  ln -sf /var/www/owncloud/data/config/ /var/www/owncloud/config
-fi
-
-chown -R nobody:users /var/www/owncloud
 EOT
 
 #PHP-FPM config
@@ -126,6 +71,7 @@ pm.max_requests = 500
 php_admin_value[upload_max_filesize] = 100G
 php_admin_value[post_max_size] = 100G
 php_admin_value[default_charset] = UTF-8
+php_admin_value[max_execution_time] = 0
 EOT
 
 # NGINX config
@@ -159,76 +105,19 @@ EOT
 
 # NGINX site
 rm -f /etc/nginx/sites-enabled/default
-cat <<'EOT' > /etc/nginx/sites-enabled/owncloud.site
+cat <<'EOT' > /etc/nginx/sites-enabled/eXtplorer.site
 upstream php-handler {
   server unix:/var/run/php5-fpm.sock;
 }
 
 server {
-  listen DEFAULT_PORT ssl;
-  server_name "";
-
-  ssl_certificate /opt/server.pem;
-  ssl_certificate_key /opt/server.key;
-
-  # Force SSL
-  error_page 497 https://$host:DEFAULT_PORT$request_uri;
-  
-  # Path to the root of your installation
-  root /var/www/owncloud;
-  
-  client_max_body_size 0m;
-  fastcgi_buffers 64 4K;
-  
-  rewrite ^/caldav(.*)$ /remote.php/caldav$1 redirect;
-  rewrite ^/carddav(.*)$ /remote.php/carddav$1 redirect;
-  rewrite ^/webdav(.*)$ /remote.php/webdav$1 redirect;
-  
-  index index.php;
-  error_page 403 /core/templates/403.php;
-  error_page 404 /core/templates/404.php;
-  
-  location = /robots.txt {
-    allow all;
-    log_not_found off;
-    access_log off;
-  }
-  location ~ ^/(?:\.htaccess|data|config|db_structure\.xml|README) {
-    deny all;
-  }
-  location / {
-    # The following 2 rules are only needed with webfinger
-    rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
-    rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
-    rewrite ^/.well-known/carddav /remote.php/carddav/ redirect;
-    rewrite ^/.well-known/caldav /remote.php/caldav/ redirect;
-    rewrite ^(/core/doc/[^\/]+/)$ $1/index.html;
-    try_files $uri $uri/ index.php;
-    client_max_body_size 0m;
-  }
-  location ~ \.php(?:$|/) {
-    fastcgi_split_path_info ^(.+\.php)(/.+)$;
-    include fastcgi_params;
-    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-    fastcgi_param PATH_INFO $fastcgi_path_info;
-    fastcgi_pass php-handler;
-  }
-  # Optional: set long EXPIRES header on static assets
-  location ~* \.(?:jpg|jpeg|gif|bmp|ico|png|css|js|swf)$ {
-    expires 30d;
-    # Optional: Don't log access to assets
-    access_log off;
-  }
-}
-
-server {
-  listen 8001;
+  listen 8088;
   server_name "";
   
   # Path to the root of your installation
-  root /var/www/owncloud;
+  root /var/www/eXtplorer;
   
-  client_max_body_size 0m;
+  client_max_body_size 100G;
   fastcgi_buffers 64 4K;
   
   rewrite ^/caldav(.*)$ /remote.php/caldav$1 redirect;
@@ -257,7 +146,6 @@ server {
     rewrite ^/.well-known/caldav /remote.php/caldav/ redirect;
     rewrite ^(/core/doc/[^\/]+/)$ $1/index.html;
     try_files $uri $uri/ index.php;
-    client_max_body_size 0m;
   }
   
   location ~ \.php(?:$|/) {
@@ -283,16 +171,12 @@ chmod -R +x /etc/service/ /etc/my_init.d/
 ##             INSTALLATION            ##
 #########################################
 
-# Install ownCloud
-mkdir -p /var/www/
-HTML=$(wget -qO - https://owncloud.org/changelog/)
-REGEX="(https://download.owncloud.org/community/owncloud-[0-9.]*tar.bz2)"
-if [[ $HTML =~ $REGEX ]]; then
- curl -s -k -L "${BASH_REMATCH[1]}" | tar -jx -C /var/www
-else
-  exit 1
-fi
-rm /var/www/owncloud/.user.ini
+# Install eXtplorer
+mkdir -p /var/www/eXtplorer/
+wget -qO /var/www/extplorer.zip "http://extplorer.net/attachments/download/57/eXtplorer_${EXTPLORER_VERSION}.zip"
+unzip /var/www/extplorer.zip -d  /var/www/eXtplorer/
+chown -R nobody:users /var/www/eXtplorer
+rm /var/www/extplorer.zip
 
 #########################################
 ##                 CLEANUP             ##

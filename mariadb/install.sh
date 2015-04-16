@@ -49,7 +49,6 @@ if [[ ! -f /tmp/.mysql_configured ]]; then
     echo "Creating database."
     /usr/bin/mysql_install_db --datadir=/db >/dev/null 2>&1
   fi
-  mysql -uroot -e "GRANT USAGE ON *.* TO 'root'@'%';"
   mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;"
   mysqladmin -u root shutdown
   touch /tmp/.mysql_configured
@@ -105,7 +104,7 @@ upstream php-handler {
   server unix:/var/run/php5-fpm.sock;
 }
 server {
-  listen 3307;
+  listen 3380;
   server_name "";
   root /var/www/phpMyAdmin/;
   index index.php index.html index.htm;
