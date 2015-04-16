@@ -4,8 +4,9 @@
   <Description>
     Dropbox is a free service that lets you bring your photos, docs, and videos anywhere and share them easily. Never email yourself a file again![br][br]
     [b][span style='color: #E80000;']Directions:[/span][/b][br]
-    [b]/config[/b] : in this path, Dropbox will store it's configuration files.[br]
-    [b]/dropbox[/b] : in this path, Dropbox wil store the user files. [br][br]
+    [b]/home/.dropbox[/b]: in this path, Dropbox will store it's configuration files.[br]
+    [b]/home/Dropbox[/b] : in this path, Dropbox wil store the user files. [br][br]
+    [b]STATUS[/b]        : this environment variable is used determine whether system tray messages normally displayed in a desktop environment will get printed to the console. When set to 1 messages will be printed.
     [b][span style='color: #E80000;']Tip:[/span][/b] If it's the first time you install this container, an authorization link will be available in the logs. Please take a look.
   </Description>
   <Registry>https://registry.hub.docker.com/u/gfjardim/dropbox/</Registry>
@@ -13,7 +14,10 @@
   <Repository>gfjardim/dropbox</Repository>
   <BindTime>true</BindTime>
   <Privileged>true</Privileged>
-  <Environment/>
+  <Environment>
+   <Name>STATUS</Name>
+   <Value>1</Value>
+  </Environment>
   <Networking>
     <Mode>host</Mode>
     <Publish/>
