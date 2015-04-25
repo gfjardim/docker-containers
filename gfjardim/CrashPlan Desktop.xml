@@ -5,8 +5,9 @@
     This is a MATE desktop with CrashPlan Desktop GUI. [br][br] Disclaimer: this is a fork of the excellent work of SparklyBall's desktops.
   </Overview>
   <Description>
-    This is a MATE desktop with CrashPlan Desktop GUI. [br]User/password is ubuntu:PASSWD (case sensitive).[br][br]
-    [b]IMPORTANT:- You have to connect with a remote desktop connection to port 3389.[/b]
+    This is a MATE desktop with CrashPlan Desktop GUI. [br][br]
+    User/password is [b]ubuntu:PASSWD[/b] (case sensitive).[br][br]
+    [b]IMPORTANT:-You have to connect with a remote desktop connection to port 3389.[/b]
   </Description>
   <Registry>https://registry.hub.docker.com/u/gfjardim/crashplan-desktop/</Registry>
   <Repository>gfjardim/crashplan-desktop</Repository>
