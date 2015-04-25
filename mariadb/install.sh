@@ -75,6 +75,7 @@ chmod -R +x /etc/service/ /etc/my_init.d/
 # Repositories
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse"
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
+add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ trusty-proposed restricted main multiverse universe"
 
 # Install Dependencies
 apt-get update -qq

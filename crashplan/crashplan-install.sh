@@ -81,7 +81,7 @@ sed -i -e "s|.*serviceHost.*|serviceHost=172.17.42.1|" ${TARGETDIR}/conf/ui.prop
 chmod -R 777 /usr/local/crashplan
 
 # Disable auto update
-chmod  /usr/local/crashplan/upgrade/
+chmod -x /usr/local/crashplan/upgrade/
 
 # Fix permissions
 chmod -R u-x,go-rwx,go+u,ugo+X /usr/local/crashplan

@@ -21,13 +21,17 @@ rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
 # Repositories
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse"
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
+add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ trusty-proposed restricted main multiverse universe"
 
 # Install Dependencies
 export DEBIAN_FRONTEND="noninteractive"
 apt-get update -qq
 apt-get install -qy mariadb-server \
                     php5-cli \
+                    php5-sqlite \
                     php5-mysqlnd \
+                    php5-mcrypt \
+                    php5-gd \
                     php5-fpm \
                     nginx \
                     wget \
@@ -58,8 +62,8 @@ cat <<'EOT' > /etc/php5/fpm/pool.d/www.conf
 daemonize = no
 
 [www]
-user = nobody
-group = users
+user = www-data
+group = www-data
 listen = /var/run/php5-fpm.sock
 listen.mode = 0666
 pm = dynamic
@@ -76,7 +80,6 @@ EOT
 
 # NGINX config
 cat <<'EOT' > /etc/nginx/nginx.conf
-user nobody users;
 daemon off;
 worker_processes 4;
 pid /run/nginx.pid;
@@ -105,7 +108,7 @@ EOT
 
 # NGINX site
 rm -f /etc/nginx/sites-enabled/default
-cat <<'EOT' > /etc/nginx/sites-enabled/eXtplorer.site
+cat <<'EOT' > /etc/nginx/sites-enabled/sticky.site
 upstream php-handler {
   server unix:/var/run/php5-fpm.sock;
 }
@@ -115,7 +118,7 @@ server {
   server_name "";
   
   # Path to the root of your installation
-  root /var/www/sticky;
+  root /var/www/sticky/public;
   
   client_max_body_size 10M;
   fastcgi_buffers 64 4K;
@@ -128,6 +131,17 @@ server {
     allow all;
     log_not_found off;
     access_log off;
+  }
+
+  # Redirect Trailing Slashes...
+  if (!-d $request_filename) {
+    rewrite ^/(.+)/$ /$1 permanent;
+  }
+
+  # Handle Front Controller...
+  if (!-e $request_filename) {
+    rewrite ^/(.*)$ /index.php?/$1 last;
+    break;
   }
 
   location ~ ^/(?:\.htaccess|data|config|db_structure\.xml|README) {
@@ -157,12 +171,13 @@ chmod -R +x /etc/service/ /etc/my_init.d/
 ##             INSTALLATION            ##
 #########################################
 
-# Install eXtplorer
-mkdir -p /var/www/eXtplorer/
-wget -qO /var/www/extplorer.zip "http://extplorer.net/attachments/download/57/eXtplorer_${EXTPLORER_VERSION}.zip"
-unzip /var/www/extplorer.zip -d  /var/www/eXtplorer/
-chown -R nobody:users /var/www/eXtplorer
-rm /var/www/extplorer.zip
+# Install sticky
+php5enmod mcrypt
+mkdir -p /var/www/sticky/
+curl -k -L -s https://github.com/sayakb/sticky-notes/archive/1.9.tar.gz | tar xz --strip 1 -C /var/www/sticky/
+cp /var/www/sticky/app/config/database.sample.php
+sed -e "s#'default' => 'mysql',#'default' => 'sqlite',#" /var/www/sticky/app/config/database.sample.php >/var/www/sticky/app/config/database.php
+chown -R www-data:www-data /var/www/sticky
 
 #########################################
 ##                 CLEANUP             ##
