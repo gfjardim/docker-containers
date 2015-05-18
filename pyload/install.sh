@@ -11,8 +11,32 @@ usermod -g 100 nobody
 usermod -d /home nobody
 chown -R nobody:users /home
 
-# Disable SSH, Syslog and Cron
+# Disable SSH
 rm -rf /etc/service/sshd /etc/service/cron /etc/service/syslog-ng /etc/my_init.d/00_regen_ssh_host_keys.sh
+
+#########################################
+##  FILES, SERVICES AND CONFIGURATION  ##
+#########################################
+# pyload
+mkdir -p /etc/service/pyload
+cat <<'EOT' > /etc/service/pyload/run
+#!/bin/bash
+umask 000
+if [[ $(cat /etc/timezone) != $TZ ]] ; then
+  echo "$TZ" > /etc/timezone
+  DEBIAN_FRONTEND="noninteractive" dpkg-reconfigure -f noninteractive tzdata
+fi
+
+if [[ ! -e /config/pyload.conf ]]; then
+  cp -rf /tmp/pyload-config/* /config/
+fi
+
+chown -R nobody:users /config /opt/pyload
+
+exec /sbin/setuser nobody python /opt/pyload/pyLoadCore.py --configdir=/config
+EOT
+
+chmod -R +x /etc/service/ /etc/my_init.d/
 
 #########################################
 ##    REPOSITORIES AND DEPENDENCIES    ##
@@ -21,42 +45,19 @@ rm -rf /etc/service/sshd /etc/service/cron /etc/service/syslog-ng /etc/my_init.d
 # Repositories
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse"
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
-#curl -skL -o /etc/apt/sources.list http://tinyurl.com/lm2vf9a
+curl -skL -o /etc/apt/sources.list http://tinyurl.com/lm2vf9a
 
 # Install Dependencies
-apt-get update -qq
-apt-get install -qy lame faad flac sox
-
-#########################################
-##  FILES, SERVICES AND CONFIGURATION  ##
-#########################################
-# LMS
-mkdir -p /etc/service/logitechmediaserver
-cat <<'EOT' > /etc/service/logitechmediaserver/run
-#!/bin/bash
-chown -R nobody:users /config
-squeezeboxserver --user nobody  --prefsdir /config/prefs --logdir /config/logs --cachedir /config/cache
-EOT
-
-chmod -R +x /etc/service/ /etc/my_init.d/
+apt-get update -q
+apt-get install -qy python-crypto python-pycurl tesseract-ocr git rhino unrar
 
 #########################################
 ##             INSTALLATION            ##
 #########################################
 
-# Install LMS
-OUT=$(curl -skL "http://downloads.slimdevices.com/nightly/index.php?ver=7.9")
-# Try to catch the link or die
-REGEX=".*href=\".(.*).deb\""
-if [[ ${OUT} =~ ${REGEX} ]]; then
-  URL="http://downloads.slimdevices.com/nightly${BASH_REMATCH[1]}.deb"
-else
-  exit 1
-fi
-
-curl -skL -o /tmp/lms.deb $URL
-dpkg -i /tmp/lms.deb
-rm /tmp/lms.deb
+# Install Pyload
+mkdir -p /opt/pyload
+curl -s -k -L "https://github.com/pyload/pyload/archive/stable.tar.gz" | tar -xz --strip 1 -C /opt/pyload
 
 #########################################
 ##                 CLEANUP             ##
