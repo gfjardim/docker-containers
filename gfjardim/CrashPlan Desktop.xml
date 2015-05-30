@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
+  <Beta>False</Beta>
+<Category>Backup:</Category>
   <Name>CrashPlan-Desktop</Name>
   <Overview>
     This is a MATE desktop with CrashPlan Desktop GUI. [br][br] Disclaimer: this is a fork of the excellent work of SparklyBall's desktops.
