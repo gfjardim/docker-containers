@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
+  <Beta>False</Beta>
+<Category>MediaApp:Video</Category>
   <Name>plexWatch</Name>
   <Overview>
     Notify and Log watched content on a Plex Media Server.
