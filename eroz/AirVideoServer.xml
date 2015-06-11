@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
+  <Beta>False</Beta>
+<Category>MediaServer:Video</Category>
   <Name>AirVideoServer</Name>
   <Overview>
     Air Video can stream videos in almost any format to your iPhone, iPad and iPod touch. You don't need to copy your videos to the device just to watch them.
