@@ -12,8 +12,8 @@ usermod -g 100 nobody
 usermod -d /home nobody
 chown -R nobody:users /home
 
-# Disable SSH
-rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
+# Disable some services
+rm -rf /etc/service/sshd /etc/service/cron /etc/service/syslog-ng /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 #########################################
 ##    REPOSITORIES AND DEPENDENCIES    ##
