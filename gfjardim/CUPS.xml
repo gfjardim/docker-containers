@@ -23,7 +23,7 @@
   </Overview>
   <Environment>
     <Variable>
-      <Name>CUPS_USER_ADMINCUPS_USER_ADMIN</Name>
+      <Name>CUPS_USER_ADMIN</Name>
       <Value>admin</Value>
     </Variable>
     <Variable>
@@ -59,6 +59,6 @@
   <Version></Version>
   <WebUI>https://[IP]:[PORT:631]/</WebUI>
   <Banner></Banner>
-  <Icon>https://raw.githubusercontent.com/gfjardim/docker-containers/images/cups.png</Icon>
+  <Icon>http://i.imgur.com/8RCRnCu.png</Icon>
   <ExtraParams>-v /dev:/dev</ExtraParams>
 </Container>
