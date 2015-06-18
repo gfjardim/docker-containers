@@ -11,7 +11,7 @@
     [b]CUPS_USER_ADMIN :[/b] choose the username used to admin CUPS (default [b]admin[/b]).[br]
     [b]CUPS_USER_PASSWORD :[/b] choose the password used to admin CUPS (default [b]pass[/b]).[br]
     [b]CLOUD_PRINT_EMAIL :[/b] set the e-mail you use to login on your Google account (empty e-mail will disable CloudPrint).[br]
-    [b]CLOUD_PRINT_PASS :[/b] set the password you use to login on your Google account. If you use two-step authentication, you must use an app password which can be found [a href=\'https://security.google.com/settings/security/apppasswords\'] here[/a].</Description>
+    [b]CLOUD_PRINT_PASS :[/b] set the password you use to login on your Google account. If you use two-step authentication, you must use an app password which can be found [a href=\'https://security.google.com/settings/security/apppasswords\' target='_blank'] here[/a].</Description>
   <Registry>https://registry.hub.docker.com/u/gfjardim/cups/</Registry>
   <Repository>gfjardim/cups</Repository>
   <BindTime>true</BindTime>
