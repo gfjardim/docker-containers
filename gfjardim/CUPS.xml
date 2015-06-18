@@ -16,7 +16,7 @@
   <Repository>gfjardim/cups</Repository>
   <BindTime>true</BindTime>
   <Privileged>true</Privileged>
-  <Beta>False</Beta>
+  <Beta>True</Beta>
   <Category>Productivity: Tools:</Category>
   <Overview>
     CUPS is the standards-based, open source printing system developed by Apple Inc. for OS X® and other UNIX®-like operating systems. CUPS uses the Internet Printing Protocol (IPP) to support printing to local and network printers.
