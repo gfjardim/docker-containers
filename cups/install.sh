@@ -48,29 +48,83 @@ mkdir -p /etc/cups/ssl
 # Add services
 # Add firstrun.sh to execute during container startup
 mkdir -p /etc/my_init.d
-cp /tmp/firstrun.sh /etc/my_init.d/firstrun.sh
-chmod +x /etc/my_init.d/firstrun.sh
+cat <<'EOT' >/etc/my_init.d/config.sh
+#!/bin/bash
+
+mkdir -p /config/cups /config/spool /config/logs /config/cache /config/cups/ssl /config/cups/ppd /config/cloudprint
+
+# Copy missing config files
+cd /etc/cups
+for f in *.conf ; do 
+  if [ ! -f "/config/cups/${f}" ]; then
+    cp ./${f} /config/cups/
+  fi
+done
+
+# CloudPrint
+if [[ -n ${CLOUD_PRINT_EMAIL} ]]; then
+  # Create auth token
+  if [[ $(grep -c 'auth_token' '/config/cloudprint/Service State') -eq 0 ]]; then
+    cd /config/cloudprint
+    python /opt/generate_cloudprint_config.py
+  fi
+else
+  # Disable CloudPrint
+  rm -rf /etc/service/chrome
+fi
+EOT
+chmod +x /etc/my_init.d/config.sh
 
 # Add cups to runit
 mkdir /etc/service/cups
-cp /tmp/start_cups.sh /etc/service/cups/run
+cat <<'EOT' >/etc/service/cups/run
+#!/bin/sh
+if [ -n "$CUPS_USER_ADMIN" ]; then
+  if [ $(grep -ci $CUPS_USER_ADMIN /etc/shadow) -eq 0 ]; then
+    useradd $CUPS_USER_ADMIN --system -G root,lpadmin --no-create-home --password $(mkpasswd $CUPS_USER_PASSWORD)
+  fi
+fi
+exec /usr/sbin/cupsd -f -c /config/cups/cupsd.conf
+EOT
 chmod +x /etc/service/cups/run
 
 # Add Chrome/CloudPrint to runit
 mkdir /etc/service/chrome
-cp /tmp/chrome.sh /etc/service/chrome/run
-chmod +x /etc/service/chrome/run
+cat <<'EOT' >/etc/service/chrome/run
+#!/bin/bash
 
-# Add avahi-daemon to runit
-mkdir /etc/service/avahi-daemon
-cp /tmp/avahi-daemon.sh /etc/service/avahi-daemon/run
-chmod +x /etc/service/avahi-daemon/run
+# Fix a weird chrome error
+if [ ! -f "/usr/lib/libudev.so.0" ]; then
+  ln -s /lib/x86_64-linux-gnu/libudev.so.1.3.5 /usr/lib/libudev.so.0
+fi
+
+/opt/google/chrome/chrome --type=service --enable-cloud-print-proxy --no-service-autorun --noerrdialogs --user-data-dir=/config/cloudprint --enable-logging=stderr
+EOT
+chmod +x /etc/service/chrome/run
 
 # Add AirPrint to runit
 mkdir /etc/service/air_print
-cp /tmp/air_print.sh /etc/service/air_print/run
-chmod +x /etc/service/air_print/run
+cat <<'EOT' > /etc/service/air_print/run
+#!/bin/bash
 
+while [[ $(curl -sk localhost:631 >/dev/null; echo $?) -ne 0 ]]; do
+  sleep 1
+done
+
+/opt/airprint-generate.py -d /avahi
+
+inotifywait -m /config/cups/ppd -e create -e moved_to -e close_write|
+    while read path action file; do
+        echo "Printer ${file} modified, reloading Avahi services."
+        /opt/airprint-generate.py -d /avahi
+    done
+EOT
+
+cat <<'EOT' > /etc/service/air_print/finish
+#!/bin/bash
+rm -rf /avahi/AirPrint*
+EOT
+chmod +x /etc/service/air_print/*
 
 # Disbale some cups backend that are unusable within a container
 mv /usr/lib/cups/backend/parallel /usr/lib/cups/backend-available/
