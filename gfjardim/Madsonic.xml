@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Container>
+  <Beta>False</Beta>
+<Category>MediaServer:Music</Category>
   <Name>Madsonic</Name>
   <Overview>
     Madsonic is a fork of the Subsonic 4.x Server, Madsonic is a full replacement for your current Subsonic server!, Madsonic is designed for people who want more from the vanilla Subsonic features. [b] This container is a fork of binhex, converted to use Phusion Base Image.[/b]
