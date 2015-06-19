@@ -53,5 +53,5 @@
   <WebUI>https://[IP]:[PORT:631]/</WebUI>
   <Banner></Banner>
   <Icon>http://i.imgur.com/8RCRnCu.png</Icon>
-  <ExtraParams>-v /dev:/dev</ExtraParams>
+  <ExtraParams>-v /dev:/dev -v /etc/avahi/services:/avahi</ExtraParams>
 </Container>
