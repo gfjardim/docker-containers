@@ -28,7 +28,7 @@ if [[ $(cat /etc/timezone) != $TZ ]] ; then
 fi
 
 if [[ ! -e /config/pyload.conf ]]; then
-  cp -rf /tmp/pyload-config/* /config/
+  cp -rf /tmp/pyload.conf /tmp/plugin.conf /tmp/files.version /tmp/files.db /config/
 fi
 
 chown -R nobody:users /config /opt/pyload
