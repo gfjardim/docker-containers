@@ -19,5 +19,5 @@ if [[ -n ${CLOUD_PRINT_EMAIL} ]]; then
   fi
 else
   # Disable CloudPrint
-  chmod -x /etc/service/chrome/run
+  rm -rf /etc/service/chrome
 fi
