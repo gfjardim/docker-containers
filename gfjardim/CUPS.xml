@@ -30,14 +30,6 @@
       <Name>CUPS_USER_PASSWORD</Name>
       <Value>pass</Value>
     </Variable>
-    <Variable>
-      <Name>CLOUD_PRINT_EMAIL</Name>
-      <Value></Value>
-    </Variable>
-    <Variable>
-      <Name>CLOUD_PRINT_PASS</Name>
-      <Value></Value>
-    </Variable>
   </Environment>
   <Networking>
     <Mode>host</Mode>
