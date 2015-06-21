@@ -41,7 +41,7 @@ apt-add-repository ppa:ubuntu-mate-dev/ppa
 apt-add-repository ppa:ubuntu-mate-dev/trusty-mate
 
 # Use mirrors
-sed -i -e "s#http://[^\s]*archive.ubuntu[^\s]* #mirror://mirrors.ubuntu.com/mirrors.txt #g" /etc/apt/sources.list
+# sed -i -e "s#http://[^\s]*archive.ubuntu[^\s]* #mirror://mirrors.ubuntu.com/mirrors.txt #g" /etc/apt/sources.list
 
 # Install Dependencies
 apt-get update -qq
@@ -65,22 +65,6 @@ apt-get install -y --force-yes xrdp
 #########################################
 ##  FILES, SERVICES AND CONFIGURATION  ##
 #########################################
-# Install excludes
-cat <<'EOT' >/etc/dpkg/dpkg.cfg.d/excludes
-path-exclude /usr/share/doc/*
-# we need to keep copyright files for legal reasons
-path-include /usr/share/doc/*/copyright
-path-exclude /usr/share/man/*
-path-exclude /usr/share/groff/*
-path-exclude /usr/share/info/*
-# lintian stuff is small, but really unnecessary
-path-exclude /usr/share/lintian/*
-path-exclude /usr/share/linda/*
-# Drop locales except English
-path-exclude=/usr/share/locale/*
-path-include=/usr/share/locale/en/*
-path-include=/usr/share/locale/locale.alias
-EOT
 
 #config
 cat <<'EOT' > /etc/my_init.d/config.sh
@@ -244,7 +228,7 @@ RUNLVLDIR=/etc/rc${RUNLEVEL}.d
 JAVACOMMON=`which java`
 
 # Downloading Crashplan
-wget -nv http://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_3.7.0_Linux.tgz -O - | tar -zx -C /tmp
+wget -nv https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_4.2.0_Linux.tgz -O - | tar -zx -C /tmp
 
 # Installation directory
 cd /tmp/CrashPlan-install
