@@ -53,4 +53,6 @@ if [[ ! -f /config/bin/run.conf ]]; then
 fi
 _link /config/bin /usr/local/crashplan/bin
 
+echo "4243,unRAID" > /config/id/.ui_info
+
 chown -R nobody:users /config

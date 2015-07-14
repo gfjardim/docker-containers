@@ -74,7 +74,7 @@ if [[ $(cat /etc/timezone) != $TZ ]] ; then
   dpkg-reconfigure -f noninteractive tzdata
 fi
 
-mkdir -p /home/ubuntu/unraid /var/run/sshd /root/.vnc
+mkdir -p /home/ubuntu/unraid /var/run/sshd /root/.vnc /config/id
 
 if [ -d "/home/ubuntu/unraid/wallpapers" ]; then
   echo "using existing wallpapers etc..."
@@ -86,6 +86,7 @@ fi
 while [ 1 ]; do
   bash
 done
+
 EOT
 
 cat <<'EOT' > /opt/supervisord.conf
@@ -228,7 +229,7 @@ RUNLVLDIR=/etc/rc${RUNLEVEL}.d
 JAVACOMMON=`which java`
 
 # Downloading Crashplan
-wget -nv https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_4.2.0_Linux.tgz -O - | tar -zx -C /tmp
+wget -nv https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_4.3.0_Linux.tgz -O - | tar -zx -C /tmp
 
 # Installation directory
 cd /tmp/CrashPlan-install
@@ -297,6 +298,9 @@ EOS
 # Tweak the ui.properties to docker environment
 sed -i -e "s|.*serviceHost.*|serviceHost=172.17.42.1|" ${TARGETDIR}/conf/ui.properties
 
+# Create lib symlink
+ln -sf /config/id /var/lib/crashplan
+
 # Fix permissions
 chmod -R u-x,go-rwx,go+u,ugo+X /usr/local/crashplan
 chmod -R 777 /usr/local/crashplan/bin
@@ -309,6 +313,7 @@ cp /usr/share/applications/CrashPlan.desktop /home/ubuntu/.config/autostart/Cras
 cp /usr/share/applications/CrashPlan.desktop /home/ubuntu/Desktop/CrashPlan.desktop
 chmod +x /home/ubuntu/.config/autostart/CrashPlan.desktop /home/ubuntu/Desktop/CrashPlan.desktop
 chown -R ubuntu:ubuntu /usr/local/crashplan /home/ubuntu/Desktop /home/ubuntu/.config
+
 EOT
 
 # create ubuntu user

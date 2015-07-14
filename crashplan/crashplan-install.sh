@@ -10,7 +10,7 @@ RUNLVLDIR=/etc/rc${RUNLEVEL}.d
 JAVACOMMON=`which java`
 
 # Downloading Crashplan
-wget -nv https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_4.2.0_Linux.tgz -O - | tar -zx -C /tmp
+wget -nv https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_4.3.0_Linux.tgz -O - | tar -zx -C /tmp
 
 # Installation directory
 cd /tmp/CrashPlan-install
@@ -81,10 +81,11 @@ sed -i -e "s|.*serviceHost.*|serviceHost=172.17.42.1|" ${TARGETDIR}/conf/ui.prop
 chmod -R 777 /usr/local/crashplan
 
 # Disable auto update
-chmod -x /usr/local/crashplan/upgrade/
+chmod -R -x /usr/local/crashplan/upgrade/
 
 # Fix permissions
 chmod -R u-x,go-rwx,go+u,ugo+X /usr/local/crashplan
+chmod -R 777 /usr/local/crashplan/bin
 
 # Remove install data
 rm -rf ${INSTALL_DIR}
