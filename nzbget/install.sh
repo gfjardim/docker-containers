@@ -19,8 +19,9 @@ rm -rf /etc/service/sshd /etc/service/cron /etc/service/syslog-ng /etc/my_init.d
 mkdir -p /etc/service/nzbget
 cp /tmp/nzbget-run.sh /etc/service/nzbget/run
 cp /tmp/nzbget-finish.sh /etc/service/nzbget/finish
+cp /tmp/config.sh /etc/my_init.d/config.sh
 
-chmod -R 777 /etc/service /etc/my_init.d #/opt/nzbget-update-install.sh
+chmod -R 777 /etc/service /etc/my_init.d
 
 #########################################
 ##    REPOSITORIES AND DEPENDENCIES    ##
@@ -29,7 +30,6 @@ chmod -R 777 /etc/service /etc/my_init.d #/opt/nzbget-update-install.sh
 # Repositories
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse"
 add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
-apt-add-repository ppa:modriscoll/nzbget
 add-apt-repository ppa:mc3man/trusty-media
 
 # Use mirrors

@@ -31,22 +31,25 @@ if [ -f /config/nzbget.conf ]; then
   echo "Using existing nzbget.conf file."
 else
   echo "Creating nzbget.conf from template."
-  cp /usr/share/nzbget/nzbget.conf /config/
+  cp /opt/nzbget/webui/nzbget.conf.template /config/nzbget.conf
   sed -i -e "s#\(MainDir=\).*#\1/downloads#g" /config/nzbget.conf
   sed -i -e "s#\(ControlIP=\).*#\10.0.0.0#g" /config/nzbget.conf
   sed -i -e "s#\(UMask=\).*#\1000#g" /config/nzbget.conf
   sed -i -e "s#\(ScriptDir=\).*#\1/config/ppscripts#g" /config/nzbget.conf
   sed -i -e "s#\(QueueDir=\).*#\1/config/queue#g" /config/nzbget.conf
-  sed -i -e "s#\(LogFile=\).*#\1/config/log/nzbget.log#g" /config/nzbget.conf
   sed -i -e "s#\(SecureControl=\).*#\1yes#g" /config/nzbget.conf
   sed -i -e "s#\(SecurePort=\).*#\16791#g" /config/nzbget.conf
-  sed -i -e "s#\(SecureCert=\).*#\1/config/ssl/nzbget.crt#g" /config/nzbget.conf
   mkdir -p /downloads/dst
 fi
 
+# Set Docker environment settings to NZBGet config
 sed -i -e "s#\(WebDir=\).*#\1/opt/nzbget/webui#g" /config/nzbget.conf
 sed -i -e 's#\(ConfigTemplate=\).*#\1/opt/nzbget/webui/nzbget.conf.template#g' /config/nzbget.conf
+sed -i -e "s#\(LogFile=\).*#\1/config/log/nzbget.log#g" /config/nzbget.conf
+sed -i -e "s#\(SecureCert=\).*#\1/config/ssl/nzbget.crt#g" /config/nzbget.conf
+sed -i -e "s#\(SecureKey=\).*#\1/config/ssl/nzbget.key#g" /config/nzbget.conf
 
+# Create TLS certs
 if [[ ! -f /config/ssl/nzbget.key ]]; then
   mkdir -p /config/ssl
   openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /config/ssl/nzbget.key -out /config/ssl/nzbget.crt -subj "/O=SOHO/OU=HOME/CN=yourhome.com"
@@ -74,6 +77,10 @@ fi
 # install last version of ppscripts
 if [[ ! -f /tmp/ppscripts_installed ]]; then
 
+  # Clean some old files
+  cd /config/ppscripts/
+  rm DeleteSamples.py NotifyXBMC.py  ResetDateTime.py  SafeRename.py  flatten.py passwordList.py
+
   # Add some post-processing scripts
   # nzbToMedia
   echo "Downloading nzbToMedia."
@@ -82,19 +89,22 @@ if [[ ! -f /tmp/ppscripts_installed ]]; then
   wget -nv https://github.com/clinton-hall/nzbToMedia/archive/master.tar.gz -O - | tar --strip-components 1 -C /config/ppscripts/nzbToMedia -zxf -
 
   # Misc Clinton Hall scripts
-  wget -nv https://github.com/clinton-hall/GetScripts/archive/master.tar.gz -O - | tar -zxf - --strip-components 1 -C /config/ppscripts/ --wildcards --no-anchored '*.py'
+  rm -rf /config/ppscripts/Misc
+  mkdir -p /config/ppscripts/Misc
+  wget -nv https://github.com/clinton-hall/GetScripts/archive/master.tar.gz -O - | tar -zxf - --strip-components 1 -C /config/ppscripts/Misc --wildcards --no-anchored '*.py'
 
   # Videosort
   echo "Downloading videosort."
   rm -rf /config/ppscripts/videosort
   mkdir -p /config/ppscripts/videosort
-  wget -nv http://sourceforge.net/projects/nzbget/files/ppscripts/videosort/videosort-ppscript-5.0.zip/download -O /config/ppscripts/videosort-ppscript-5.0.zip
-  unzip -qq /config/ppscripts/videosort-ppscript-5.0.zip
-  rm /config/ppscripts/videosort-ppscript-5.0.zip
+  wget -nv https://github.com/nzbget/VideoSort/archive/master.tar.gz -O - | tar -zx --strip-components 1 -C /config/ppscripts/videosort
 
   # NotifyXBMC.py
-  echo "Downloading NotifyXBMC."
-  wget -nv http://nzbget.net/forum/download/file.php?id=193 -O /config/ppscripts/NotifyXBMC.py
+  echo "Downloading Notify NZBGet."
+  echo "Search for help at http://forum.nzbget.net/viewtopic.php?f=8&t=1639."
+  rm -rf /config/ppscripts/Notify
+  mkdir -p /config/ppscripts/Notify
+  wget -nv https://github.com/caronc/nzbget-notify/archive/master.tar.gz -O - | tar -zx --strip-components 1 -C /config/ppscripts/Notify
 
   touch /tmp/ppscripts_installed
 fi
