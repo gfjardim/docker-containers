@@ -33,8 +33,6 @@ else
   echo "Creating nzbget.conf from template."
   cp /usr/share/nzbget/nzbget.conf /config/
   sed -i -e "s#\(MainDir=\).*#\1/downloads#g" /config/nzbget.conf
-  sed -i -e "s#\(WebDir=\).*#\1/opt/nzbget/webui#g" /config/nzbget.conf
-  sed -i -e 's#\(ConfigTemplate=\).*#\1/opt/nzbget/webui/nzbget.conf.template#g' /config/nzbget.conf
   sed -i -e "s#\(ControlIP=\).*#\10.0.0.0#g" /config/nzbget.conf
   sed -i -e "s#\(UMask=\).*#\1000#g" /config/nzbget.conf
   sed -i -e "s#\(ScriptDir=\).*#\1/config/ppscripts#g" /config/nzbget.conf
@@ -45,6 +43,9 @@ else
   sed -i -e "s#\(SecureCert=\).*#\1/config/ssl/nzbget.crt#g" /config/nzbget.conf
   mkdir -p /downloads/dst
 fi
+
+sed -i -e "s#\(WebDir=\).*#\1/opt/nzbget/webui#g" /config/nzbget.conf
+sed -i -e 's#\(ConfigTemplate=\).*#\1/opt/nzbget/webui/nzbget.conf.template#g' /config/nzbget.conf
 
 if [[ ! -f /config/ssl/nzbget.key ]]; then
   mkdir -p /config/ssl
