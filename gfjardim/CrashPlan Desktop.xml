@@ -30,5 +30,5 @@
   <WebUI></WebUI>
   <Banner></Banner>
   <Icon>http://i.imgur.com/F5ckGpm.png</Icon>
-  <ExtraParams></ExtraParams>
+  <ExtraParams>--volumes-from CrashPlan</ExtraParams>
 </Container>
