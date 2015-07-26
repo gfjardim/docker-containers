@@ -3,10 +3,10 @@
   <Beta>False</Beta>
 <Category>Downloaders: MediaApp:Video</Category>
   <Name>Sonarr</Name>
-  <Description>
   <Overview>
     Sonarr (former NZBDrone) is a PVR for newsgroup users. It can monitor multiple RSS feeds for new episodes of your favourite shows and will grab, sorts and renames them. It can also be configured to automatically upgrade the quality of files already downloaded if a better quality format becomes available.
   </Overview>
+  <Description></Description>
     Sonarr (former NZBDrone) is a PVR for newsgroup users. It can monitor multiple RSS feeds for new episodes of your favourite shows and will grab, sorts and renames them. It can also be configured to automatically upgrade the quality of files already downloaded if a better quality format becomes available.[br][br]
     [b][span style='color: #E80000;']Directions:[/span][/b][br]
     [b]/config[/b] : set this path to where you wish NzbDrone to store it's configuration.[br]
