@@ -6,26 +6,6 @@ if [[ $(cat /etc/timezone) != $TZ ]] ; then
   dpkg-reconfigure -f noninteractive tzdata
 fi
 
-# if [[ ! -f /tmp/last_version_installed ]]; then
-#   if [[ -d /config/last_version ]]; then
-#     # install last used version
-#     for file in /config/last_version/* ; do
-#       dpkg -i $file
-#     done
-#   else
-#     # install current stable version
-#     /opt/nzbget-update-install.sh
-#   fi
-#   touch /tmp/last_version_installed
-# fi
-
-# # Fix a potential lack of template config
-# if [[ -f /usr/share/nzbget/nzbget.conf ]]; then
-#   cp /usr/share/nzbget/nzbget.conf /usr/share/nzbget/webui/
-# elif [[ -f /usr/share/nzbget/webui/nzbget.conf ]]; then
-#   cp /usr/share/nzbget/webui/nzbget.conf /usr/share/nzbget/
-# fi
-
 # Check if nzbget.conf exists. If not, copy in the sample config
 if [ -f /config/nzbget.conf ]; then
   echo "Using existing nzbget.conf file."

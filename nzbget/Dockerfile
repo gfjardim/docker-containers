@@ -7,7 +7,8 @@ MAINTAINER gfjardim <gfjardim@gmail.com>
 # Set correct environment variables
 ENV HOME="/root" LC_ALL="C.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US.UTF-8" GIT_REPO="gfjardim/nzbget-updates"
 # Use baseimage-docker's init system
-CMD ["/sbin/my_init"]
+CMD ["supervisord", "-c", "/etc/supervisor.conf", "-n"]
+# CMD ["/sbin/my_init"]
 
 #########################################
 ##         RUN INSTALL SCRIPT          ##
