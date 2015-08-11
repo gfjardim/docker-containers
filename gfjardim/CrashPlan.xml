@@ -1,41 +1,39 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Container>
-  <Beta>False</Beta>
-<Category>Backup:</Category>
+<?xml version="1.0"?>
+<Container version="2">
   <Name>CrashPlan</Name>
-  <Overview>
-    With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywhere, anytime access to ALL your files, CrashPlan is the simplest, surest way to protect your digital life.
-  </Overview>
+  <Repository>gfjardim/crashplan</Repository>
+  <Registry>https://registry.hub.docker.com/u/gfjardim/crashplan/</Registry>
+  <Network>host</Network>
+  <Privileged>true</Privileged>
+  <Support>http://lime-technology.com/forum/index.php?topic=33864.0</Support>
+  <Overview>With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywhere, anytime access to ALL your files, CrashPlan is the simplest, surest way to protect your digital life.</Overview>
+  <Category>Backup:</Category>
+  <WebUI>http://www.code42.com/crashplan/</WebUI>
+  <Icon>http://i.imgur.com/F5ckGpm.png</Icon>
+  <ExtraParams/>
   <Description>
     With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywhere, anytime access to ALL your files, CrashPlan is the simplest, surest way to protect your digital life.[br][br]
     [b][span style='color: #E80000;']Directions:[/span][/b][br]
     [b]/config[/b] : this path is where the configuration of CrashPlan is stored to.[br]
     [b]/data[/b] : normally this should point to '/mnt/user', but you can set this to any directory you wish to backup. You may add another paths too.
   </Description>
-  <Registry>https://registry.hub.docker.com/u/gfjardim/crashplan/</Registry>
-  <GitHub>https://github.com/gfjardim/docker-crashplan</GitHub>
-  <Support>http://lime-technology.com/forum/index.php?topic=33864.0</Support>
-  <Repository>gfjardim/crashplan</Repository>
-  <BindTime>true</BindTime>
-  <Privileged>true</Privileged>
   <Networking>
     <Mode>host</Mode>
     <Publish/>
   </Networking>
-  <Environment/>
   <Data>
     <Volume>
-      <HostDir>/mnt/user/appdata/crashplan</HostDir>
+      <HostDir>/mnt/ssd/appdata/crashplan/</HostDir>
       <ContainerDir>/config</ContainerDir>
       <Mode>rw</Mode>
     </Volume>
     <Volume>
-      <HostDir></HostDir>
+      <HostDir>/mnt/user/</HostDir>
       <ContainerDir>/data</ContainerDir>
       <Mode>rw</Mode>
     </Volume>
   </Data>
-  <WebUI>http://www.code42.com/crashplan/</WebUI>
-  <Banner>http://i.imgur.com/mAdH6Zu.png</Banner>
-  <Icon>http://i.imgur.com/F5ckGpm.png</Icon>
+  <Environment/>
+  <Config Name="Config Directory" Target="/config" Default="/mnt/user/appdata/crashplan" Mode="rw" Description="This path is where the configuration of CrashPlan is stored to." Type="Path" Display="always" Required="true" Mask="no"></Config>
+  <Config Name="Data Directory" Target="/data" Default="/mnt/user/" Mode="rw" Description="Usually his should point to '/mnt/user', but you can set this to any directory you wish to backup.&amp;lt;br&amp;gt;&#13;&#10;&amp;lt;orange&amp;gt;Tip:&amp;lt;/orange&amp;gt; You can add as many paths you want to backup." Type="Path" Display="always" Required="true" Mask="false"></Config>
 </Container>
