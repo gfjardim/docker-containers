@@ -42,6 +42,8 @@ if [ -z "$STATUS" ]; then
   echo "Continous console status not requested"
   [ -d /etc/service/DropboxStatus ] && rm -r /etc/service/DropboxStatus
 fi
+
+exit 0
 EOT
 
 # Dropbox
