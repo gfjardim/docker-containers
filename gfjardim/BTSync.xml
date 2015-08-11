@@ -46,7 +46,7 @@
   </Data>
   <Environment/>
   <Config Name="Web Interface Port" Target="8888" Default="8888" Mode="tcp" Description="Port which BTSync web interface will use." Type="Port" Display="always" Required="true" Mask="false"/>
-  <Config Name="Discover Server Port" Target="5555" Default="5555" Mode="tcp" Description="This port is used to discover other peers on the internet.&amp;lt;br&amp;gt;&#13;&#10;&amp;lt;red&amp;gt;NOTICE:&amp;lt;/red&amp;gt;You need to map this port into your router if you want your server to be directly accessible from the internet," Type="Port" Display="always" Required="true" Mask="false"/>
+  <Config Name="Discover Server Port" Target="5555" Default="5555" Mode="tcp" Description="This port is used to discover other peers on the internet.&amp;lt;br&amp;gt;&#13;&#10;&amp;lt;red&amp;gt;NOTICE:&amp;lt;/red&amp;gt; You need to map this port into your router if you want your server to be directly accessible from the internet." Type="Port" Display="always" Required="true" Mask="false"/>
   <Config Name="LAN Discovery Port" Target="3838" Default="3838" Mode="udp" Description="Peers discovery in LAN." Type="Port" Display="always" Required="true" Mask="false"/>
   <Config Name="Config Directory" Target="/config" Default="/mnt/mnt/appdata/btsync" Mode="rw" Description="This path is where Bittorrent Sync will store it's configuration files." Type="Path" Display="always" Required="true" Mask="false"/>
 </Container>
