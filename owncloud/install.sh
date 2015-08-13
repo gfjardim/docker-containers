@@ -68,6 +68,12 @@ EOT
 cat <<'EOT' > /etc/my_init.d/config.sh
 #!/bin/bash
 
+$ Upgrade ownCloud
+if [[ ! -f /tmp/.occ_updated ]]; then
+  /sbin/setuser nobody php /var/www/owncloud/occ upgrade
+  touch /tmp/.occ_updated
+fi
+
 # Fix the timezone
 if [[ $(cat /etc/timezone) != $TZ ]] ; then
   echo "$TZ" > /etc/timezone
@@ -288,10 +294,11 @@ mkdir -p /var/www/
 HTML=$(wget -qO - https://owncloud.org/changelog/)
 REGEX="(https://download.owncloud.org/community/owncloud-[0-9.]*tar.bz2)"
 if [[ $HTML =~ $REGEX ]]; then
- curl -s -k -L "${BASH_REMATCH[1]}" | tar -jx -C /var/www
+  URL=${BASH_REMATCH[1]}
 else
   exit 1
 fi
+curl -s -k -L "${URL}" | tar -jx -C /var/www
 rm /var/www/owncloud/.user.ini
 
 #########################################
