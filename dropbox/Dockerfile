@@ -6,16 +6,18 @@ MAINTAINER gfjardim <gfjardim@gmail.com>
 #########################################
 
 # Set correct environment variables
-ENV HOME="/root" LC_ALL="C.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US.UTF-8"
+ENV HOME="/root" LC_ALL="C.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US.UTF-8" TERM=xterm
 
 # Use baseimage-docker's init system
-CMD ["/sbin/my_init"]
+# CMD ["/sbin/my_init"]
+# Use Supervisor
+CMD ["supervisord", "-c", "/etc/supervisor.conf", "-n"]
 
 #########################################
 ##         RUN INSTALL SCRIPT          ##
 #########################################
 
-COPY install.sh /tmp/
+COPY * /tmp/
 RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh
 
 #########################################
