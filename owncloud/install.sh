@@ -43,7 +43,12 @@ apt-get install -qy -f php5-cli \
                     nginx \
                     openssl \
                     wget \
-                    bzip2
+                    bzip2 \
+                    php5memcached \
+                    memcached
+wget http://mirrors.kernel.org/ubuntu/pool/universe/p/php-apcu/php5-apcu_4.0.6-1_amd64.deb
+dpkg -i php5-apcu_4.0.6-1_amd64.deb
+rm php5-apcu_4.0.6-1_amd64.deb
 
 #########################################
 ##  FILES, SERVICES AND CONFIGURATION  ##
@@ -132,6 +137,13 @@ pm.max_requests = 500
 php_admin_value[upload_max_filesize] = 100G
 php_admin_value[post_max_size] = 100G
 php_admin_value[default_charset] = UTF-8
+EOT
+
+#ACPU memcache config
+cat <<'EOT' > /etc/php5/mods-available/apcu.ini
+extension=apcu.so
+apc.enabled=1
+apc.enable_cli=1
 EOT
 
 # NGINX config
