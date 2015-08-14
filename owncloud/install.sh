@@ -132,6 +132,7 @@ pm.max_requests = 500
 php_admin_value[upload_max_filesize] = 100G
 php_admin_value[post_max_size] = 100G
 php_admin_value[default_charset] = UTF-8
+env[PATH] = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 EOT
 
 # NGINX config
