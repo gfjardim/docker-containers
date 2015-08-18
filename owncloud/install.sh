@@ -73,7 +73,7 @@ EOT
 cat <<'EOT' > /etc/my_init.d/config.sh
 #!/bin/bash
 
-$ Upgrade ownCloud
+# Upgrade ownCloud
 if [[ ! -f /tmp/.occ_updated ]]; then
   /sbin/setuser nobody php /var/www/owncloud/occ upgrade
   #/usr/bin/php /opt/fix_config.php
@@ -118,7 +118,7 @@ fi
 
 # Copy ca-bundle file to config
 if [[ ! -f /var/www/owncloud/config/ca-bundle.crt  ]]; then
-  /opt/ca-bundle.crt /var/www/owncloud/config/ca-bundle.crt 
+  cp /opt/ca-bundle.crt /var/www/owncloud/config/ca-bundle.crt 
 if
 
 chown -R nobody:users /var/www/owncloud
