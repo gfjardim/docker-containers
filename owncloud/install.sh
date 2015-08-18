@@ -73,12 +73,12 @@ EOT
 cat <<'EOT' > /etc/my_init.d/config.sh
 #!/bin/bash
 
-# Upgrade ownCloud
-if [[ ! -f /tmp/.occ_updated ]]; then
-  /sbin/setuser nobody php /var/www/owncloud/occ upgrade
-  #/usr/bin/php /opt/fix_config.php
-  touch /tmp/.occ_updated
-fi
+# # Upgrade ownCloud
+# if [[ ! -f /tmp/.occ_updated ]]; then
+#   /sbin/setuser nobody php /var/www/owncloud/occ upgrade
+#   /usr/bin/php /opt/fix_config.php
+#   touch /tmp/.occ_updated
+# fi
 
 # Fix the timezone
 if [[ $(cat /etc/timezone) != $TZ ]] ; then
@@ -119,7 +119,7 @@ fi
 # Copy ca-bundle file to config
 if [[ ! -f /var/www/owncloud/config/ca-bundle.crt  ]]; then
   cp /opt/ca-bundle.crt /var/www/owncloud/config/ca-bundle.crt 
-if
+fi
 
 chown -R nobody:users /var/www/owncloud
 EOT
