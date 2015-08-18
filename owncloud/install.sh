@@ -45,6 +45,11 @@ apt-get install -qy -f php5-cli \
                     wget \
                     bzip2
 
+apt-get install -qy -f php5-dev libpcre3-dev
+pecl channel-update pecl.php.net
+yes | pecl install -f channel://pecl.php.net/apcu-4.0.7
+apt-get remove -qy -f php5-dev libpcre3-dev
+
 #########################################
 ##  FILES, SERVICES AND CONFIGURATION  ##
 #########################################
@@ -71,6 +76,7 @@ cat <<'EOT' > /etc/my_init.d/config.sh
 $ Upgrade ownCloud
 if [[ ! -f /tmp/.occ_updated ]]; then
   /sbin/setuser nobody php /var/www/owncloud/occ upgrade
+  #/usr/bin/php /opt/fix_config.php
   touch /tmp/.occ_updated
 fi
 
@@ -110,6 +116,11 @@ if [[ -d /var/www/owncloud/config ]]; then
   ln -sf /var/www/owncloud/data/config/ /var/www/owncloud/config
 fi
 
+# Copy ca-bundle file to config
+if [[ ! -f /var/www/owncloud/config/ca-bundle.crt  ]]; then
+  /opt/ca-bundle.crt /var/www/owncloud/config/ca-bundle.crt 
+if
+
 chown -R nobody:users /var/www/owncloud
 EOT
 
@@ -132,6 +143,11 @@ pm.max_requests = 500
 php_admin_value[upload_max_filesize] = 100G
 php_admin_value[post_max_size] = 100G
 php_admin_value[default_charset] = UTF-8
+env[HOSTNAME] = $HOSTNAME
+env[PATH] = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+env[TMP] = /tmp
+env[TMPDIR] = /tmp
+env[TEMP] = /tmp
 EOT
 
 # NGINX config
@@ -283,6 +299,19 @@ server {
 }
 EOT
 
+cat <<'EOT' > /opt/fix_config.php
+<?PHP
+$config_file = "/var/www/owncloud/config/config.php";
+require_once($config_file);
+
+# Change values
+$CONFIG['memcache.local'] = '\OC\Memcache\APCu';
+
+# Save file
+file_put_contents("${config_file}", '<?PHP'.PHP_EOL.'$CONFIG = '.var_export($CONFIG, TRUE).PHP_EOL.'?>' );
+?>
+EOT
+
 chmod -R +x /etc/service/ /etc/my_init.d/
 
 #########################################
@@ -300,6 +329,7 @@ else
 fi
 curl -s -k -L "${URL}" | tar -jx -C /var/www
 rm /var/www/owncloud/.user.ini
+cp /var/www/owncloud/config/ca-bundle.crt /opt/ca-bundle.crt
 
 #########################################
 ##                 CLEANUP             ##
