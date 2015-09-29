@@ -165,7 +165,9 @@ http {
   sendfile on;
   tcp_nopush on;
   tcp_nodelay on;
-  keepalive_timeout 65;
+  keepalive_timeout 1200;
+  proxy_read_timeout  1800;
+  fastcgi_read_timeout 1800;
   types_hash_max_size 2048;
   include /etc/nginx/mime.types;
   default_type application/octet-stream;
@@ -178,6 +180,9 @@ http {
   include /etc/nginx/sites-enabled/*;
 }
 EOT
+
+#Create DH Parameters File
+openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
 
 # NGINX site
 rm -f /etc/nginx/sites-enabled/default
@@ -192,6 +197,16 @@ server {
 
   ssl_certificate /opt/server.pem;
   ssl_certificate_key /opt/server.key;
+  
+  ssl_dhparam /etc/ssl/certs/dhparam.pem;
+
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+  ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:ECDHE-RSA-AES128-GCM-SHA256:AES256+EECDH:DHE-RSA-AES128-GCM-SHA256:AES256+EDH:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
+
+  ssl_prefer_server_ciphers on;
+  ssl_session_cache shared:SSL:10m;
+
+  add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload";
 
   # Force SSL
   error_page 497 https://$host:DEFAULT_PORT$request_uri;
