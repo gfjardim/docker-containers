@@ -232,7 +232,7 @@ JAVACOMMON=`which java`
 wget -nv https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_4.4.1_Linux.tgz -O - | tar -zx -C /tmp
 
 # Installation directory
-cd /tmp/CrashPlan-install
+cd /tmp/crashplan-install
 INSTALL_DIR=`pwd`
 
 # Make the destination dir
