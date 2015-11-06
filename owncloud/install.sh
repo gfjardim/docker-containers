@@ -43,7 +43,12 @@ apt-get install -qy -f php5-cli \
                     nginx \
                     openssl \
                     wget \
-                    bzip2
+                    bzip2 \
+                    php5memcached \
+                    memcached
+wget http://mirrors.kernel.org/ubuntu/pool/universe/p/php-apcu/php5-apcu_4.0.6-1_amd64.deb
+dpkg -i php5-apcu_4.0.6-1_amd64.deb
+rm php5-apcu_4.0.6-1_amd64.deb
 
 apt-get install -qy -f php5-dev libpcre3-dev
 pecl channel-update pecl.php.net
@@ -148,6 +153,13 @@ env[PATH] = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 env[TMP] = /tmp
 env[TMPDIR] = /tmp
 env[TEMP] = /tmp
+EOT
+
+#ACPU memcache config
+cat <<'EOT' > /etc/php5/mods-available/apcu.ini
+extension=apcu.so
+apc.enabled=1
+apc.enable_cli=1
 EOT
 
 # NGINX config
