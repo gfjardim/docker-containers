@@ -1,4 +1,5 @@
 #!/bin/bash
+export CP_VERSION="4.4.1"
 
 #########################################
 ##        ENVIRONMENTAL CONFIG         ##
@@ -75,6 +76,8 @@ if [[ $(cat /etc/timezone) != $TZ ]] ; then
 fi
 
 mkdir -p /home/ubuntu/unraid /var/run/sshd /root/.vnc /config/id
+
+sed -i -e "s|0.0.0.0|172.17.42.1|" /var/lib/crashplan/.ui_info
 
 if [ -d "/home/ubuntu/unraid/wallpapers" ]; then
   echo "using existing wallpapers etc..."
@@ -229,10 +232,10 @@ RUNLVLDIR=/etc/rc${RUNLEVEL}.d
 JAVACOMMON=`which java`
 
 # Downloading Crashplan
-wget -nv https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_4.3.0_Linux.tgz -O - | tar -zx -C /tmp
+wget -nv https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${CP_VERSION}_Linux.tgz -O - | tar -zx -C /tmp
 
 # Installation directory
-cd /tmp/CrashPlan-install
+cd /tmp/crashplan-install
 INSTALL_DIR=`pwd`
 
 # Make the destination dir

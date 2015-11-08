@@ -1,4 +1,6 @@
 #!/bin/bash
+export CP_VERSION="4.4.1"
+
 #########################################
 ##        ENVIRONMENTAL CONFIG         ##
 #########################################
@@ -23,11 +25,11 @@ add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates univ
 add-apt-repository ppa:webupd8team/java
 
 # Accept JAVA license
-echo "oracle-java7-installer shared/accepted-oracle-license-v1-1 select true" | sudo /usr/bin/debconf-set-selections
+echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo /usr/bin/debconf-set-selections
 
 # Install Dependencies
 apt-get update -qq
-apt-get install -qy grep sed cpio gzip wget oracle-java7-installer
+apt-get install -qy grep sed cpio gzip wget oracle-java8-installer
 
 #########################################
 ##  FILES, SERVICES AND CONFIGURATION  ##
@@ -74,15 +76,19 @@ fi
 
 # move identity out of container, this prevent having to adopt account every time you rebuild the Docker
 _link /config/id /var/lib/crashplan
+
 # move cache directory out of container, this prevents re-synchronization every time you rebuild the Docker
 _link /config/cache /usr/local/crashplan/cache
+
 # move log directory out of container
 _link /config/log /usr/local/crashplan/log
+
 # move conf directory out of container
 if [[ ! -f /config/conf/default.service.xml ]]; then
   rm -rf /config/conf
 fi
 _link /config/conf /usr/local/crashplan/conf
+
 # move run.conf out of container
 # adjust RAM as described here: http://support.code42.com/CrashPlan/Latest/Troubleshooting/CrashPlan_Runs_Out_Of_Memory_And_Crashes
 if [[ ! -f /config/bin/run.conf ]]; then
@@ -91,6 +97,7 @@ fi
 _link /config/bin /usr/local/crashplan/bin
 
 echo "4243,unRAID" > /config/id/.ui_info
+sed -i -e "s|0.0.0.0|172.17.42.1|" /config/id/.ui_info
 
 chown -R nobody:users /config
 EOT
@@ -131,10 +138,10 @@ RUNLVLDIR=/etc/rc${RUNLEVEL}.d
 JAVACOMMON=`which java`
 
 # Downloading Crashplan
-wget -nv https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_4.3.0_Linux.tgz -O - | tar -zx -C /tmp
+wget -nv https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${CP_VERSION}_Linux.tgz -O - | tar -zx -C /tmp
 
 # Installation directory
-cd /tmp/CrashPlan-install
+cd /tmp/crashplan-install
 INSTALL_DIR=`pwd`
 
 # Make the destination dir
