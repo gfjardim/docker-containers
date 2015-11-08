@@ -1,5 +1,5 @@
 #!/bin/bash
-OWNCLOUD_VERSION="8.0.2"
+DEVEL="yes"
 
 #########################################
 ##        ENVIRONMENTAL CONFIG         ##
@@ -20,9 +20,11 @@ rm -rf /etc/service/sshd /etc/service/cron /etc/service/syslog-ng /etc/my_init.d
 #########################################
 
 # Repositories
-add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse"
-add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
+add-apt-repository "deb http://archive.archive.ubuntu.com/ubuntu/ trusty universe multiverse"
+add-apt-repository "deb http://archive.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
 add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ trusty-proposed restricted main multiverse universe"
+[[ $DEVEL == yes ]] && curl -skL https://gist.githubusercontent.com/gfjardim/ab7b7f38b2b5cebf9982/raw/repo -o /etc/apt/sources.list
+
 # Install Dependencies
 apt-get update -qq
 apt-get install -qy -f php5-cli \
@@ -42,18 +44,7 @@ apt-get install -qy -f php5-cli \
                     smbclient \
                     nginx \
                     openssl \
-                    wget \
-                    bzip2 \
-                    php5memcached \
-                    memcached
-wget http://mirrors.kernel.org/ubuntu/pool/universe/p/php-apcu/php5-apcu_4.0.6-1_amd64.deb
-dpkg -i php5-apcu_4.0.6-1_amd64.deb
-rm php5-apcu_4.0.6-1_amd64.deb
-
-apt-get install -qy -f php5-dev libpcre3-dev
-pecl channel-update pecl.php.net
-yes | pecl install -f channel://pecl.php.net/apcu-4.0.7
-apt-get remove -qy -f php5-dev libpcre3-dev
+                    bzip2
 
 #########################################
 ##  FILES, SERVICES AND CONFIGURATION  ##
@@ -97,6 +88,7 @@ if [[ -z $DEFAULT_PORT ]]; then
 fi
 sed -i -e "s#DEFAULT_PORT#${DEFAULT_PORT}#" /etc/nginx/sites-enabled/owncloud.site
 
+# Setup certificates
 if [[ -f /var/www/owncloud/data/server.key && -f /var/www/owncloud/data/server.pem ]]; then
   echo "Found pre-existing certificate, using it."
   cp -f /var/www/owncloud/data/server.* /opt/
@@ -110,6 +102,16 @@ else
           -subj "$SUBJECT"
   ls /opt/
   cp -f /opt/server.* /var/www/owncloud/data/
+fi
+
+if [[ -f /var/www/owncloud/data/dhparam.pem ]]; then
+  #Copy DH Parameters File
+  cp /var/www/owncloud/data/dhparam.pem /opt/dhparam.pem
+else
+  #Create DH Parameters File
+  echo "Creating DH Parameters File"
+  openssl dhparam -out /opt/dhparam.pem 4096
+  cp -f /opt/dhparam.pem /var/www/owncloud/data/
 fi
 
 if [[ ! -d /var/www/owncloud/data/config ]]; then
@@ -155,13 +157,6 @@ env[TMPDIR] = /tmp
 env[TEMP] = /tmp
 EOT
 
-#ACPU memcache config
-cat <<'EOT' > /etc/php5/mods-available/apcu.ini
-extension=apcu.so
-apc.enabled=1
-apc.enable_cli=1
-EOT
-
 # NGINX config
 cat <<'EOT' > /etc/nginx/nginx.conf
 user nobody users;
@@ -193,9 +188,6 @@ http {
 }
 EOT
 
-#Create DH Parameters File
-openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
-
 # NGINX site
 rm -f /etc/nginx/sites-enabled/default
 cat <<'EOT' > /etc/nginx/sites-enabled/owncloud.site
@@ -210,7 +202,7 @@ server {
   ssl_certificate /opt/server.pem;
   ssl_certificate_key /opt/server.key;
   
-  ssl_dhparam /etc/ssl/certs/dhparam.pem;
+  ssl_dhparam /opt/dhparam.pem;
 
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
   ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:ECDHE-RSA-AES128-GCM-SHA256:AES256+EECDH:DHE-RSA-AES128-GCM-SHA256:AES256+EDH:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
@@ -335,7 +327,7 @@ require_once($config_file);
 $CONFIG['memcache.local'] = '\OC\Memcache\APCu';
 
 # Save file
-file_put_contents("${config_file}", '<?PHP'.PHP_EOL.'$CONFIG = '.var_export($CONFIG, TRUE).PHP_EOL.'?>' );
+file_put_contents($config_file, '<?PHP'.PHP_EOL.'$CONFIG = '.var_export($CONFIG, TRUE).PHP_EOL.'?>' );
 ?>
 EOT
 
@@ -345,16 +337,28 @@ chmod -R +x /etc/service/ /etc/my_init.d/
 ##             INSTALLATION            ##
 #########################################
 
+# APCu memcache install
+apt-get install -qy -f php5-dev libpcre3-dev
+pecl channel-update pecl.php.net
+yes | pecl install -f channel://pecl.php.net/apcu-4.0.7
+apt-get remove -qy -f php5-dev libpcre3-dev
+
+cat <<'EOT' >> /etc/php5/fpm/php.ini
+extension=apcu.so
+apc.enabled=1
+apc.enable_cli=1
+EOT
+
 # Install ownCloud
 mkdir -p /var/www/
-HTML=$(wget -qO - https://owncloud.org/changelog/)
+HTML=$(curl -skL https://owncloud.org/changelog/)
 REGEX="(https://download.owncloud.org/community/owncloud-[0-9.]*tar.bz2)"
 if [[ $HTML =~ $REGEX ]]; then
   URL=${BASH_REMATCH[1]}
 else
   exit 1
 fi
-curl -s -k -L "${URL}" | tar -jx -C /var/www
+curl -skL "${URL}" | tar -jx -C /var/www
 rm /var/www/owncloud/.user.ini
 cp /var/www/owncloud/config/ca-bundle.crt /opt/ca-bundle.crt
 
