@@ -13,7 +13,7 @@ usermod -d /home nobody
 chown -R nobody:users /home
 
 # Disable some services
-rm -rf /etc/service/sshd /etc/service/cron /etc/service/syslog-ng /etc/my_init.d/00_regen_ssh_host_keys.sh
+rm -rf /etc/service/sshd /etc/service/syslog-ng /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 #########################################
 ##    REPOSITORIES AND DEPENDENCIES    ##
@@ -65,16 +65,41 @@ umask 000
 exec /usr/sbin/php5-fpm --nodaemonize --fpm-config /etc/php5/fpm/php-fpm.conf
 EOT
 
+# ownCLoud update
+mkdir -p /etc/service/occ_update
+cat <<'EOT' > /etc/service/occ_update/run
+#!/bin/bash
+sv_running() {
+  state=$(sv status $1|cut -d: -f1)
+  if [[ $state == run ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+while [ 1 ]; do
+  if sv_running nginx && sv_running php-fpm; then
+    if [[ ! -f /etc/service/occ_update/down ]]; then
+      echo "NOTICE: ownCloud will now update."
+      # Update ownCloud
+      sudo -u nobody -s /bin/bash -c "php /var/www/owncloud/occ upgrade"
+      # Add necessary config options
+      php /opt/fix_config.php
+      # Mark as updated, and disable this service
+      touch /etc/service/occ_update/down
+      echo "Update done, quitting."
+      sv stop occ_update >/dev/null 2>&1
+    fi
+  fi
+  sleep 1
+done
+EOT
+
+
 # CONFIG
 cat <<'EOT' > /etc/my_init.d/config.sh
 #!/bin/bash
-
-# # Upgrade ownCloud
-# if [[ ! -f /tmp/.occ_updated ]]; then
-#   /sbin/setuser nobody php /var/www/owncloud/occ upgrade
-#   /usr/bin/php /opt/fix_config.php
-#   touch /tmp/.occ_updated
-# fi
 
 # Fix the timezone
 if [[ $(cat /etc/timezone) != $TZ ]] ; then
@@ -109,7 +134,7 @@ if [[ -f /var/www/owncloud/data/dhparam.pem ]]; then
   cp /var/www/owncloud/data/dhparam.pem /opt/dhparam.pem
 else
   #Create DH Parameters File
-  echo "Creating DH Parameters File"
+  echo "Creating DH Parameters File."
   openssl dhparam -out /opt/dhparam.pem 4096
   cp -f /opt/dhparam.pem /var/www/owncloud/data/
 fi
@@ -127,6 +152,9 @@ fi
 if [[ ! -f /var/www/owncloud/config/ca-bundle.crt  ]]; then
   cp /opt/ca-bundle.crt /var/www/owncloud/config/ca-bundle.crt 
 fi
+
+# Add cron job
+echo '*/15 * * * * /usr/bin/php -f /var/www/owncloud/cron.php >/dev/null 2>&1' | crontab -u nobody -
 
 chown -R nobody:users /var/www/owncloud
 EOT
@@ -338,12 +366,11 @@ chmod -R +x /etc/service/ /etc/my_init.d/
 #########################################
 
 # APCu memcache install
-apt-get install -qy -f php5-dev libpcre3-dev
-pecl channel-update pecl.php.net
-yes | pecl install -f channel://pecl.php.net/apcu-4.0.7
-apt-get remove -qy -f php5-dev libpcre3-dev
+curl -skL http://mirrors.kernel.org/ubuntu/pool/universe/p/php-apcu/php5-apcu_4.0.7-1build1~ubuntu14.04.1_amd64.deb -o /tmp/php5-apcu.deb
+dpkg -i /tmp/php5-apcu.deb
+rm /tmp/php5-apcu.deb
 
-cat <<'EOT' >> /etc/php5/fpm/php.ini
+cat <<'EOT' > /etc/php5/mods-available/apcu.ini
 extension=apcu.so
 apc.enabled=1
 apc.enable_cli=1
