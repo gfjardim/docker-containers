@@ -124,7 +124,7 @@ else
   echo "No pre-existing certificate found, generating a new one with subject:"
   echo $SUBJECT
   openssl req -new -x509 -days 3650 -nodes -out /opt/server.pem -keyout /opt/server.key \
-          -subj "$SUBJECT"
+          -subj "$SUBJECT" > /var/log/openssl
   ls /opt/
   cp -f /opt/server.* /var/www/owncloud/data/
 fi
