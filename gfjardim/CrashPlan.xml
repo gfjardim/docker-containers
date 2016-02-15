@@ -8,25 +8,19 @@
   <Support>http://lime-technology.com/forum/index.php?topic=33864.0</Support>
   <Overview>With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywhere, anytime access to ALL your files, CrashPlan is the simplest, surest way to protect your digital life.</Overview>
   <Category>Backup:</Category>
-  <WebUI>http://www.code42.com/crashplan/</WebUI>
+  <WebUI>http://[IP]:[PORT:4280]/vnc.html?autoconnect=true&host=[IP]&port=[PORT:4280]</WebUI>
   <Icon>http://i.imgur.com/F5ckGpm.png</Icon>
   <ExtraParams/>
   <Description>
     With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywhere, anytime access to ALL your files, CrashPlan is the simplest, surest way to protect your digital life.[br][br]
-    [b][span style='color: #E80000;']Directions:[/span][/b][br]
-    [b]/config[/b] : this path is where the configuration of CrashPlan is stored to.[br]
-    [b]/data[/b] : normally this should point to '/mnt/user', but you can set this to any directory you wish to backup. You may add another paths too.
+    [b][span style='color: #E80000;']Notes:[/span][/b][br][br]
+    [li]The web interface is usually hosted on port 4280; if you need to change it, please enable the Advanced View, edit the [b]WEB_PORT[/b] variable and the [b]WebUI[/b]  field accordingly.[/li][br]
   </Description>
   <Networking>
     <Mode>host</Mode>
     <Publish/>
   </Networking>
   <Data>
-    <Volume>
-      <HostDir>/mnt/ssd/appdata/crashplan/</HostDir>
-      <ContainerDir>/config</ContainerDir>
-      <Mode>rw</Mode>
-    </Volume>
     <Volume>
       <HostDir>/mnt/user/</HostDir>
       <ContainerDir>/data</ContainerDir>
