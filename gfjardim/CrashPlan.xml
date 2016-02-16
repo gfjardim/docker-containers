@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Container version="2">
+<Container>
   <Name>CrashPlan</Name>
   <Repository>gfjardim/crashplan</Repository>
   <Registry>https://registry.hub.docker.com/u/gfjardim/crashplan/</Registry>
@@ -14,7 +14,7 @@
   <Description>
     With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywhere, anytime access to ALL your files, CrashPlan is the simplest, surest way to protect your digital life.[br][br]
     [b][span style='color: #E80000;']Notes:[/span][/b][br][br]
-    [li]The web interface is usually hosted on port 4280; if you need to change it, please enable the Advanced View, edit the [b]WEB_PORT[/b] variable and the [b]WebUI[/b]  field accordingly.[/li][br]
+    [li]The web interface is usually hosted on port 4280; if you need to change it, please enable the Advanced View, edit the [b]WEB_PORT[/b] variable and the [b]WebUI[/b] field accordingly.[/li][br]
   </Description>
   <Networking>
     <Mode>host</Mode>
