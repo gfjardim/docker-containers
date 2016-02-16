@@ -66,11 +66,11 @@ if [[ ! -f /config/bin/run.conf ]]; then
 fi
 _link /config/bin /usr/local/crashplan/bin
 
-# Change VNC_PORT
-if [[ -z $VNC_PORT ]]; then
-  VNC_PORT="4280"
+# Change WEB_PORT
+if [[ -z $WEB_PORT ]]; then
+  WEB_PORT="4280"
 fi
-sed -i -e "s#VNC_PORT#${VNC_PORT}#g" /etc/service/novnc/run
-sed -i -e "s#VNC_PORT#${VNC_PORT}#g" /etc/service/xvnc/run
+sed -i -e "s#WEB_PORT#${WEB_PORT}#g" /etc/service/novnc/run
+sed -i -e "s#WEB_PORT#${WEB_PORT}#g" /etc/service/xvnc/run
 
 

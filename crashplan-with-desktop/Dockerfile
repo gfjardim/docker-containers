@@ -20,5 +20,5 @@ RUN /bin/bash /files/install.sh
 #########################################
 ##         EXPORTS AND VOLUMES         ##
 #########################################
-VOLUME /data
-EXPOSE 4243 4242 3389 8080
+VOLUME /data /config
+EXPOSE 4243 4242 4280
