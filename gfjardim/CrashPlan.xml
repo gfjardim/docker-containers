@@ -57,6 +57,4 @@
     </Variable>
   </Environment>
   <Networking>
-  <Config Name="Config Directory" Target="/config" Default="/mnt/user/appdata/crashplan" Mode="rw" Description="This path is where the configuration of CrashPlan is stored to." Type="Path" Display="always" Required="true" Mask="no"></Config>
-  <Config Name="Data Directory" Target="/data" Default="/mnt/user/" Mode="rw" Description="Usually his should point to '/mnt/user', but you can set this to any directory you wish to backup.&amp;lt;br&amp;gt;&#13;&#10;&amp;lt;orange&amp;gt;Tip:&amp;lt;/orange&amp;gt; You can add as many paths you want to backup." Type="Path" Display="always" Required="true" Mask="false"></Config>
 </Container>
