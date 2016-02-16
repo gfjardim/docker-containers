@@ -1,23 +1,23 @@
 #!/bin/bash
+
+# Install Crashplan
 APP_BASENAME=CrashPlan
 DIR_BASENAME=crashplan
+TEMPDIR=/tmp/crashplan-install
 TARGETDIR=/usr/local/crashplan
 BINSDIR=/usr/local/bin
-MANIFESTDIR=/data
+MANIFESTDIR=/backups
 INITDIR=/etc/init.d
-RUNLEVEL=`who -r | sed -e 's/^.*\(run-level [0-9]\).*$/\1/' | cut -d \  -f 2`
+RUNLEVEL=$(who -r | sed -e 's/^.*\(run-level [0-9]\).*$/\1/' | cut -d \  -f 2)
 RUNLVLDIR=/etc/rc${RUNLEVEL}.d
-JAVACOMMON=`which java`
+JAVACOMMON=$(which java)
 
 # Downloading Crashplan
-curl -L https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${CP_VERSION}_Linux.tgz | tar -zx -C /tmp
+wget -nv http://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${CP_VERSION}_Linux.tgz -O - | tar -zx -C /tmp
 
-# Installation directory
-cd /tmp/crashplan-install
-INSTALL_DIR=`pwd`
-
-# Make the destination dir
+# Make the destination dirs
 mkdir -p ${TARGETDIR}
+mkdir -p /var/lib/crashplan
 
 # create a file that has our install vars so we can later uninstall
 echo "" > ${TARGETDIR}/install.vars
@@ -26,47 +26,39 @@ echo "BINSDIR=${BINSDIR}" >> ${TARGETDIR}/install.vars
 echo "MANIFESTDIR=${MANIFESTDIR}" >> ${TARGETDIR}/install.vars
 echo "INITDIR=${INITDIR}" >> ${TARGETDIR}/install.vars
 echo "RUNLVLDIR=${RUNLVLDIR}" >> ${TARGETDIR}/install.vars
-NOW=`date +%Y%m%d`
-echo "INSTALLDATE=$NOW" >> ${TARGETDIR}/install.vars
-cat ${INSTALL_DIR}/install.defaults >> ${TARGETDIR}/install.vars
+echo "INSTALLDATE=$(date +%Y%m%d)" >> ${TARGETDIR}/install.vars
+cat ${TEMPDIR}/install.defaults >> ${TARGETDIR}/install.vars
 echo "JAVACOMMON=${JAVACOMMON}" >> ${TARGETDIR}/install.vars
 
-# Definition of ARCHIVE occurred above when we extracted the JAR we need to evaluate Java environment
-ARCHIVE=`ls ./*_*.cpi`
+# Extract CrashPlan installer files
 cd ${TARGETDIR}
-cat "${INSTALL_DIR}/${ARCHIVE}" | gzip -d -c - | cpio -i --no-preserve-owner
-cd ${INSTALL_DIR}
+cat $(ls ${TEMPDIR}/*_*.cpi) | gzip -d -c - | cpio -i --no-preserve-owner
 
-#update the configs for file storage
-
-if grep "<manifestPath>.*</manifestPath>" ${TARGETDIR}/conf/default.service.xml > /dev/null
-  then
-    sed -i "s|<manifestPath>.*</manifestPath>|<manifestPath>${MANIFESTDIR}</manifestPath>|g" ${TARGETDIR}/conf/default.service.xml
-  else
-    sed -i "s|<backupConfig>|<backupConfig>\n\t\t\t<manifestPath>${MANIFESTDIR}</manifestPath>|g" ${TARGETDIR}/conf/default.service.xml
+# Update the configs for file storage
+if grep "<manifestPath>.*</manifestPath>" ${TARGETDIR}/conf/default.service.xml > /dev/null; then
+  sed -i "s|<manifestPath>.*</manifestPath>|<manifestPath>${MANIFESTDIR}</manifestPath>|g" ${TARGETDIR}/conf/default.service.xml
+else
+  sed -i "s|<backupConfig>|<backupConfig>\n\t\t\t<manifestPath>${MANIFESTDIR}</manifestPath>|g" ${TARGETDIR}/conf/default.service.xml
 fi
 
-sed -i "s|</servicePeerConfig>|</servicePeerConfig>\n\t<serviceUIConfig>\n\t\t\
-       <serviceHost>0.0.0.0</serviceHost>\n\t\t<servicePort>4243</servicePort>\n\t\t\
-       <connectCheck>0</connectCheck>\n\t\t<showFullFilePath>false</showFullFilePath>\n\t\
-       </serviceUIConfig>|g" ${TARGETDIR}/conf/default.service.xml
-
-# the log dir
-LOGDIR=${TARGETDIR}/log
-chmod 777 $LOGDIR
+# Remove the default backup set
+if grep "<backupSets>.*</backupSets>" ${TARGETDIR}/conf/default.service.xml > /dev/null; then
+    sed -i "s|<backupSets>.*</backupSets>|<backupSets></backupSets>|g" ${TARGETDIR}/conf/default.service.xml
+fi
 
 # Install the control script for the service
-cp scripts/run.conf ${TARGETDIR}/bin
+cp ${TEMPDIR}/scripts/run.conf ${TARGETDIR}/bin
 
-# Tweak the ui.properties to docker environment
-sed -i -e "s|.*serviceHost.*|serviceHost=172.17.42.1|" ${TARGETDIR}/conf/ui.properties
+# Add desktop startup script
+cp ${TEMPDIR}/scripts/CrashPlanDesktop /startapp.sh
+sed -i 's|"\$SCRIPTDIR/.."|\$(dirname $SCRIPTDIR)|g' /startapp.sh
 
 # Fix permissions
-chmod -R u-x,go-rwx,go+u,ugo+X /usr/local/crashplan
-chmod -R 777 /usr/local/crashplan/bin
+chmod -R u-x,go-rwx,go+u,ugo+X ${TARGETDIR}
+chown -R nobody ${TARGETDIR} /var/lib/crashplan
 
 # Disable auto update
-chmod -R -x /usr/local/crashplan/upgrade/
-
-# Remove install data
-rm -rf ${INSTALL_DIR}
+cat <<'EOT' > ${TARGETDIR}/upgrade/startLinux.sh
+#!/bin/sh
+# in-app updates are disabled
+EOT

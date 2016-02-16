@@ -44,13 +44,13 @@ apt-get install -qy --force-yes --no-install-recommends \
 
 # Install window manager and x-server
 apt-get install -qy --force-yes --no-install-recommends \
-                vnc4server \
                 x11-xserver-utils \
                 openbox \
                 xfonts-base \
                 xfonts-100dpi \
                 xfonts-75dpi \
-                libfuse2
+                libfuse2 \
+                xbase-clients
 
 # Install noVNC dependencies
 apt-get install -qy --force-yes --no-install-recommends \
@@ -82,9 +82,9 @@ mkdir -p /nobody/.config/openbox /nobody/.cache
 cp /files/openbox/autostart.sh /nobody/.config/openbox/autostart
 cp /files/openbox/rc.xml /nobody/.config/openbox/rc.xml
 
-# Xvnc Service
-mkdir -p /etc/service/xvnc
-cp /files/xvnc/service.sh /etc/service/xvnc/run
+# TigerVNC Service
+mkdir -p /etc/service/tigervnc
+cp /files/tigervnc/service.sh /etc/service/tigervnc/run
 
 # Config File
 mkdir -p /etc/my_init.d
@@ -98,12 +98,12 @@ chmod -R +x /etc/service/ /etc/my_init.d/
 
 # Install Crashplan
 /bin/bash /files/crashplan/install.sh
-mkdir -p /var/lib/crashplan
-chown -R nobody /usr/local/crashplan /var/lib/crashplan
+
+# Install TigerVNC
+/bin/bash /files/tigervnc/install.sh
 
 # Install noVNC
-mkdir /opt/novnc
-curl -L https://github.com/kanaka/noVNC/archive/master.tar.gz | tar -xz --strip=1 -C /opt/novnc
+/bin/bash /files/novnc/install.sh
 
 #########################################
 ##                 CLEANUP             ##
