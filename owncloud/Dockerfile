@@ -1,6 +1,6 @@
-FROM phusion/baseimage:0.9.16
+FROM phusion/baseimage:0.9.18
 MAINTAINER gfjardim <gfjardim@gmail.com>
-LABEL BASEIMAGE="phusion/baseimage:0.9.16"
+ENV OWNCLOUD_VERSION="8.2.2"
 
 #########################################
 ##        ENVIRONMENTAL CONFIG         ##
@@ -14,8 +14,8 @@ CMD ["/sbin/my_init"]
 #########################################
 ##         RUN INSTALL SCRIPT          ##
 #########################################
-ADD * /tmp/
-RUN /bin/bash /tmp/install.sh
+ADD ./files /files/
+RUN /bin/bash /files/install.sh
 
 #########################################
 ##         EXPORTS AND VOLUMES         ##
