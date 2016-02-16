@@ -42,8 +42,6 @@
       <ContainerDir>/data</ContainerDir>
       <Mode>rw</Mode>
     </Volume>
-  </Data>
-  <Data>
     <Volume>
       <HostDir>/mnt/user/appdata/crashplan</HostDir>
       <ContainerDir>/config</ContainerDir>
@@ -56,5 +54,4 @@
       <Value>4280</Value>
     </Variable>
   </Environment>
-  <Networking>
 </Container>
