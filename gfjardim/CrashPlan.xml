@@ -8,7 +8,7 @@
   <Support>http://lime-technology.com/forum/index.php?topic=33864.0</Support>
   <Overview>With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywhere, anytime access to ALL your files, CrashPlan is the simplest, surest way to protect your digital life.</Overview>
   <Category>Backup:</Category>
-  <WebUI>http://[IP]:[PORT:4280]/vnc.html?autoconnect=true&host=[IP]&port=[PORT:4280]</WebUI>
+  <WebUI>http://[IP]:[PORT:4280]/vnc.html?autoconnect=true&amp;host=[IP]&amp;port=[PORT:4280]</WebUI>
   <Icon>http://i.imgur.com/F5ckGpm.png</Icon>
   <ExtraParams/>
   <Description>
@@ -18,7 +18,23 @@
   </Description>
   <Networking>
     <Mode>host</Mode>
-    <Publish/>
+    <Publish>
+      <Port>
+        <HostPort>4242</HostPort>
+        <ContainerPort>4242</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>4243</HostPort>
+        <ContainerPort>4243</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>4280</HostPort>
+        <ContainerPort>4280</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
   </Networking>
   <Data>
     <Volume>
@@ -27,7 +43,20 @@
       <Mode>rw</Mode>
     </Volume>
   </Data>
-  <Environment/>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/crashplan</HostDir>
+      <ContainerDir>/config</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable>
+      <Name>WEB_PORT</Name>
+      <Value>4280</Value>
+    </Variable>
+  </Environment>
+  <Networking>
   <Config Name="Config Directory" Target="/config" Default="/mnt/user/appdata/crashplan" Mode="rw" Description="This path is where the configuration of CrashPlan is stored to." Type="Path" Display="always" Required="true" Mask="no"></Config>
   <Config Name="Data Directory" Target="/data" Default="/mnt/user/" Mode="rw" Description="Usually his should point to '/mnt/user', but you can set this to any directory you wish to backup.&amp;lt;br&amp;gt;&#13;&#10;&amp;lt;orange&amp;gt;Tip:&amp;lt;/orange&amp;gt; You can add as many paths you want to backup." Type="Path" Display="always" Required="true" Mask="false"></Config>
 </Container>
