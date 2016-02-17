@@ -10,16 +10,16 @@ sv_running() {
 
 while [ 1 ]; do
   if sv_running nginx && sv_running php-fpm; then
-    if [[ ! -f /etc/service/occ_update/down ]]; then
+    if [[ ! -f /etc/service/owncloud/down ]]; then
       echo "NOTICE: ownCloud will now update."
       # Update ownCloud
       sudo -u nobody -s /bin/bash -c "php /var/www/owncloud/occ upgrade"
       # Add necessary config options
       php /opt/fix_config.php
       # Mark as updated, and disable this service
-      touch /etc/service/occ_update/down
+      touch /etc/service/owncloud/down
       echo "Update done, quitting."
-      sv stop occ_update >/dev/null 2>&1
+      sv stop owncloud >/dev/null 2>&1
     fi
   fi
   sleep 1
