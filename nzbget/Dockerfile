@@ -14,7 +14,7 @@ CMD ["supervisord", "-c", "/etc/supervisor.conf", "-n"]
 ##         RUN INSTALL SCRIPT          ##
 #########################################
 ADD * /tmp/
-RUN chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh
+RUN /bin/bash /tmp/install.sh
 
 #########################################
 ##         EXPORTS AND VOLUMES         ##
