@@ -81,10 +81,8 @@ pip install supervisor-stdout
 wget http://www.rarlab.com/rar/rarlinux-x64-5.2.1b2.tar.gz -O - |tar zx --strip-components=1 -C /usr/bin/ rar/unrar
 
 # Install nzbget
-wget http://nzbget.net/download/nzbget-15.0-bin-linux.run -O /opt/install-nzbget.run
+wget https://github.com/nzbget/nzbget/releases/download/v16.4/nzbget-16.4-bin-linux.run -O /opt/install-nzbget.run
 sh /opt/install-nzbget.run --destdir /opt/nzbget
-
-
 
 #########################################
 ##                 CLEANUP             ##

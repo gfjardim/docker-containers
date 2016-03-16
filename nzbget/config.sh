@@ -77,7 +77,7 @@ if [[ ! -f /tmp/ppscripts_installed ]]; then
   echo "Downloading videosort."
   rm -rf /config/ppscripts/videosort
   mkdir -p /config/ppscripts/videosort
-  wget -nv https://github.com/nzbget/VideoSort/archive/master.tar.gz -O - | tar -zx --strip-components 1 -C /config/ppscripts/videosort
+  wget -nv https://github.com/nzbget/VideoSort/archive/v6.1.tar.gz -O - | tar -zx --strip-components 1 -C /config/ppscripts/videosort
 
   # NotifyXBMC.py
   echo "Downloading Notify NZBGet."
