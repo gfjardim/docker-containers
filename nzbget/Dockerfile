@@ -1,11 +1,11 @@
-FROM phusion/baseimage:0.9.16
+FROM phusion/baseimage:0.9.18
 MAINTAINER gfjardim <gfjardim@gmail.com>
 
 #########################################
 ##        ENVIRONMENTAL CONFIG         ##
 #########################################
 # Set correct environment variables
-ENV HOME="/root" LC_ALL="C.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US.UTF-8" GIT_REPO="gfjardim/nzbget-updates"
+ENV HOME="/root" LC_ALL="C.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US.UTF-8"
 # Use baseimage-docker's init system
 CMD ["supervisord", "-c", "/etc/supervisor.conf", "-n"]
 # CMD ["/sbin/my_init"]
