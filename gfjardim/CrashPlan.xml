@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Container version="2">
-  <Name>CrashPlan-Template</Name>
+  <Name>CrashPlan</Name>
   <Repository>gfjardim/crashplan</Repository>
   <Registry>https://registry.hub.docker.com/u/gfjardim/crashplan/</Registry>
   <Network>host</Network>
