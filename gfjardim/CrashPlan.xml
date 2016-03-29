@@ -74,7 +74,7 @@ With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywh
       <Mode/>
     </Variable>
   </Environment>
-  <Config Name="Config Directory" Target="/config" Default="/mnt/user/appdata/CrashPlan" Mode="rw" Description="In this directory, CrashPlan will store it's configuration files." Type="Path" Display="always-hide" Required="true" Mask="false"></Config>
+  <Config Name="Config Directories" Target="/config" Default="/mnt/user/appdata/CrashPlan" Mode="rw" Description="In this directory, CrashPlan will store it's configuration files." Type="Path" Display="always-hide" Required="true" Mask="false"></Config>
   <Config Name="Backup Source" Target="/mnt/user" Default="/mnt/user" Mode="rw" Description="unRAID Share Path" Type="Path" Display="always-hide" Required="true" Mask="false"></Config>
   <Config Name="Backup Destination" Target="/backup" Default="/mnt/user/Backup/" Mode="rw" Description="In this path, CrashPlan will store the backup files" Type="Path" Display="always-hide" Required="true" Mask="false"></Config>
   <Config Name="Service Port" Target="4242" Default="4242" Mode="tcp" Description="Listening port required for computer-to-computer connections.&amp;lt;br&amp;gt;&#13;&#10;&amp;lt;span class='label-important'&amp;gt;Note:&amp;lt;/span&amp;gt; Please note that this setting is only important &amp;lt;b&amp;gt;IF&amp;lt;/b&amp;gt; you change your network type to &amp;lt;b&amp;gt;Bridge&amp;lt;/b&amp;gt;, which is highly discouraged.&amp;lt;br&amp;gt;&#13;&#10;&amp;lt;span class='label-warning'&amp;gt;Tip:&amp;lt;/span&amp;gt; This port can be changed using the webUI, on Settings &amp;gt; General &amp;gt; Inbound backup from other computers." Type="Port" Display="advanced-hide" Required="true" Mask="false"></Config>
