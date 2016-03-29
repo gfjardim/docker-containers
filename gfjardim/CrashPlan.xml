@@ -1,21 +1,25 @@
 <?xml version="1.0"?>
-<Container>
-  <Name>CrashPlan</Name>
+<Container version="2">
+  <Name>CrashPlan-Template</Name>
   <Repository>gfjardim/crashplan</Repository>
   <Registry>https://registry.hub.docker.com/u/gfjardim/crashplan/</Registry>
   <Network>host</Network>
-  <Privileged>true</Privileged>
-  <Support>http://lime-technology.com/forum/index.php?topic=33864.0</Support>
-  <Overview>With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywhere, anytime access to ALL your files, CrashPlan is the simplest, surest way to protect your digital life.</Overview>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Overview>&amp;lt;img src='http://i.imgur.com/FEDXhd6.png' width='120px'&amp;gt;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;&#xD;
+&#xD;
+With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywhere, anytime access to ALL your files, CrashPlan is the simplest, surest way to protect your digital life.[br][br]&#xD;
+</Overview>
   <Category>Backup:</Category>
-  <WebUI>http://[IP]:[PORT:4280]/vnc.html?autoconnect=true&amp;host=[IP]&amp;port=[PORT:4280]</WebUI>
+  <WebUI> http://[IP]:[PORT:4280]/vnc.html?autoconnect=true&amp;amp;host=[IP]&amp;amp;port=[PORT:4280]</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/gfjardim/docker-containers/templates/gfjardim/CrashPlan.xml</TemplateURL>
   <Icon>http://i.imgur.com/F5ckGpm.png</Icon>
   <ExtraParams/>
-  <Description>
-    With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywhere, anytime access to ALL your files, CrashPlan is the simplest, surest way to protect your digital life.[br][br]
-    [b][span style='color: #E80000;']Notes:[/span][/b][br][br]
-    [li]The web interface is usually hosted on port 4280; if you need to change it, please enable the Advanced View, edit the [b]WEB_PORT[/b] variable and the [b]WebUI[/b] field accordingly.[/li][br]
-  </Description>
+  <DateInstalled>1459254872</DateInstalled>
+  <Description>&amp;lt;img src='http://i.imgur.com/FEDXhd6.png' width='120px'&amp;gt;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;&#xD;
+&#xD;
+With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywhere, anytime access to ALL your files, CrashPlan is the simplest, surest way to protect your digital life.[br][br]&#xD;
+</Description>
   <Networking>
     <Mode>host</Mode>
     <Publish>
@@ -34,24 +38,49 @@
         <ContainerPort>4280</ContainerPort>
         <Protocol>tcp</Protocol>
       </Port>
+      <Port>
+        <HostPort>4239</HostPort>
+        <ContainerPort>4239</ContainerPort>
+        <Protocol>udp</Protocol>
+      </Port>
     </Publish>
   </Networking>
   <Data>
     <Volume>
-      <HostDir>/mnt/user/</HostDir>
-      <ContainerDir>/data</ContainerDir>
+      <HostDir>/mnt/user/appdata/CrashPlan</HostDir>
+      <ContainerDir>/config</ContainerDir>
       <Mode>rw</Mode>
     </Volume>
     <Volume>
-      <HostDir>/mnt/user/appdata/crashplan</HostDir>
-      <ContainerDir>/config</ContainerDir>
+      <HostDir>/mnt/user</HostDir>
+      <ContainerDir>/UNRAID</ContainerDir>
       <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/Backup/</HostDir>
+      <ContainerDir>/backup</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/disks/</HostDir>
+      <ContainerDir>/unassigned</ContainerDir>
+      <Mode>rw,slave</Mode>
     </Volume>
   </Data>
   <Environment>
     <Variable>
-      <Name>WEB_PORT</Name>
-      <Value>4280</Value>
+      <Value/>
+      <Name>VNC_PASSWD</Name>
+      <Mode/>
     </Variable>
   </Environment>
+  <Config Name="Config Directory" Target="/config" Default="/mnt/user/appdata/CrashPlan" Mode="rw" Description="In this directory, CrashPlan will store it's configuration files." Type="Path" Display="always-hide" Required="true" Mask="false"></Config>
+  <Config Name="Backup Source" Target="/mnt/user" Default="/mnt/user" Mode="rw" Description="unRAID Share Path" Type="Path" Display="always-hide" Required="true" Mask="false"></Config>
+  <Config Name="Backup Destination" Target="/backup" Default="/mnt/user/Backup/" Mode="rw" Description="In this path, CrashPlan will store the backup files" Type="Path" Display="always-hide" Required="true" Mask="false"></Config>
+  <Config Name="Service Port" Target="4242" Default="4242" Mode="tcp" Description="Listening port required for computer-to-computer connections.&amp;lt;br&amp;gt;&#13;&#10;&amp;lt;span class='label-important'&amp;gt;Note:&amp;lt;/span&amp;gt; Please note that this setting is only important &amp;lt;b&amp;gt;IF&amp;lt;/b&amp;gt; you change your network type to &amp;lt;b&amp;gt;Bridge&amp;lt;/b&amp;gt;, which is highly discouraged.&amp;lt;br&amp;gt;&#13;&#10;&amp;lt;span class='label-warning'&amp;gt;Tip:&amp;lt;/span&amp;gt; This port can be changed using the webUI, on Settings &amp;gt; General &amp;gt; Inbound backup from other computers." Type="Port" Display="advanced-hide" Required="true" Mask="false"></Config>
+  <Config Name="CrashPlan Control Port" Target="4243" Default="4243" Mode="tcp" Description="Used by the CrashPlan Desktop to connect to the CrashPlan service.&amp;lt;br&amp;gt;&#13;&#10;&amp;lt;span class='label-important'&amp;gt;Note:&amp;lt;/span&amp;gt; Please note that this setting is only important &amp;lt;b&amp;gt;IF&amp;lt;/b&amp;gt; you change your network type to &amp;lt;b&amp;gt;Bridge&amp;lt;/b&amp;gt;, which is highly discouraged.&amp;lt;br&amp;gt;" Type="Port" Display="advanced" Required="true" Mask="false"></Config>
+  <Config Name="WebUI Port" Target="4280" Default="4280" Mode="tcp" Description="This is the WebUI Port. If the port is already used by other service, you can freely change it." Type="Port" Display="advanced-hide" Required="true" Mask="false"></Config>
+  <Config Name="VNC Password" Target="VNC_PASSWD" Default="" Mode="" Description="If you want to protect your WebUI, please define a password here." Type="Variable" Display="advanced-hide" Required="false" Mask="true"/>
+  <Config Name="VNC Server Port" Target="4239" Default="4239" Mode="udp" Description="This container exposes a VNC Server usually hosted on port 4239. If you need, you can change it accordingly." Type="Port" Display="advanced" Required="true" Mask="false"></Config>
+  <Config Name="Unassigned Devices" Target="/unassigned" Default="/mnt/disks/" Mode="rw,slave" Description="Map Unassigned Devices disks to the container." Type="Path" Display="advanced" Required="false" Mask="false">/mnt/disks/</Config>
 </Container>
