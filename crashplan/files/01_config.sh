@@ -66,17 +66,3 @@ if [[ ! -f /config/bin/run.conf ]]; then
 fi
 _link /config/bin /usr/local/crashplan/bin
 
-# Change WEB_PORT
-if [[ -z $WEB_PORT ]]; then
-  WEB_PORT="4280"
-fi
-sed -i -e "s#WEB_PORT#${WEB_PORT}#g" /etc/service/novnc/run
-sed -i -e "s#WEB_PORT#${WEB_PORT}#g" /etc/service/tigervnc/run
-
-# Set VNC password if requested:
-if [[ -n $VNC_PASSWD ]]; then
-  sed -i -e "s#SECURITY#-SecurityTypes TLSVnc,VncAuth -PasswordFile /nobody/.vnc_passwd#g" /etc/service/tigervnc/run
-  /opt/vncpasswd/vncpasswd.py -f /nobody/.vnc_passwd -e "${VNC_PASSWD}"
-else
-  sed -i -e "s#SECURITY#-SecurityTypes None#g" /etc/service/tigervnc/run
-fi

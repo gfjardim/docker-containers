@@ -21,12 +21,20 @@ rm -rf /etc/service/sshd /etc/service/cron /etc/my_init.d/00_regen_ssh_host_keys
 #########################################
 
 # Repositories
-add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty universe multiverse"
-add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
+add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ trusty universe multiverse"
+add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse"
 
 # Add Oracle JAVA and accept it's license
 add-apt-repository ppa:webupd8team/java
 echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo /usr/bin/debconf-set-selections
+
+# Local mirror
+mkdir /opt/apt-select
+URL=$(curl -sL https://github.com/jblakeman/apt-select/releases/latest | grep -Po "/jblakeman/apt-select/archive/.*.tar.gz")
+curl -sL "https://github.com${URL}" | tar zx -C /opt/apt-select --strip-components=1
+apt-get update -qq && apt-get -qy --force-yes install python3-bs4
+
+cd /etc/apt/ && python3 /opt/apt-select/apt-select.py -t 3 -m up-to-date
 
 # Install Dependencies
 apt-get update -qq
@@ -88,7 +96,8 @@ cp /files/tigervnc/service.sh /etc/service/tigervnc/run
 
 # Config File
 mkdir -p /etc/my_init.d
-cp /files/config.sh /etc/my_init.d/config.sh
+cp /files/00_config.sh /etc/my_init.d/00_config.sh
+cp /files/01_config.sh /etc/my_init.d/01_config.sh
 
 chmod -R +x /etc/service/ /etc/my_init.d/
 

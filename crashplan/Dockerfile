@@ -1,23 +1,24 @@
-FROM phusion/baseimage:0.9.16
+FROM phusion/baseimage:0.9.18
 MAINTAINER gfjardim <gfjardim@gmail.com>
 
 #########################################
 ##        ENVIRONMENTAL CONFIG         ##
 #########################################
 # Set correct environment variables
-ENV HOME="/root" LC_ALL="C.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US.UTF-8"
+ENV CP_VERSION="4.6.0"
+ENV USER_ID="0" GROUP_ID="0" TERM="xterm" WIDTH="1280" HEIGHT="720"
+
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
 #########################################
 ##         RUN INSTALL SCRIPT          ##
 #########################################
-ADD * /tmp/
-RUN /bin/bash /tmp/install.sh
+ADD ./files /files/
+RUN /bin/bash /files/install.sh
 
 #########################################
 ##         EXPORTS AND VOLUMES         ##
 #########################################
-VOLUME /data
-EXPOSE 4243 4242
-
+VOLUME /data /config
+EXPOSE 4243 4242 4280
