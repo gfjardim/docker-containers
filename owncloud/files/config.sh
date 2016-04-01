@@ -24,7 +24,6 @@ else
   echo $SUBJECT
   openssl req -new -x509 -days 3650 -nodes -out /opt/server.pem -keyout /opt/server.key \
           -subj "$SUBJECT"
-  ls /opt/
   cp -f /opt/server.* /var/www/owncloud/data/
 fi
 
@@ -34,6 +33,7 @@ if [[ -f /var/www/owncloud/data/dhparam.pem ]]; then
 else
   #Create DH Parameters File
   echo "Creating DH Parameters File."
+  echo "This may take up to 30 minutes."
   openssl dhparam -out /opt/dhparam.pem 4096
   cp -f /opt/dhparam.pem /var/www/owncloud/data/
 fi

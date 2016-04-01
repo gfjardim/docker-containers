@@ -1,6 +1,6 @@
 FROM phusion/baseimage:0.9.18
 MAINTAINER gfjardim <gfjardim@gmail.com>
-ENV OWNCLOUD_VERSION="8.2.2"
+ENV OWNCLOUD_VERSION="9.0.0"
 
 #########################################
 ##        ENVIRONMENTAL CONFIG         ##
@@ -20,5 +20,5 @@ RUN /bin/bash /files/install.sh
 #########################################
 ##         EXPORTS AND VOLUMES         ##
 #########################################
-VOLUME ["/var/www/owncloud/data"]
+VOLUME ["/config"]
 EXPOSE 8000 8001
