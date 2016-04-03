@@ -67,13 +67,7 @@ With unlimited, set-it-and-get-at-it backup to multiple destinations, plus anywh
       <Mode>rw,slave</Mode>
     </Volume>
   </Data>
-  <Environment>
-    <Variable>
-      <Value/>
-      <Name>VNC_PASSWD</Name>
-      <Mode/>
-    </Variable>
-  </Environment>
+  <Environment/>
   <Config Name="Config Directory" Target="/config" Default="/mnt/user/appdata/CrashPlan" Mode="rw" Description="In this directory, CrashPlan will store it's configuration files." Type="Path" Display="always-hide" Required="true" Mask="false"></Config>
   <Config Name="Backup Source" Target="/mnt/user" Default="/mnt/user" Mode="rw" Description="unRAID Share Path" Type="Path" Display="always-hide" Required="true" Mask="false"></Config>
   <Config Name="Backup Destination" Target="/backup" Default="/mnt/user/Backup/" Mode="rw" Description="In this path, CrashPlan will store the backup files" Type="Path" Display="always-hide" Required="true" Mask="false"></Config>
