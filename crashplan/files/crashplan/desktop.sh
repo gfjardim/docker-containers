@@ -9,8 +9,8 @@ export SWT_GTK3=0
 
 cd ${TARGETDIR}
 
-until $(ps -eaf | grep -q [C]rashPlan); do
-  sleep 10
+until /bin/nc -z 127.0.0.1 TCP_PORT_4242; do
+  sleep 1
 done
 
 if [ "_${VERSION_5_UI}" == "_true" ]; then

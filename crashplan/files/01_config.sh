@@ -68,6 +68,7 @@ sed -i -e "s#VNC_PORT#${TCP_PORT_4239}#g" /etc/service/tigervnc/run
 sed -i -e "s#<location>\([^:]*\):[^<]*</location>#<location>\1:${TCP_PORT_4242}</location>#g" /config/conf/my.service.xml
 sed -i -e "s#<servicePort>[^<]*</servicePort>#<servicePort>${TCP_PORT_4243}</servicePort>#g"  /config/conf/my.service.xml
 sed -i -e "s#<upgradePath>[^<]*</upgradePath>#<upgradePath>/dev/null</upgradePath>#g"         /config/conf/my.service.xml
+sed -i -e "s#TCP_PORT_4242#${TCP_PORT_4242}#g" /opt/crashplan-desktop.sh
 
 # Set VNC password if requested:
 if [[ -n $VNC_PASSWD ]]; then
