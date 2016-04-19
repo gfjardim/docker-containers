@@ -6,6 +6,7 @@ mkdir -p /config/config /config/db /config/apps /config/data /config/tmp
 # Move old config
 if [ -f "/config/server.key" ]; then
   mv /config/server.key /config/config/server.key
+  find /config -mindepth 1 -maxdepth 1 ! \( -name "apps" -o -name "config" -o -name "tmp" -o -name "data" -o -name "db" \) -exec mv '{}' /config/data/ \;
 fi
 if [ -f "/config/server.pem" ]; then
   mv /config/server.pem /config/config/server.pem
@@ -13,7 +14,6 @@ fi
 if [ -f "/config/dhparam.pem" ]; then
   mv /config/dhparam.pem /config/config/dhparam.pem
 fi
-find /config -mindepth 1 -maxdepth 1 ! \( -name "apps" -o -name "config" -o -name "tmp" -o -name "data" -o -name "db" \) -exec mv '{}' /config/data/ \;
 
 # Setup certificates
 if [[ -f /config/config/server.key && -f /config/config/server.pem ]]; then
