@@ -57,8 +57,23 @@ sed -i 's|"\$SCRIPTDIR/.."|\$(dirname $SCRIPTDIR)|g' /startapp.sh
 chmod -R u-x,go-rwx,go+u,ugo+X ${TARGETDIR}
 chown -R nobody ${TARGETDIR} /var/lib/crashplan
 
-# Disable auto update
-cat <<'EOT' > ${TARGETDIR}/upgrade/startLinux.sh
-#!/bin/sh
-# in-app updates are disabled
+# Add service to init
+cat <<'EOT' > /etc/init.d/crashplan
+#!/bin/bash
+case "$1" in
+  start)
+    /usr/bin/sv start crashplan
+    /usr/bin/sv start openbox
+
+    ;;
+  stop)
+    /usr/bin/sv stop crashplan
+    /usr/bin/sv stop openbox
+    ;;
+  restart)
+    /usr/bin/sv restart crashplan
+    /usr/bin/sv restart openbox
+    ;;
+esac
 EOT
+chmod +x /etc/init.d/crashplan

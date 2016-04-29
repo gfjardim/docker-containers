@@ -9,13 +9,14 @@ export SWT_GTK3=0
 
 cd ${TARGETDIR}
 
-until /bin/nc -z 127.0.0.1 TCP_PORT_4242; do
+i=0
+until /bin/nc -z 127.0.0.1 $(cat /var/lib/crashplan/.ui_info|cut -d',' -f1); do
   sleep 1
+  let i+=1
+  if [ $i -gt 10 ]; then
+    break
+  fi
 done
 
-if [ "_${VERSION_5_UI}" == "_true" ]; then
-  ${TARGETDIR}/electron/crashplan > /config/desktop_output.log 2> /config/desktop_error.log &
-else
-  ${JAVACOMMON} ${GUI_JAVA_OPTS} -classpath "./lib/com.backup42.desktop.jar:./lang:./skin" com.backup42.desktop.CPDesktop \
-                > /config/desktop_output.log 2> /config/desktop_error.log &
-fi
+${JAVACOMMON} ${GUI_JAVA_OPTS} -classpath "./lib/com.backup42.desktop.jar:./lang:./skin" com.backup42.desktop.CPDesktop \
+              > /config/desktop_output.log 2> /config/desktop_error.log

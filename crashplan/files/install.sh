@@ -34,7 +34,8 @@ URL=$(curl -sL https://github.com/jblakeman/apt-select/releases/latest | grep -P
 curl -sL "https://github.com${URL}" | tar zx -C /opt/apt-select --strip-components=1
 apt-get update -qq && apt-get -qy --force-yes install python3-bs4
 
-cd /etc/apt/ && python3 /opt/apt-select/apt-select.py -t 3 -m up-to-date
+cd /opt && python3 /opt/apt-select/apt-select.py -t 3 -m up-to-date
+[ -f /opt/sources.list ] && mv /opt/sources.list /etc/apt/sources.list
 
 # Install Dependencies
 apt-get update -qq
@@ -70,20 +71,23 @@ apt-get install -qy --force-yes --no-install-recommends \
 #########################################
 
 # CrashPlan Service
-mkdir -p /etc/service/crashplan
+mkdir -p /etc/service/crashplan /etc/service/crashplan/control
 cp /files/crashplan/service.sh /etc/service/crashplan/run
+cp /files/crashplan/service_stop.sh /etc/service/crashplan/control/t
 
 # CrashPlan Desktop
-cp /files/crashplan/desktop.sh /opt/crashplan-desktop.sh
-chmod +x /opt/crashplan-desktop.sh
+cp /files/crashplan/desktop.sh /opt/startapp.sh
+cp /files/crashplan/desktop_stop.sh /opt/stopapp.sh
+chmod +x /opt/startapp.sh /opt/stopapp.sh
 
 # noVNC Service
 mkdir -p /etc/service/novnc
 cp /files/novnc/service.sh /etc/service/novnc/run
 
 # Openbox Service
-mkdir -p /etc/service/openbox
+mkdir -p /etc/service/openbox  /etc/service/openbox/control/
 cp /files/openbox/service.sh /etc/service/openbox/run
+cp /files/openbox/service_stop.sh /etc/service/openbox/control/t
 
 # Openbox Autostart
 mkdir -p /nobody/.config/openbox /nobody/.cache

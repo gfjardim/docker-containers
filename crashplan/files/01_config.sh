@@ -54,7 +54,7 @@ _link /config/bin /usr/local/crashplan/bin
 # Load default values if empty
 TCP_PORT_4239=${TCP_PORT_4239:-4239}
 TCP_PORT_4242=${TCP_PORT_4242:-4242}
-TCP_PORT_4243=${TCP_PORT_4243:-4243} 
+TCP_PORT_4243=${TCP_PORT_4243:-4243}
 TCP_PORT_4280=${TCP_PORT_4280:-4280} 
 
 # noVNC
@@ -67,8 +67,7 @@ sed -i -e "s#VNC_PORT#${TCP_PORT_4239}#g" /etc/service/tigervnc/run
 # CrashPlan
 sed -i -e "s#<location>\([^:]*\):[^<]*</location>#<location>\1:${TCP_PORT_4242}</location>#g" /config/conf/my.service.xml
 sed -i -e "s#<servicePort>[^<]*</servicePort>#<servicePort>${TCP_PORT_4243}</servicePort>#g"  /config/conf/my.service.xml
-sed -i -e "s#<upgradePath>[^<]*</upgradePath>#<upgradePath>/dev/null</upgradePath>#g"         /config/conf/my.service.xml
-sed -i -e "s#TCP_PORT_4242#${TCP_PORT_4242}#g" /opt/crashplan-desktop.sh
+sed -i -e "s#<upgradePath>[^<]*</upgradePath>#<upgradePath>upgrade</upgradePath>#g"           /config/conf/my.service.xml
 
 # Set VNC password if requested:
 if [[ -n $VNC_PASSWD ]]; then

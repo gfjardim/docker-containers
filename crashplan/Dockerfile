@@ -6,7 +6,7 @@ MAINTAINER gfjardim <gfjardim@gmail.com>
 #########################################
 # Set correct environment variables
 ENV CP_VERSION="4.6.0"
-ENV USER_ID="0" GROUP_ID="0" TERM="xterm" WIDTH="1280" HEIGHT="720"
+ENV USER_ID="0" GROUP_ID="0" TERM="xterm"
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
