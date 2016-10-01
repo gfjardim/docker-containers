@@ -41,7 +41,8 @@ apt-get install -qy --force-yes --no-install-recommends \
                 gzip \
                 wget \
                 gtk2-engines \
-                ttf-ubuntu-font-family
+                ttf-ubuntu-font-family \
+                paxctl
 
 # Install window manager and x-server
 apt-get install -qy --force-yes --no-install-recommends \
@@ -62,6 +63,10 @@ apt-get install -qy --force-yes --no-install-recommends \
 #########################################
 ##  FILES, SERVICES AND CONFIGURATION  ##
 #########################################
+
+# Disable MPROTECT for grsec on java executable (for hardened kernels)
+paxctl -c $(which java)
+paxctl -m $(which java)
 
 # CrashPlan Service
 mkdir -p /etc/service/crashplan /etc/service/crashplan/control
