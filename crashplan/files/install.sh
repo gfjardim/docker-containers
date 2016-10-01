@@ -27,15 +27,8 @@ add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ trusty-updates univers
 # Add Oracle JAVA and accept it's license
 add-apt-repository ppa:webupd8team/java
 echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo /usr/bin/debconf-set-selections
+# curl -skL https://gist.githubusercontent.com/gfjardim/ab7b7f38b2b5cebf9982/raw/repo -o /etc/apt/sources.list
 
-# Local mirror
-mkdir /opt/apt-select
-URL=$(curl -sL https://github.com/jblakeman/apt-select/releases/latest | grep -Po "/jblakeman/apt-select/archive/.*.tar.gz")
-curl -sL "https://github.com${URL}" | tar zx -C /opt/apt-select --strip-components=1
-apt-get update -qq && apt-get -qy --force-yes install python3-bs4
-
-cd /opt && python3 /opt/apt-select/apt-select.py -t 3 -m up-to-date
-[ -f /opt/sources.list ] && mv /opt/sources.list /etc/apt/sources.list
 
 # Install Dependencies
 apt-get update -qq
@@ -47,9 +40,8 @@ apt-get install -qy --force-yes --no-install-recommends \
                 cpio \
                 gzip \
                 wget \
-                oracle-java8-installer \
-                gtk2-engines-murrine \
-                ttf-ubuntu-font-family 
+                gtk2-engines \
+                ttf-ubuntu-font-family
 
 # Install window manager and x-server
 apt-get install -qy --force-yes --no-install-recommends \
@@ -64,6 +56,7 @@ apt-get install -qy --force-yes --no-install-recommends \
 # Install noVNC dependencies
 apt-get install -qy --force-yes --no-install-recommends \
                 python \
+                python-numpy \
                 git
 
 #########################################
@@ -108,6 +101,8 @@ chmod -R +x /etc/service/ /etc/my_init.d/
 #########################################
 ##             INSTALLATION            ##
 #########################################
+
+sync
 
 # Install Crashplan
 /bin/bash /files/crashplan/install.sh
