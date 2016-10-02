@@ -41,7 +41,8 @@ apt-get install -qy --force-yes --no-install-recommends \
                 gzip \
                 wget \
                 gtk2-engines \
-                ttf-ubuntu-font-family
+                ttf-ubuntu-font-family \
+                net-tools
 
 # Install window manager and x-server
 apt-get install -qy --force-yes --no-install-recommends \
@@ -51,7 +52,8 @@ apt-get install -qy --force-yes --no-install-recommends \
                 xfonts-100dpi \
                 xfonts-75dpi \
                 libfuse2 \
-                xbase-clients
+                xbase-clients \
+                xkb-data
 
 # Install noVNC dependencies
 apt-get install -qy --force-yes --no-install-recommends \
