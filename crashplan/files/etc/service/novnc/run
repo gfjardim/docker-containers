@@ -1,0 +1,5 @@
+#!/bin/bash
+
+. /opt/default-values.sh
+
+/opt/novnc/utils/launch.sh --listen ${WEB_PORT} --vnc localhost:${VNC_PORT}

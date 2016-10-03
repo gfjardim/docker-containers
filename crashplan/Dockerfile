@@ -5,8 +5,10 @@ MAINTAINER gfjardim <gfjardim@gmail.com>
 ##        ENVIRONMENTAL CONFIG         ##
 #########################################
 # Set correct environment variables
-ENV CP_VERSION="4.8.0"
-ENV USER_ID="0" GROUP_ID="0" TERM="xterm"
+ENV USER_ID="0" \
+    GROUP_ID="0" \
+    TERM="xterm" \
+    CP_VERSION="4.8.0"
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
@@ -14,8 +16,8 @@ CMD ["/sbin/my_init"]
 #########################################
 ##         RUN INSTALL SCRIPT          ##
 #########################################
-ADD ./files /files/
-RUN /bin/bash /files/install.sh
+ADD ./files /
+RUN /bin/bash /tmp/install.sh
 
 #########################################
 ##         EXPORTS AND VOLUMES         ##

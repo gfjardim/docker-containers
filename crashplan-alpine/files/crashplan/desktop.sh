@@ -10,7 +10,7 @@ export SWT_GTK3=0
 cd ${TARGETDIR}
 
 i=0
-until /bin/nc -z 127.0.0.1 $(cat /var/lib/crashplan/.ui_info|cut -d',' -f1); do
+until [ "$(/etc/init.d/crashplan status)" == "running" ]; do
   sleep 1
   let i+=1
   if [ $i -gt 10 ]; then

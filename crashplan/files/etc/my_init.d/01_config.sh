@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. /opt/default-values.sh
+
 # create default dirs
 mkdir -p /config/id /config/log /config/conf /config/bin /config/cache
 
@@ -28,29 +30,15 @@ fi
 # adjust RAM as described here: http://support.code42.com/CrashPlan/Latest/Troubleshooting/CrashPlan_Runs_Out_Of_Memory_And_Crashes
 if [[ ! -L "/usr/local/crashplan/bin" ]]; then
   if [ ! -f "/config/bin/run.conf" ]; then
-    cp -rf /usr/local/crashplan/bin/* /config/bin/
+    cp -rf /usr/local/crashplan/bin/run.conf /config/bin/run.conf
   fi
   rm -rf /usr/local/crashplan/bin
   ln -sf /config/bin /usr/local/crashplan/bin
 fi
 
-# Load default values if empty
-TCP_PORT_4239=${TCP_PORT_4239:-4239}
-TCP_PORT_4280=${TCP_PORT_4280:-4280} 
-TCP_PORT_4242=${TCP_PORT_4242:-4242}
-TCP_PORT_4243=${TCP_PORT_4243:-4243}
-
-# noVNC
-sed -i -e "s#WEB_PORT#${TCP_PORT_4280}#g" /etc/service/novnc/run
-sed -i -e "s#VNC_PORT#${TCP_PORT_4239}#g" /etc/service/novnc/run
-
-# TigerVNC
-sed -i -e "s#VNC_PORT#${TCP_PORT_4239}#g" /etc/service/tigervnc/run
-if [[ -n $VNC_PASSWD ]]; then
-  sed -i -e "s#SECURITY#-SecurityTypes TLSVnc,VncAuth -PasswordFile /nobody/.vnc_passwd#g" /etc/service/tigervnc/run
-  /opt/vncpasswd/vncpasswd.py -f /config/.vnc_passwd -e "${VNC_PASSWD}"
-else
-  sed -i -e "s#SECURITY#-SecurityTypes None#g" /etc/service/tigervnc/run
+# VNC credentials
+if [ ! -f "${VNC_CREDENTIALS}" -a -n "${VNC_PASSWD}" ]; then
+  /opt/vncpasswd/vncpasswd.py -f "${VNC_CREDENTIALS}" -e "${VNC_PASSWD}"
 fi
 
 # CrashPlan
@@ -63,4 +51,20 @@ if [ -f "/config/conf/my.service.xml" ]; then
   else
     sed -i "s|<backupConfig>|<backupConfig>\n\t\t\t<cachePath>/config/cache</cachePath>|g" /config/conf/my.service.xml
   fi
+fi
+
+# Allow CrashPlan to restart
+echo -e '#!/bin/sh\n/etc/init.d/crashplan restart' > /usr/local/crashplan/bin/restartLinux.sh
+chmod +x /usr/local/crashplan/bin/restartLinux.sh
+
+# Move old logs to /config/log/
+find /config -maxdepth 1 -type f -iname "*.log" -exec mv '{}' /config/log/ \;
+
+# Disable MPROTECT for grsec on java executable (for hardened kernels)
+if [ -n "${HARDENED}" -a ! -f "/tmp/.hardened" ]; then
+  echo "Disable MPROTECT for grsec on JAVA executable."
+  source /usr/local/crashplan/install.vars
+  paxctl -c "${JAVACOMMON}"
+  paxctl -m "${JAVACOMMON}"
+  touch /tmp/.hardened
 fi
