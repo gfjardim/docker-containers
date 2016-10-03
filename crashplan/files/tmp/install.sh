@@ -28,7 +28,7 @@ deb http://us.archive.ubuntu.com/ubuntu/ xenial-proposed main restricted univers
 deb http://us.archive.ubuntu.com/ubuntu/ xenial-backports main restricted universe multiverse 
 EOT
 
-curl -skL https://repogen.simplylinux.ch/txt/xenial/sources_bbf3012a51a23b31db429017a1859e99ee11fc4c.txt -o /etc/apt/sources.list
+# curl -skL https://repogen.simplylinux.ch/txt/xenial/sources_bbf3012a51a23b31db429017a1859e99ee11fc4c.txt -o /etc/apt/sources.list
 
 # Install Dependencies
 apt-get update -qq

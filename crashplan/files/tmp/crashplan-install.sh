@@ -10,8 +10,8 @@ RUNLVLDIR=/etc/rc2.d
 
 # Downloading Crashplan
 mkdir /tmp/crashplan
-# curl -L http://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${CP_VERSION}_Linux.tgz | tar -xz --strip=1 -C /tmp/crashplan
-curl -L http://192.168.0.100:88/CrashPlan_${CP_VERSION}_Linux.tgz | tar -xz --strip=1 -C /tmp/crashplan
+curl -L http://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${CP_VERSION}_Linux.tgz | tar -xz --strip=1 -C /tmp/crashplan
+# curl -L http://192.168.0.100:88/CrashPlan_${CP_VERSION}_Linux.tgz | tar -xz --strip=1 -C /tmp/crashplan
 
 cd /tmp/crashplan
 
@@ -21,7 +21,7 @@ echo "BINSDIR=${BINSDIR}"         >> /tmp/crashplan/install.vars
 echo "MANIFESTDIR=${MANIFESTDIR}" >> /tmp/crashplan/install.vars
 echo "INITDIR=${INITDIR}"         >> /tmp/crashplan/install.vars
 echo "RUNLVLDIR=${RUNLVLDIR}"     >> /tmp/crashplan/install.vars
-echo "JRE_X64_DOWNLOAD_URL=http://192.168.0.100:88/jre-linux-x64-1.8.0_72.tgz" >> install.vars
+# echo "JRE_X64_DOWNLOAD_URL=http://192.168.0.100:88/jre-linux-x64-1.8.0_72.tgz" >> install.vars
 
 # Creating directories
 mkdir -p /usr/local/crashplan/bin /backup
