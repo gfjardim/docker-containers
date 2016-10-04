@@ -15,6 +15,8 @@ usermod -a -G adm,sudo nobody
 # Disable SSH
 rm -rf /etc/service/sshd /etc/service/cron /etc/my_init.d/00_regen_ssh_host_keys.sh
 
+cd /files && find . -type f -exec cp -f --parents '{}' / \;
+
 #########################################
 ##    REPOSITORIES AND DEPENDENCIES    ##
 #########################################
@@ -92,4 +94,4 @@ chmod 777 /tmp
 # Clean APT install files
 apt-get autoremove -y 
 apt-get clean -y
-rm -rf /var/lib/apt/lists/* /var/cache/* /var/tmp/* /tmp/*
+rm -rf /var/lib/apt/lists/* /var/cache/* /var/tmp/* /files/
