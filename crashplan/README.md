@@ -28,7 +28,7 @@ This will set the correct timezone. Set yours to avoid time related issues.
 This will disable MPROTECT for grsec on Java executable (for hardened kernels).
 
 ```
--e "HARDENED"="Yes"
+-e HARDENED="Yes"
 ```
 
 ####Variable VNC_PASSWD:
