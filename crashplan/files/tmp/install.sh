@@ -83,6 +83,7 @@ sync
 
 chmod -R +x /etc/service/ /etc/my_init.d/ /opt/startapp.sh /opt/stopapp.sh
 chown -R nobody:users /nobody
+chmod 777 /tmp
 
 #########################################
 ##                 CLEANUP             ##
