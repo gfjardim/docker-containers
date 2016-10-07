@@ -43,9 +43,10 @@ fi
 
 # CrashPlan
 if [ -f "/config/conf/my.service.xml" ]; then
-  sed -i -e "s#<location>\([^:]*\):[^<]*</location>#<location>\1:${TCP_PORT_4242}</location>#g" /config/conf/my.service.xml
-  sed -i -e "s#<servicePort>[^<]*</servicePort>#<servicePort>${TCP_PORT_4243}</servicePort>#g"  /config/conf/my.service.xml
-  sed -i -e "s#<upgradePath>[^<]*</upgradePath>#<upgradePath>upgrade</upgradePath>#g"           /config/conf/my.service.xml
+  sed -i -e "s#<location>\([^:]*\):[^<]*</location>#<location>\1:${BACKUP_PORT}</location>#g" \
+         -e "s#<servicePort>[^<]*</servicePort>#<servicePort>${SERVICE_PORT}</servicePort>#g" \
+         -e "s#<upgradePath>[^<]*</upgradePath>#<upgradePath>upgrade</upgradePath>#g" /config/conf/my.service.xml
+
   if grep "<cachePath>.*</cachePath>" /config/conf/my.service.xml > /dev/null; then
     sed -i "s|<cachePath>.*</cachePath>|<cachePath>/config/cache</cachePath>|g" /config/conf/my.service.xml
   else
