@@ -2,11 +2,12 @@
 
 # Fix the timezone
 if [[ $(cat /etc/timezone) != $TZ ]] ; then
-  echo "$TZ" > /etc/timezone
+  ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
   dpkg-reconfigure -f noninteractive tzdata
 fi
 
 # Reconfigure user ID/GID if necessary
+mkdir -p /nobody
 USERID=${USER_ID:-99}
 GROUPID=${GROUP_ID:-100}
 groupmod -g $GROUPID users
