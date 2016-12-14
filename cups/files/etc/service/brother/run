@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Wait CUPS start
+while ! curl -sk localhost:631 &>/dev/null; do
+  sleep 1
+done
+
+sleep 5
+
+# Brother installation
+if [ -d "/config/brother" ] && [ ! -f "/tmp/.brother_installed" ] ; then
+  echo "Installing Brother printers..."
+  apt-get update -qq && apt-get install -qy lib32stdc++6 &>/dev/null
+  for deb in /config/brother/*.deb; do 
+    dpkg -i --force-all "$deb"
+  done
+  echo "Brother printers installed."
+  touch /tmp/.brother_installed
+fi
+
+while true; do
+  sleep 1
+done

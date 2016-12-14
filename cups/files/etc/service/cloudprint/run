@@ -1,0 +1,23 @@
+#!/bin/bash
+debug(){
+  [ -n "$1" ] && out="$@" || read out
+  echo "service[$(basename $(dirname $(readlink -f ${BASH_SOURCE[0]})))]: ${out}"
+}
+
+# Wait CUPS start
+while ! curl -sk localhost:631 &>/dev/null; do
+  sleep 1
+done
+
+sleep 1
+
+regex="(.*)(https[^ ]*)(.*)"
+while read line; do
+  if [[ $line =~ $regex ]]; then
+    echo "CloudPrint warning: $line"
+  elif [[ $line =~ "trying for the win" ]]; then
+    continue
+  else
+    echo "$line"
+  fi
+done < <(python -u /usr/local/bin/cloudprint -a /config/cloudprint.cfg 2>&1)
