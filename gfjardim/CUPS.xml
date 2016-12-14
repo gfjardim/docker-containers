@@ -1,39 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Container>
+<?xml version="1.0"?>
+<Container version="2">
   <Name>CUPS</Name>
-  <Description>
-    CUPS is the standards-based, open source printing system developed by Apple Inc. for OS X® and other UNIX®-like operating systems. CUPS uses the Internet Printing Protocol (IPP) to support printing to local and network printers.[br][br]
-    [b]This container has support for AirPrint and for Google CloudPrint.[/b][br][br]
-    [b][span style=\'color: #E80000;\']Directions:[/span][/b][br]
-    [b][span style=\'color: #0088CC;\']Paths:[/span][/b][br]
-    [b]/config :[/b] set this path to where you wish CUPS to store it\'s configuration.[br][br]
-    [b][span style=\'color: #0088CC;\']Variables:[/span][/b][br]
-    [b]CUPS_USER_ADMIN :[/b] choose the username used to admin CUPS (default [b]admin[/b]).[br]
-    [b]CUPS_USER_PASSWORD :[/b] choose the password used to admin CUPS (default [b]pass[/b]).[br]
-    [b]CLOUD_PRINT_EMAIL :[/b] set the e-mail you use to login on your Google account (empty e-mail will disable CloudPrint).[br]
-    [b]CLOUD_PRINT_PASS :[/b] set the password you use to login on your Google account. If you use two-step authentication, you must use an app password which can be found [a href=\'https://security.google.com/settings/security/apppasswords\' target='_blank'] here[/a].</Description>
-  <Registry>https://registry.hub.docker.com/u/gfjardim/cups/</Registry>
   <Repository>gfjardim/cups</Repository>
-  <BindTime>true</BindTime>
+  <Registry>https://registry.hub.docker.com/u/gfjardim/cups/</Registry>
+  <Network>bridge</Network>
   <Privileged>true</Privileged>
-  <Date>2015-06-19</Date>
-  <Beta>True</Beta>
-  <Category>Productivity: Tools:</Category>
-  <Overview>
-    CUPS is the standards-based, open source printing system developed by Apple Inc. for OS X® and other UNIX®-like operating systems. CUPS uses the Internet Printing Protocol (IPP) to support printing to local and network printers.
-  </Overview>
-  <Environment>
-    <Variable>
-      <Name>CUPS_USER_ADMIN</Name>
-      <Value>admin</Value>
-    </Variable>
-    <Variable>
-      <Name>CUPS_USER_PASSWORD</Name>
-      <Value>pass</Value>
-    </Variable>
-  </Environment>
+  <Support/>
+  <Overview>CUPS is the standards-based, open source printing system developed by Apple Inc. for OS X&#xAE; and other UNIX&#xAE;-like operating systems. CUPS uses the Internet Printing Protocol (IPP) to support printing to local and network printers.[br][br]&#xD;
+[b]This container has support for AirPrint and for Google CloudPrint.[/b]</Overview>
+  <Category>Tools: Status:Beta</Category>
+  <WebUI>https://[IP]:[PORT:631]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/gfjardim/docker-containers/templates/gfjardim/CUPS.xml</TemplateURL>
+  <Icon>http://i.imgur.com/8RCRnCu.png</Icon>
+  <ExtraParams/>
+  <DateInstalled>1481741346</DateInstalled>
+  <Description>CUPS is the standards-based, open source printing system developed by Apple Inc. for OS X&#xAE; and other UNIX&#xAE;-like operating systems. CUPS uses the Internet Printing Protocol (IPP) to support printing to local and network printers.[br][br]&#xD;
+[b]This container has support for AirPrint and for Google CloudPrint.[/b]</Description>
   <Networking>
-    <Mode>host</Mode>
+    <Mode>bridge</Mode>
     <Publish>
       <Port>
         <HostPort>631</HostPort>
@@ -44,14 +28,49 @@
   </Networking>
   <Data>
     <Volume>
-      <HostDir>/mnt/user/appdata/cups</HostDir>
+      <HostDir>/mnt/cache/appdata/cups/</HostDir>
       <ContainerDir>/config</ContainerDir>
       <Mode>rw</Mode>
     </Volume>
+    <Volume>
+      <HostDir>/var/run/dbus/</HostDir>
+      <ContainerDir>/var/run/dbus/</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/dev/</HostDir>
+      <ContainerDir>/dev</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/etc/avahi/services/</HostDir>
+      <ContainerDir>/avahi</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/var/run/avahi-daemon/</HostDir>
+      <ContainerDir>/var/run/avahi-daemon/</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
   </Data>
-  <Version></Version>
-  <WebUI>https://[IP]:[PORT:631]/</WebUI>
-  <Banner></Banner>
-  <Icon>http://i.imgur.com/8RCRnCu.png</Icon>
-  <ExtraParams>-v /dev:/dev -v /etc/avahi/services:/avahi</ExtraParams>
+  <Environment>
+    <Variable>
+      <Value>admin</Value>
+      <Name>CUPS_USER_ADMIN</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>pass</Value>
+      <Name>CUPS_USER_PASSWORD</Name>
+      <Mode/>
+    </Variable>
+  </Environment>
+  <Config Name="Config Directory" Target="/config" Default="/mnt/cache/appdata/cups/" Mode="rw" Description="In this directory, CUPS stores it's configuration files." Type="Path" Display="always-hide" Required="true" Mask="false">/mnt/cache/appdata/cups/</Config>
+  <Config Name="Admin User" Target="CUPS_USER_ADMIN" Default="admin" Mode="" Description="This is the WebUI admin user. Default: " Type="Variable" Display="always-hide" Required="true" Mask="false">admin</Config>
+  <Config Name="Admin Password" Target="CUPS_USER_PASSWORD" Default="pass" Mode="" Description="This is the WebUI administrator password. Default: " Type="Variable" Display="always-hide" Required="false" Mask="true">pass</Config>
+  <Config Name="WebUI Port" Target="631" Default="631" Mode="tcp" Description="You can configure CUPS using the WebUI presented in this port." Type="Port" Display="advanced-hide" Required="true" Mask="false">631</Config>
+  <Config Name="D-Bus Interface" Target="/var/run/dbus/" Default="/var/run/dbus/" Mode="rw" Description="This is the required D-Bus interface between the container and the host server." Type="Path" Display="advanced-hide" Required="true" Mask="false">/var/run/dbus/</Config>
+  <Config Name="Host Devices" Target="/dev" Default="/dev/" Mode="rw" Description="This allows the container to access USB printers plugged on the host machine." Type="Path" Display="advanced-hide" Required="true" Mask="false">/dev/</Config>
+  <Config Name="Avahi Services" Target="/avahi" Default="/etc/avahi/services/" Mode="rw" Description="This allows the container to export Zeroconf services using the host Avahi service." Type="Path" Display="advanced-hide" Required="true" Mask="false">/etc/avahi/services/</Config>
+  <Config Name="Avahi Daemon" Target="/var/run/avahi-daemon/" Default="/var/run/avahi-daemon/" Mode="rw" Description="This allows CUPS to access needed Avahi daemon information." Type="Path" Display="advanced-hide" Required="true" Mask="false">/var/run/avahi-daemon/</Config>
 </Container>

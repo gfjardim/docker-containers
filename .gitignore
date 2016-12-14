@@ -2,3 +2,5 @@
 .sync/IgnoreList
 
 .sync/StreamsList
+
+sftp-config.json
