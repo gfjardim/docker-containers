@@ -16,7 +16,7 @@ RUN usermod -u 99 nobody && \
 RUN apt-get update -q
 
 # Install Hamachi
-ADD https://secure.logmein.com/labs/logmein-hamachi-2.1.0.119-x64.tgz /tmp/hamachi.tgz
+ADD https://secure.logmein.com/labs/logmein-hamachi-2.1.0.139-x64.tgz /tmp/hamachi.tgz
 RUN mkdir -p /opt/logmein-hamachi
 RUN tar -zxf /tmp/hamachi.tgz --strip-components 1 -C /opt/logmein-hamachi
 RUN ln -sf /opt/logmein-hamachi/hamachid /usr/bin/hamachi
