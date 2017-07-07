@@ -10,7 +10,7 @@ To run this container, please use this command:
            -p 4243:4243 \
            -p 4280:4280 \
            -v "/path/to/your/crashplan/config":"/config":rw \
-           -v "/path/to/your/manifest/dir":"/backup":rw \
+           -v "/path/to/your/manifest/dir":"/data":rw \
                gfjardim/crashplan
 
 ###Some supported variables:
