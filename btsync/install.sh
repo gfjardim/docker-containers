@@ -73,7 +73,7 @@ add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates univ
 
 # Install BTSync
 mkdir -p /opt/btsync
-curl -s -k -L "https://download-cdn.getsyncapp.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz" |  tar -xzf - -C /opt/btsync
+curl -s -k -L "https://download-cdn.resilio.com/stable/linux-x64/resilio-sync_x64.tar.gz" |  tar -xzf - -C /opt/btsync
 
 
 #########################################
