@@ -44,6 +44,7 @@ apt-get install --assume-yes --quiet \
         whois \
         hplip \
         suld-driver-4.01.17 \
+        printer-driver-all \
         python-cups \
         python-pip \
         inotify-tools
