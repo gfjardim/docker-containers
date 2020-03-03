@@ -1,7 +1,7 @@
 FROM phusion/baseimage:0.9.11
 MAINTAINER gfjardim <gfjardim@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
-ADD sources.list /etc/apt/sources.list
+ADD hamachi/sources.list /etc/apt/sources.list
 
 # Set correct environment variables
 ENV HOME /root
@@ -26,7 +26,7 @@ VOLUME /config
 
 # Add install.sh to execute during container startup
 RUN mkdir -p /etc/my_init.d
-ADD install.sh /etc/my_init.d/install.sh
+ADD hamachi/install.sh /etc/my_init.d/install.sh
 RUN chmod +x /etc/my_init.d/install.sh
 
 # Disable sshd
@@ -34,5 +34,5 @@ RUN rm -r /etc/services/sshd
 
 # Add hamachi.sh to runit
 RUN mkdir /etc/service/hamachi
-ADD hamachi.sh /etc/service/hamachi/run
+ADD hamachi/hamachi.sh /etc/service/hamachi/run
 RUN chmod +x /etc/service/hamachi/run
