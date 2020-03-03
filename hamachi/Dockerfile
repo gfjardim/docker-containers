@@ -29,6 +29,9 @@ RUN mkdir -p /etc/my_init.d
 ADD install.sh /etc/my_init.d/install.sh
 RUN chmod +x /etc/my_init.d/install.sh
 
+# Disable sshd
+RUN rm -r /etc/sshd
+
 # Add hamachi.sh to runit
 RUN mkdir /etc/service/hamachi
 ADD hamachi.sh /etc/service/hamachi/run
