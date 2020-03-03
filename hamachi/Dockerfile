@@ -30,7 +30,7 @@ ADD install.sh /etc/my_init.d/install.sh
 RUN chmod +x /etc/my_init.d/install.sh
 
 # Disable sshd
-RUN rm -r /etc/sshd
+RUN rm -r /etc/services/sshd
 
 # Add hamachi.sh to runit
 RUN mkdir /etc/service/hamachi
