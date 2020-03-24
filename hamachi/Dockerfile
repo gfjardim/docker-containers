@@ -1,7 +1,7 @@
 FROM phusion/baseimage:0.9.11
 MAINTAINER gfjardim <gfjardim@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
-ADD sources.list /etc/apt/sources.list
+ADD hamachi/sources.list /etc/apt/sources.list
 
 # Set correct environment variables
 ENV HOME /root
@@ -16,7 +16,7 @@ RUN usermod -u 99 nobody && \
 RUN apt-get update -q
 
 # Install Hamachi
-ADD https://secure.logmein.com/labs/logmein-hamachi-2.1.0.119-x64.tgz /tmp/hamachi.tgz
+ADD https://www.vpn.net/installers/logmein-hamachi-2.1.0.203-x64.tgz /tmp/hamachi.tgz
 RUN mkdir -p /opt/logmein-hamachi
 RUN tar -zxf /tmp/hamachi.tgz --strip-components 1 -C /opt/logmein-hamachi
 RUN ln -sf /opt/logmein-hamachi/hamachid /usr/bin/hamachi
@@ -26,10 +26,13 @@ VOLUME /config
 
 # Add install.sh to execute during container startup
 RUN mkdir -p /etc/my_init.d
-ADD install.sh /etc/my_init.d/install.sh
+ADD hamachi/install.sh /etc/my_init.d/install.sh
 RUN chmod +x /etc/my_init.d/install.sh
+
+# Disable sshd
+RUN rm -r /etc/services/sshd
 
 # Add hamachi.sh to runit
 RUN mkdir /etc/service/hamachi
-ADD hamachi.sh /etc/service/hamachi/run
+ADD hamachi/hamachi.sh /etc/service/hamachi/run
 RUN chmod +x /etc/service/hamachi/run
